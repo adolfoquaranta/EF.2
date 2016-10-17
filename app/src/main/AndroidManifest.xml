@@ -19,9 +19,22 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".atividades.Formularios"
+            android:name=".atividades.ListarFormularios"
             android:label="@string/title_activity_formularios"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".atividades.CadastroFormulario"
+            android:label="@string/title_activity_cadastro_formulario"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".atividades.CadastroFormularioDIC"
+            android:label="@string/title_activity_cadastro_formulario_dic"
+            android:parentActivityName=".atividades.CadastroFormulario"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="me.adolfoquaranta.ef2.atividades.CadastroFormulario" />
+        </activity>
     </application>
 
 </manifest>

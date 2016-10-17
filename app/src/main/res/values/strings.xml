@@ -5,5 +5,43 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
-    <string name="title_activity_formularios">Formularios</string>
+    <string name="title_activity_formularios">Lista de</string>
+    <string name="title_activity_cadastro_formulario">Novo</string>
+
+
+    <string name="hint_nome_Form">Nome do Modelo</string>
+    <string name="hint_descricao_Form">Descrição</string>
+    <string name="hint_criador_Form">Nome do Criador</string>
+    <string name="btn_salvar">Salvar</string>
+
+    <string name="err_msg_nome_Form">Insira um nome para o modelo</string>
+    <string name="err_msg_descricao_Form">Insira um descrição</string>
+    <string name="err_msg_criador_Form">Insira um criador</string>
+
+    <string name="err_msg_deveSerNumInteiro">Insira um número Inteiro</string>
+
+    <string name="err_msg_selecioneUmRadio">Escolha uma das opções</string>
+
+
+
+
+    <string name="inicio_btnEXE">EXP</string>
+    <string name="inicio_btnINV">INV</string>
+    <string name="inicio_btnFITO">FITO</string>
+    <string name="inicio_btnSOLOS">SOLOS</string>
+    <string name="inicio_btnFOLHA">FOLHA</string>
+    <string name="inicio_btnINS">INS</string>
+
+    <string name="msg_naoExistemDados">Não existem dados para serem exibidos.</string>
+    <string name="cadastro_formulario_tipo_Form">Tipo</string>
+    <string name="radio_dic">DIC</string>
+    <string name="radio_dbc">DBC</string>
+    <string name="radio_fat">FAT</string>
+    <string name="radio_sub">SUB</string>
+    <string name="title_activity_cadastro_formulario_dic">Novo DIC</string>
+    <string name="hint_quantidadeVariaveis_DIC">Quantidade de Variáveis</string>
+    <string name="hint_quantidadeReplicacoes_DIC">Quantidade de Replicações</string>
+    <string name="hint_quantidadeRepeticoes_DIC">Quantidade de Repetições</string>
+    <string name="hint_quantidadeTratatmentos_DIC">Quantidade de Tratamentos</string>
+
 </resources>

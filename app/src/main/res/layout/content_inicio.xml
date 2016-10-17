@@ -14,58 +14,77 @@
     tools:showIn="@layout/app_bar_inicio">
 
     <RelativeLayout
+        android:id="@+id/rl_inicio"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <Button
-            android:text="EXE"
+            android:text="@string/inicio_btnEXE"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:id="@+id/inicio_btnEXE" />
+            android:id="@+id/inicio_btnEXE"
+            android:background="@color/colorPrimary"
+            android:layout_marginTop="10dp"
+            android:textColor="@android:color/white"/>
 
         <Button
-            android:text="INV"
+            android:text="@string/inicio_btnINV"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/inicio_btnINV"
             android:layout_below="@+id/inicio_btnEXE"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:background="@color/colorPrimary"
+            android:layout_marginTop="10dp"
+            android:textColor="@android:color/white"/>
         <Button
-            android:text="FITO"
+            android:text="@string/inicio_btnFITO"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/inicio_btnFITO"
             android:layout_below="@+id/inicio_btnINV"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:background="@color/colorPrimary"
+            android:layout_marginTop="10dp"
+            android:textColor="@android:color/white"/>
         <Button
-            android:text="SOLOS"
+            android:text="@string/inicio_btnSOLOS"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/inicio_btnSOLOS"
             android:layout_below="@+id/inicio_btnFITO"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:background="@color/colorPrimary"
+            android:layout_marginTop="10dp"
+            android:textColor="@android:color/white"/>
         <Button
-            android:text="FOLHA"
+            android:text="@string/inicio_btnFOLHA"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/inicio_btnFOLHA"
             android:layout_below="@+id/inicio_btnSOLOS"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:background="@color/colorPrimary"
+            android:layout_marginTop="10dp"
+            android:textColor="@android:color/white"/>
         <Button
-            android:text="INS"
+            android:text="@string/inicio_btnINS"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/inicio_btnINS"
             android:layout_below="@+id/inicio_btnFOLHA"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:background="@color/colorPrimary"
+            android:layout_marginTop="10dp"
+            android:textColor="@android:color/white"/>
     </RelativeLayout>
 
 </ScrollView>

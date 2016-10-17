@@ -2,10 +2,6 @@ package me.adolfoquaranta.ef2.atividades;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.view.Gravity;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -14,18 +10,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import me.adolfoquaranta.ef2.R;
 
 public class Inicio extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
     //Variaveis
-    Integer opcaoMenu_Usuario = null;
+    private Integer opcaoMenu_Usuario = R.id.nav_formularioNovo;
 
     //Botões
-    Button inicio_btnEXE, inicio_btnINV, inicio_btnFITO, inicio_btnSOLOS, inicio_btnFOLHA, inicio_btnINS;
+    private Button inicio_btnEXE, inicio_btnINV, inicio_btnFITO, inicio_btnSOLOS, inicio_btnFOLHA,
+            inicio_btnINS;
+
+    //drawer
+    private DrawerLayout drawer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,7 @@ public class Inicio extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+
         inicio_btnEXE = (Button) findViewById(R.id.inicio_btnEXE);
         inicio_btnINV = (Button) findViewById(R.id.inicio_btnINV);
         inicio_btnFITO = (Button) findViewById(R.id.inicio_btnFITO);
@@ -41,6 +45,7 @@ public class Inicio extends AppCompatActivity
         inicio_btnFOLHA = (Button) findViewById(R.id.inicio_btnFOLHA);
         inicio_btnINS = (Button) findViewById(R.id.inicio_btnINS);
 
+        /*
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,8 +54,9 @@ public class Inicio extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+        */
 
-        final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
@@ -59,19 +65,13 @@ public class Inicio extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        inicio_btnEXE.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(opcaoMenu_Usuario==null){
-                    drawer.openDrawer(Gravity.LEFT);
-                }
-                else{
-                    Intent mostrarFormularios = new Intent(Inicio.this, Formularios.class);
-                    startActivity(mostrarFormularios);
-                }
-            }
-        });
 
+        inicio_btnEXE.setOnClickListener(this);
+        inicio_btnINV.setOnClickListener(this);
+        inicio_btnFITO.setOnClickListener(this);
+        inicio_btnSOLOS.setOnClickListener(this);
+        inicio_btnFOLHA.setOnClickListener(this);
+        inicio_btnINS.setOnClickListener(this);
 
     }
 
@@ -116,5 +116,25 @@ public class Inicio extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        Button modelo_Form = (Button) v;
+        switch (opcaoMenu_Usuario){
+            case R.id.nav_formularioNovo:
+                Intent cadastroFormulario = new Intent(Inicio.this, CadastroFormulario.class);
+                cadastroFormulario.putExtra("modelo_Form", modelo_Form.getText().toString());
+                startActivity(cadastroFormulario);
+                break;
+            case R.id.nav_coletaContinuar:
+                Intent mostrarFormularios = new Intent(Inicio.this, ListarFormularios.class);
+                mostrarFormularios.putExtra("modelo_Form", modelo_Form.getText().toString());
+                startActivity(mostrarFormularios);
+                break;
+            default:
+                Toast.makeText(this, "Em Breve!", Toast.LENGTH_SHORT).show();
+                break;
+        }
     }
 }

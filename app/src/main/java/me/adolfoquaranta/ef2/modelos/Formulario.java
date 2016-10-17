@@ -1,34 +1,32 @@
 package me.adolfoquaranta.ef2.modelos;
 
-import java.util.Date;
-
 /**
  * Created by adolfo on 10/10/16.
  */
 
 public class Formulario {
-    public Integer id_Form;
-    public String modelo_Form, nome_Form, descricao_Form, criador_Form;
-    public Date dataCriacao_Form;
+    private Long id_Form;
+    private String modelo_Form, nome_Form, descricao_Form, criador_Form, dataCriacao_Form, status_Form;
 
     public Formulario(){
 
     }
 
-    public Formulario(Integer id_Form, String modelo_Form, String nome_Form, String descricao_Form, String criador_Form, Date dataCriacao_Form){
+    public Formulario(Long id_Form, String modelo_Form, String nome_Form, String descricao_Form, String criador_Form, String dataCriacao_Form, String status_Form){
         this.id_Form = id_Form;
         this.modelo_Form = modelo_Form;
         this.nome_Form = nome_Form;
         this.descricao_Form = descricao_Form;
         this.criador_Form = criador_Form;
         this.dataCriacao_Form = dataCriacao_Form;
+        this.status_Form = status_Form;
     }
 
-    public Integer getId_Form() {
+    public Long getId_Form() {
         return id_Form;
     }
 
-    public void setId_Form(Integer id_Form) {
+    public void setId_Form(Long id_Form) {
         this.id_Form = id_Form;
     }
 
@@ -64,12 +62,20 @@ public class Formulario {
         this.criador_Form = criador_Form;
     }
 
-    public Date getDataCriacao_Form() {
+    public String getDataCriacao_Form() {
         return dataCriacao_Form;
     }
 
-    public void setDataCriacao_Form(Date dataCriacao_Form) {
+    public void setDataCriacao_Form(String dataCriacao_Form) {
         this.dataCriacao_Form = dataCriacao_Form;
+    }
+
+    public String getStatus_Form() {
+        return status_Form;
+    }
+
+    public void setStatus_Form(String status_Form) {
+        this.status_Form = status_Form;
     }
 
     @Override
@@ -80,7 +86,8 @@ public class Formulario {
                 ", nome_Form='" + nome_Form + '\'' +
                 ", descricao_Form='" + descricao_Form + '\'' +
                 ", criador_Form='" + criador_Form + '\'' +
-                ", dataCriacao_Form=" + dataCriacao_Form +
+                ", dataCriacao_Form='" + dataCriacao_Form + '\'' +
+                ", status_Form='" + status_Form + '\'' +
                 '}';
     }
 }
