@@ -13,7 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +102,7 @@ public class ListarFormularios extends AppCompatActivity {
         @Override
         public void onItemClick(View childView, int position) {
             // Do something when an item is clicked, or override something else.
-            Toast.makeText(ListarFormularios.this, String.valueOf(position), Toast.LENGTH_SHORT).show();
+
         }
 
     }

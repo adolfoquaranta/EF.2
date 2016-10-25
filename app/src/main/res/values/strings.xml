@@ -22,6 +22,9 @@
 
     <string name="err_msg_selecioneUmRadio">Escolha uma das opções</string>
 
+    <string name="err_msg_opcaoInvalida">Opção Inválida</string>
+    <string name="err_msg_nomeTratamento">Insira um nome para o Tratamento</string>
+
 
 
 
@@ -43,5 +46,21 @@
     <string name="hint_quantidadeReplicacoes_DIC">Quantidade de Replicações</string>
     <string name="hint_quantidadeRepeticoes_DIC">Quantidade de Repetições</string>
     <string name="hint_quantidadeTratatmentos_DIC">Quantidade de Tratamentos</string>
+    <string name="title_activity_cadastro_tratamentos">Cadastro de Tratamentos</string>
+    <string name="hint_nomeTratamento">Nome Tratamento</string>
+
+
+    <string name="spinnerTitulo_tipoTratamento">Tipo</string>
+    <string name="dialog_close_button">Cancelar</string>
+    <string-array name="spinnerArray_tipoTratamento">
+        <item>Tipo</item>
+        <item>a</item>
+        <item>b</item>
+    </string-array>
+    <string-array name="spinnerArray_tipoTratamentoValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
 
 </resources>

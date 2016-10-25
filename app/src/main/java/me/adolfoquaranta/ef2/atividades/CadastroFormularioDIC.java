@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -12,8 +13,6 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Toast;
 
 import me.adolfoquaranta.ef2.R;
 import me.adolfoquaranta.ef2.auxiliares.DBAuxilar;
@@ -21,10 +20,10 @@ import me.adolfoquaranta.ef2.modelos.DIC;
 
 public class CadastroFormularioDIC extends AppCompatActivity {
 
-    private EditText input_quantidadeTratamentos_DIC, input_quantidadeRepeticoes_DIC, input_quantidadeReplicacoes_DIC, input_quantidadeVariaveis_DIC;
+    private TextInputEditText input_quantidadeTratamentos_DIC, input_quantidadeRepeticoes_DIC, input_quantidadeReplicacoes_DIC, input_quantidadeVariaveis_DIC;
     private TextInputLayout inputLayoutQuantidadeTratamentos_DIC, inputLayoutQuantidadeRepeticoes_DIC, inputLayoutQuantidadeReplicacoes_DIC, inputLayoutQuantidadeVariaveis_DIC;
 
-    private Long id_Form;
+    private Long id_Form, id_DIC;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,18 +43,22 @@ public class CadastroFormularioDIC extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent cadastroFormularioDIC = getIntent();
-        id_Form = Long.getLong(cadastroFormularioDIC.getSerializableExtra("id_Form").toString());
-        String tipo_Form = cadastroFormularioDIC.getSerializableExtra("tipo_Form").toString();
+        id_Form = cadastroFormularioDIC.getLongExtra("id_Form", 0);
 
-        input_quantidadeTratamentos_DIC = (EditText) findViewById(R.id.input_quantidadeTratatmentos_DIC);
-        input_quantidadeRepeticoes_DIC = (EditText) findViewById(R.id.input_quantidadeRepeticoes_DIC);
-        input_quantidadeReplicacoes_DIC = (EditText) findViewById(R.id.input_quantidadeReplicacoes_DIC);
-        input_quantidadeVariaveis_DIC = (EditText) findViewById(R.id.input_quantidadeVariaveis_DIC);
+        input_quantidadeTratamentos_DIC = (TextInputEditText) findViewById(R.id.input_quantidadeTratatmentos_DIC);
+        input_quantidadeRepeticoes_DIC = (TextInputEditText) findViewById(R.id.input_quantidadeRepeticoes_DIC);
+        input_quantidadeReplicacoes_DIC = (TextInputEditText) findViewById(R.id.input_quantidadeReplicacoes_DIC);
+        input_quantidadeVariaveis_DIC = (TextInputEditText) findViewById(R.id.input_quantidadeVariaveis_DIC);
 
         inputLayoutQuantidadeTratamentos_DIC = (TextInputLayout) findViewById(R.id.input_layout_quantidadeTratatmentos_DIC);
         inputLayoutQuantidadeRepeticoes_DIC = (TextInputLayout) findViewById(R.id.input_layout_quantidadeRepeticoes_DIC);
         inputLayoutQuantidadeReplicacoes_DIC = (TextInputLayout) findViewById(R.id.input_layout_quantidadeReplicacoes_DIC);
         inputLayoutQuantidadeVariaveis_DIC = (TextInputLayout) findViewById(R.id.input_layout_quantidadeVariaveis_DIC);
+
+        input_quantidadeTratamentos_DIC.addTextChangedListener(new FormularioDICTextWatcher(input_quantidadeTratamentos_DIC));
+        input_quantidadeRepeticoes_DIC.addTextChangedListener(new FormularioDICTextWatcher(input_quantidadeRepeticoes_DIC));
+        input_quantidadeReplicacoes_DIC.addTextChangedListener(new FormularioDICTextWatcher(input_quantidadeReplicacoes_DIC));
+        input_quantidadeVariaveis_DIC.addTextChangedListener(new FormularioDICTextWatcher(input_quantidadeVariaveis_DIC));
 
         Button btnSalvar_DIC = (Button) findViewById(R.id.btn_salvar_DIC);
 
@@ -84,19 +87,22 @@ public class CadastroFormularioDIC extends AppCompatActivity {
             return;
         }
 
-        DIC dic = new DIC();
+
         DBAuxilar dbAuxilar = new DBAuxilar(getApplicationContext());
 
+        DIC dic = new DIC();
         dic.setIdFormulario_DIC(id_Form);
-        dic.setQuantidadeTratamentos_DIC(Integer.getInteger(input_quantidadeTratamentos_DIC.getText().toString()));
-        dic.setQuantidadeRepeticoes_DIC(Integer.getInteger(input_quantidadeRepeticoes_DIC.getText().toString()));
-        dic.setQuantidadeReplicacoes_DIC(Integer.getInteger(input_quantidadeReplicacoes_DIC.getText().toString()));
-        dic.setQuantidadeVariaveis_DIC(Integer.getInteger(input_quantidadeVariaveis_DIC.getText().toString()));
+        dic.setQuantidadeTratamentos_DIC(Integer.parseInt(input_quantidadeTratamentos_DIC.getText().toString()));
+        dic.setQuantidadeRepeticoes_DIC(Integer.parseInt(input_quantidadeRepeticoes_DIC.getText().toString()));
+        dic.setQuantidadeReplicacoes_DIC(Integer.parseInt(input_quantidadeReplicacoes_DIC.getText().toString()));
+        dic.setQuantidadeVariaveis_DIC(Integer.parseInt(input_quantidadeVariaveis_DIC.getText().toString()));
 
-        Long id_DIC = dbAuxilar.inserirDIC(dic);
+        id_DIC = dbAuxilar.inserirDIC(dic);
 
-        Toast.makeText(this, id_DIC.toString(), Toast.LENGTH_SHORT).show();
-
+        Intent criarTratamentos = new Intent(CadastroFormularioDIC.this, CadastroTratamentos.class);
+        criarTratamentos.putExtra("id_Formulario_DIC", id_Form);
+        criarTratamentos.putExtra("id_DIC", id_DIC);
+        startActivity(criarTratamentos);
 
 
     }

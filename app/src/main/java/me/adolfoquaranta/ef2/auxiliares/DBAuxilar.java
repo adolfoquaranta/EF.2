@@ -12,6 +12,7 @@ import java.util.List;
 
 import me.adolfoquaranta.ef2.modelos.DIC;
 import me.adolfoquaranta.ef2.modelos.Formulario;
+import me.adolfoquaranta.ef2.modelos.Tratamento;
 
 /**
  * Created by adolfo on 13/10/16.
@@ -50,6 +51,15 @@ public class DBAuxilar extends SQLiteOpenHelper {
     public static final String DIC_CONSTRAINT_FK_DIC_FORMULARIO = "FK_DIC_Formulario";
 
 
+    public static final String TRATAMENTO_TABELA = "Tratamento";
+
+    public static final String TRATAMENTO_COL_ID = "id_Tratamento";
+    public static final String TRATAMENTO_COL_NOME_TRATAMENTO = "nome_Tratamento";
+    public static final String TRATAMENTO_COL_TIPO_TRATAMENTO = "tipo_Tratamento";
+    public static final String TRATAMENTO_COL_ID_FORMULARIO_TRATAMENTO = "idForm_Tratamento";
+    public static final String TRATAMENTO_CONSTRAINT_FK_TRATAMENTO_FORMULARIO = "FK_DIC_Tratamento";
+
+
     private static final String CRIAR_TABELA_FORMULARIO = "CREATE TABLE "
             + FORMULARIO_TABELA + "(" + FORMULARIO_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             + FORMULARIO_COL_MODELO + " TEXT NOT NULL, "
@@ -72,13 +82,20 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + "UNIQUE " + "('"+ DIC_COL_ID +"') "
             + ")";
 
-
-
+    private static final String CRIAR_TABELA_TRATAMENTO = "CREATE TABLE "
+            + TRATAMENTO_TABELA + "("+ TRATAMENTO_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+            + TRATAMENTO_COL_NOME_TRATAMENTO + " TEXT, "
+            + TRATAMENTO_COL_TIPO_TRATAMENTO + " INTEGER, "
+            + TRATAMENTO_COL_ID_FORMULARIO_TRATAMENTO + " INTEGER, "
+            + "CONSTRAINT '" + TRATAMENTO_CONSTRAINT_FK_TRATAMENTO_FORMULARIO +"' FOREIGN KEY ('"+ TRATAMENTO_COL_ID_FORMULARIO_TRATAMENTO +"') REFERENCES "+ FORMULARIO_TABELA + " ('"+ FORMULARIO_COL_ID + "'), "
+            + "UNIQUE " + "('"+ TRATAMENTO_COL_ID +"') "
+            + ")";
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CRIAR_TABELA_FORMULARIO);
         db.execSQL(CRIAR_TABELA_DIC);
+        db.execSQL(CRIAR_TABELA_TRATAMENTO);
 
     }
 
@@ -86,6 +103,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + DIC_TABELA);
         db.execSQL("DROP TABLE IF EXISTS " + FORMULARIO_TABELA);
+        db.execSQL("DROP TABLE IF EXISTS " + TRATAMENTO_TABELA);
     }
 
     //Formulario
@@ -176,7 +194,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
     public DIC lerDIC(Long id_DIC, Long idFormulario_DIC){
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectQuery = "SELECT * FROM " + DIC_TABELA + " WHERE " + DIC_COL_ID + " = " + id_DIC + " JOIN " + FORMULARIO_TABELA + " ON " + FORMULARIO_COL_ID +" = " + idFormulario_DIC;
+        String selectQuery = "SELECT * FROM " + DIC_TABELA + " JOIN " + FORMULARIO_TABELA + " ON " + FORMULARIO_COL_ID +" = " + idFormulario_DIC + " WHERE " + DIC_COL_ID + " = " + id_DIC;
 
         Log.e(LOG, selectQuery);
 
@@ -185,6 +203,13 @@ public class DBAuxilar extends SQLiteOpenHelper {
         if(c != null) c.moveToFirst();
 
         DIC dic = new DIC();
+        dic.setId_Form(c.getLong(c.getColumnIndex(FORMULARIO_COL_ID)));
+        dic.setModelo_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_MODELO)));
+        dic.setNome_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_NOME)));
+        dic.setDescricao_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_DESCRICAO)));
+        dic.setCriador_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_CRIADOR)));
+        dic.setDataCriacao_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_DATA_CRIACAO)));
+        dic.setStatus_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_STATUS)));
         dic.setId_DIC(c.getLong(c.getColumnIndex(DIC_COL_ID)));
         dic.setQuantidadeTratamentos_DIC(c.getInt(c.getColumnIndex(DIC_COL_QUANTIDADE_TRATAMENTOS)));
         dic.setQuantidadeRepeticoes_DIC(c.getInt(c.getColumnIndex(DIC_COL_QUANTIDADE_REPETICOES)));
@@ -200,7 +225,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
     public List<DIC> lerTodosDICs(String modelo_Form, Long idFormulario_DIC){
         List<DIC> dics = new ArrayList<>();
 
-        String selectQuery = "SELECT * FROM " + DIC_TABELA + " WHERE " + FORMULARIO_COL_MODELO + " = " + modelo_Form + " JOIN " + FORMULARIO_TABELA + " ON " + FORMULARIO_COL_ID +" = " + idFormulario_DIC;
+        String selectQuery = "SELECT * FROM " + DIC_TABELA + " JOIN " + FORMULARIO_TABELA + " ON " + FORMULARIO_COL_ID +" = " + idFormulario_DIC + " WHERE " + FORMULARIO_COL_MODELO + " = " + modelo_Form;
 
         Log.e(LOG, selectQuery);
 
@@ -230,6 +255,21 @@ public class DBAuxilar extends SQLiteOpenHelper {
         return dics;
     }
 
+
+    //Tratamento
+
+    //Inserir Tratamento
+
+    public Long insertTratamento(Tratamento tratamento){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(TRATAMENTO_COL_NOME_TRATAMENTO, tratamento.getNome_Tratamento());
+        values.put(TRATAMENTO_COL_TIPO_TRATAMENTO, tratamento.getTipo_Tratamento());
+        values.put(TRATAMENTO_COL_ID_FORMULARIO_TRATAMENTO, tratamento.getIdForm_Tratamento());
+
+        return db.insert(TRATAMENTO_TABELA, null, values);
+    }
 
 
 

@@ -35,6 +35,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="me.adolfoquaranta.ef2.atividades.CadastroFormulario" />
         </activity>
+        <activity
+            android:name=".atividades.CadastroTratamentos"
+            android:label="@string/title_activity_cadastro_tratamentos"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
