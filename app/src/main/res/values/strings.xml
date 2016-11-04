@@ -26,8 +26,6 @@
     <string name="err_msg_nomeTratamento">Insira um nome para o Tratamento</string>
 
 
-
-
     <string name="inicio_btnEXE">EXP</string>
     <string name="inicio_btnINV">INV</string>
     <string name="inicio_btnFITO">FITO</string>
@@ -47,20 +45,45 @@
     <string name="hint_quantidadeRepeticoes_DIC">Quantidade de Repetições</string>
     <string name="hint_quantidadeTratatmentos_DIC">Quantidade de Tratamentos</string>
     <string name="title_activity_cadastro_tratamentos">Cadastro de Tratamentos</string>
-    <string name="hint_nomeTratamento">Nome Tratamento</string>
-
+    <string name="hint_nomeTratamento">Nome do tratamento</string>
+    <string name="title_activity_cadastro_variaveis">Cadastro de Variáveis</string>
+    <string name="hint_nomeVariavel">Nome da variável</string>
 
     <string name="spinnerTitulo_tipoTratamento">Tipo</string>
     <string name="dialog_close_button">Cancelar</string>
+    <string name="err_msg_tipoTratamento">Escolha um Tipo</string>
+    <string name="err_msg_nomeVariavel">Insira um nome</string>
+    <string name="err_msg_tipoVariavel">Insira um tipo</string>
+
+    <string name="title_activity_cadastro_coleta">Cadastro de Coleta</string>
+    <string name="hint_nomeColeta">Nome da Coleta</string>
+    <string name="hint_descricaoColeta">Descrição da Coleta</string>
+    <string name="err_msg_nomeColeta">Insira um nome</string>
+    <string name="err_msg_descricaoColeta">Insira uma descrição</string>
+
+
     <string-array name="spinnerArray_tipoTratamento">
         <item>Tipo</item>
-        <item>a</item>
-        <item>b</item>
+        <item>Qual.</item>
+        <item>Quant.</item>
     </string-array>
     <string-array name="spinnerArray_tipoTratamentoValues">
         <item>0</item>
         <item>1</item>
         <item>2</item>
     </string-array>
+
+    <string-array name="spinnerArray_tipoVariavel">
+        <item>Tipo</item>
+        <item>Disc.</item>
+        <item>Cont.</item>
+    </string-array>
+    <string-array name="spinnerArray_tipoVariavelValues">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string name="title_activity_coletar">Coletar</string>
+
 
 </resources>

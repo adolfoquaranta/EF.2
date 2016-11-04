@@ -5,9 +5,9 @@ package me.adolfoquaranta.ef2.modelos;
  */
 
 public class Tratamento {
-    Long id_Tratamento, idForm_Tratamento;
-    Integer tipo_Tratamento;
-    String nome_Tratamento;
+    private Long id_Tratamento, idForm_Tratamento;
+    private Integer tipo_Tratamento;
+    private String nome_Tratamento;
 
     public Tratamento() {
     }

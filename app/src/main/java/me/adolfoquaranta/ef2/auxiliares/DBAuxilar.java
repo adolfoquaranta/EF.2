@@ -10,9 +10,11 @@ import android.util.Log;
 import java.util.ArrayList;
 import java.util.List;
 
+import me.adolfoquaranta.ef2.modelos.Coleta;
 import me.adolfoquaranta.ef2.modelos.DIC;
 import me.adolfoquaranta.ef2.modelos.Formulario;
 import me.adolfoquaranta.ef2.modelos.Tratamento;
+import me.adolfoquaranta.ef2.modelos.Variavel;
 
 /**
  * Created by adolfo on 13/10/16.
@@ -60,6 +62,30 @@ public class DBAuxilar extends SQLiteOpenHelper {
     public static final String TRATAMENTO_CONSTRAINT_FK_TRATAMENTO_FORMULARIO = "FK_DIC_Tratamento";
 
 
+    public static final String VARIAVEL_TABELA = "Variavel";
+
+    public static final String VARIAVEL_COL_ID = "id_Variavel";
+    public static final String VARIAVEL_COL_NOME_VARIAVEL = "nome_Variavel";
+    public static final String VARIAVEL_COL_TIPO_VARIAVEL = "tipo_Variavel";
+    public static final String VARIAVEL_COL_ID_FORMULARIO_VARIAVEL = "idForm_Variavel";
+    public static final String VARIAVEL_CONSTRAINT_FK_VARIAVEL_FORMULARIO = "FK_DIC_Variavel";
+
+
+    public static final String COLETA_TABELA = "Coleta";
+
+    public static final String COLETA_COL_ID = "id_Coleta";
+    public static final String COLETA_COL_NOME_COLETA = "nome_Coleta";
+    public static final String COLETA_COL_DESCRICAO_COLETA = "descricao_Coleta";
+    public static final String COLETA_COL_DATA_CRIACAO_COLETA = "dataCriacao_Coleta";
+    public static final String COLETA_COL_DATA_ULTIMA_EDICAO_COLETA = "dataUltimaEdicao_Coleta";
+    public static final String COLETA_COL_STATUS_COLETA = "status_Coleta";
+    public static final String COLETA_COL_TIPO_COLETA = "tipo_Coleta";
+    public static final String COLETA_COL_MODELO_FORM_COLETA = "modeloForm_Coleta";
+    public static final String COLETA_COL_ID_FORMULARIO_COLETA = "idForm_Coleta";
+    public static final String COLETA_CONSTRAINT_FK_COLETA_FORMULARIO = "FK_Coleta_Formulario";
+
+
+
     private static final String CRIAR_TABELA_FORMULARIO = "CREATE TABLE "
             + FORMULARIO_TABELA + "(" + FORMULARIO_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             + FORMULARIO_COL_MODELO + " TEXT NOT NULL, "
@@ -91,11 +117,36 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + "UNIQUE " + "('"+ TRATAMENTO_COL_ID +"') "
             + ")";
 
+    private static final String CRIAR_TABELA_VARIAVEL = "CREATE TABLE "
+            + VARIAVEL_TABELA + "("+ VARIAVEL_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+            + VARIAVEL_COL_NOME_VARIAVEL + " TEXT, "
+            + VARIAVEL_COL_TIPO_VARIAVEL + " INTEGER, "
+            + VARIAVEL_COL_ID_FORMULARIO_VARIAVEL + " INTEGER, "
+            + "CONSTRAINT '" + VARIAVEL_CONSTRAINT_FK_VARIAVEL_FORMULARIO +"' FOREIGN KEY ('"+ VARIAVEL_COL_ID_FORMULARIO_VARIAVEL +"') REFERENCES "+ FORMULARIO_TABELA + " ('"+ FORMULARIO_COL_ID + "'), "
+            + "UNIQUE " + "('"+ VARIAVEL_COL_ID +"') "
+            + ")";
+
+    private static final String CRIAR_TABELA_COLETA = "CREATE TABLE "
+            + COLETA_TABELA + "(" + COLETA_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+            + COLETA_COL_NOME_COLETA + " TEXT NOT NULL, "
+            + COLETA_COL_DESCRICAO_COLETA + " TEXT, "
+            + COLETA_COL_DATA_CRIACAO_COLETA + " TEXT, "
+            + COLETA_COL_DATA_ULTIMA_EDICAO_COLETA + " TEXT, "
+            + COLETA_COL_STATUS_COLETA + " TEXT, "
+            + COLETA_COL_TIPO_COLETA + " TEXT, "
+            + COLETA_COL_MODELO_FORM_COLETA + " TEXT, "
+            + COLETA_COL_ID_FORMULARIO_COLETA + " INTEGER, "
+            + "CONSTRAINT '" + COLETA_CONSTRAINT_FK_COLETA_FORMULARIO +"' FOREIGN KEY ('"+ COLETA_COL_ID_FORMULARIO_COLETA +"') REFERENCES "+ FORMULARIO_TABELA + " ('"+ FORMULARIO_COL_ID + "') "
+            + ")";
+
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CRIAR_TABELA_FORMULARIO);
         db.execSQL(CRIAR_TABELA_DIC);
         db.execSQL(CRIAR_TABELA_TRATAMENTO);
+        db.execSQL(CRIAR_TABELA_VARIAVEL);
+        db.execSQL(CRIAR_TABELA_COLETA);
 
     }
 
@@ -104,6 +155,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + DIC_TABELA);
         db.execSQL("DROP TABLE IF EXISTS " + FORMULARIO_TABELA);
         db.execSQL("DROP TABLE IF EXISTS " + TRATAMENTO_TABELA);
+        db.execSQL("DROP TABLE IF EXISTS " + VARIAVEL_TABELA);
+        db.execSQL("DROP TABLE IF EXISTS " + COLETA_TABELA);
     }
 
     //Formulario
@@ -175,6 +228,15 @@ public class DBAuxilar extends SQLiteOpenHelper {
         return formularios;
     }
 
+    public Long updateFormularioStatus(Formulario formulario){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(FORMULARIO_COL_STATUS, formulario.getStatus_Form());
+
+        return (long) db.update(FORMULARIO_TABELA, values, "id=" + formulario.getId_Form(), null);
+    }
+
 
     //DIC
     public Long inserirDIC(DIC dic){
@@ -191,10 +253,10 @@ public class DBAuxilar extends SQLiteOpenHelper {
         return db.insert(DIC_TABELA, null, values);
     }
 
-    public DIC lerDIC(Long id_DIC, Long idFormulario_DIC){
+    public DIC lerDIC(Long idFormulario_DIC){
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectQuery = "SELECT * FROM " + DIC_TABELA + " JOIN " + FORMULARIO_TABELA + " ON " + FORMULARIO_COL_ID +" = " + idFormulario_DIC + " WHERE " + DIC_COL_ID + " = " + id_DIC;
+        String selectQuery = "SELECT * FROM " + DIC_TABELA + " JOIN " + FORMULARIO_TABELA + " ON " + FORMULARIO_COL_ID +" = " + idFormulario_DIC;
 
         Log.e(LOG, selectQuery);
 
@@ -271,6 +333,114 @@ public class DBAuxilar extends SQLiteOpenHelper {
         return db.insert(TRATAMENTO_TABELA, null, values);
     }
 
+    //ler todos os Tratamentos
+    public List<Tratamento> lerTodosTratamentos(Long id_Formulario){
+        List<Tratamento> tratamentos = new ArrayList<>();
+
+        String selectQuery = "SELECT * FROM " + TRATAMENTO_TABELA + " WHERE " + TRATAMENTO_COL_ID_FORMULARIO_TRATAMENTO + " = " + id_Formulario;
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if(c.moveToFirst()){
+            do{
+                Tratamento tratamento = new Tratamento();
+                tratamento.setId_Tratamento(c.getLong(c.getColumnIndex(TRATAMENTO_COL_ID)));
+                tratamento.setNome_Tratamento(c.getString(c.getColumnIndex(TRATAMENTO_COL_NOME_TRATAMENTO)));
+                tratamento.setTipo_Tratamento(c.getInt(c.getColumnIndex(TRATAMENTO_COL_TIPO_TRATAMENTO)));
+                tratamento.setIdForm_Tratamento(c.getLong(c.getColumnIndex(TRATAMENTO_COL_ID_FORMULARIO_TRATAMENTO)));
+                tratamentos.add(tratamento);
+            }while (c.moveToNext());
+        }
+
+        return tratamentos;
+    }
+
+    //Variavel
+
+    //Inserir Variavel
+
+    public Long insertVariavel(Variavel variavel){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(VARIAVEL_COL_NOME_VARIAVEL, variavel.getNome_Variavel());
+        values.put(VARIAVEL_COL_TIPO_VARIAVEL, variavel.getTipo_Variavel());
+        values.put(VARIAVEL_COL_ID_FORMULARIO_VARIAVEL, variavel.getIdForm_Variavel());
+
+        return db.insert(VARIAVEL_TABELA, null, values);
+    }
+
+    //ler todas as Variaveis
+    public List<Variavel> lerTodasVariaveis(Long id_Formulario){
+        List<Variavel> variaveis = new ArrayList<>();
+
+        String selectQuery = "SELECT * FROM " + VARIAVEL_TABELA + " WHERE " + VARIAVEL_COL_ID_FORMULARIO_VARIAVEL + " = " + id_Formulario;
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if(c.moveToFirst()){
+            do{
+                Variavel variavel = new Variavel();
+                variavel.setId_Variavel(c.getLong(c.getColumnIndex(VARIAVEL_COL_ID)));
+                variavel.setNome_Variavel(c.getString(c.getColumnIndex(VARIAVEL_COL_NOME_VARIAVEL)));
+                variavel.setTipo_Variavel(c.getInt(c.getColumnIndex(VARIAVEL_COL_TIPO_VARIAVEL)));
+                variavel.setIdForm_Variavel(c.getLong(c.getColumnIndex(VARIAVEL_COL_ID_FORMULARIO_VARIAVEL)));
+                variaveis.add(variavel);
+            }while (c.moveToNext());
+        }
+
+        return variaveis;
+    }
+
+    //Coleta
+
+    //Inserir Coleta
+    public Long insertColeta(Coleta coleta){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLETA_COL_NOME_COLETA, coleta.getNome_Coleta());
+        values.put(COLETA_COL_DESCRICAO_COLETA, coleta.getDescricao_Coleta());
+        values.put(COLETA_COL_DATA_CRIACAO_COLETA, coleta.getDataCriacao_Coleta());
+        values.put(COLETA_COL_DATA_ULTIMA_EDICAO_COLETA, coleta.getDataUltimaEdicao_Coleta());
+        values.put(COLETA_COL_STATUS_COLETA, coleta.getStatus_Coleta());
+        values.put(COLETA_COL_TIPO_COLETA, coleta.getTipo_Coleta());
+        values.put(COLETA_COL_MODELO_FORM_COLETA, coleta.getModeloForm_Coleta());
+        values.put(COLETA_COL_ID_FORMULARIO_COLETA, coleta.getIdForm_Coleta());
+
+        return db.insert(COLETA_TABELA, null, values);
+    }
+
+    public Coleta lerColeta(Long id_Coleta){
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + COLETA_TABELA + " WHERE " + COLETA_COL_ID + " = " + id_Coleta;
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if(c != null) c.moveToFirst();
+
+        Coleta coleta = new Coleta();
+        coleta.setIdForm_Coleta(c.getLong(c.getColumnIndex(COLETA_COL_ID)));
+        coleta.setNome_Coleta(c.getString(c.getColumnIndex(COLETA_COL_NOME_COLETA)));
+        coleta.setDescricao_Coleta(c.getString(c.getColumnIndex(COLETA_COL_DESCRICAO_COLETA)));
+        coleta.setDataCriacao_Coleta(c.getString(c.getColumnIndex(COLETA_COL_DATA_CRIACAO_COLETA)));
+        coleta.setDataUltimaEdicao_Coleta(c.getString(c.getColumnIndex(COLETA_COL_DATA_ULTIMA_EDICAO_COLETA)));
+        coleta.setStatus_Coleta(c.getString(c.getColumnIndex(COLETA_COL_STATUS_COLETA)));
+        coleta.setTipo_Coleta(c.getString(c.getColumnIndex(COLETA_COL_TIPO_COLETA)));
+        coleta.setModeloForm_Coleta(c.getString(c.getColumnIndex(COLETA_COL_MODELO_FORM_COLETA)));
+        coleta.setIdForm_Coleta(c.getLong(c.getColumnIndex(COLETA_COL_ID_FORMULARIO_COLETA)));
+
+        return coleta;
+    }
 
 
 }

@@ -38,6 +38,18 @@
         <activity
             android:name=".atividades.CadastroTratamentos"
             android:label="@string/title_activity_cadastro_tratamentos"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".atividades.CadastroVariaveis"
+            android:label="@string/title_activity_cadastro_variaveis"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".atividades.CadastroColeta"
+            android:label="@string/title_activity_cadastro_coleta"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".atividades.ColetarDados"
+            android:label="@string/title_activity_coletar"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
