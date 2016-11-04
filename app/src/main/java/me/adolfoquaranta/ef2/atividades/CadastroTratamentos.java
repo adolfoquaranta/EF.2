@@ -14,21 +14,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-
-import java.util.ArrayList;
 
 import me.adolfoquaranta.ef2.R;
 import me.adolfoquaranta.ef2.auxiliares.DBAuxilar;
 import me.adolfoquaranta.ef2.modelos.DIC;
 
 public class CadastroTratamentos extends AppCompatActivity {
+    private ListView list_viewTratamentos;
+    private TratamentosListAdapter tratamentosListAdapter;
     private DIC dic;
+    private String[] nomeTratamentosLista;
+    private Integer[] tipoTratamentosLista;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,43 +57,53 @@ public class CadastroTratamentos extends AppCompatActivity {
 
         dic = dbauxiliar.lerDIC(id_DIC, id_Formulario_DIC);
 
+        nomeTratamentosLista = new String[dic.getQuantidadeTratamentos_DIC()];
+        tipoTratamentosLista = new Integer[dic.getQuantidadeTratamentos_DIC()];
 
-        final TratamentosListAdapter tratamentosListAdapter = new TratamentosListAdapter();
-        final ListView list_viewTratamentos = (ListView) findViewById(R.id.list_viewTratamentos);
+        tratamentosListAdapter = new TratamentosListAdapter();
+        list_viewTratamentos = (ListView) findViewById(R.id.list_viewTratamentos);
         list_viewTratamentos.setAdapter(tratamentosListAdapter);
-        list_viewTratamentos.setFooterDividersEnabled(true);
+        //list_viewTratamentos.setFooterDividersEnabled(true);
 
 
         Button btn_salvar_Tratamentos = (Button) findViewById(R.id.btn_salvar_Tratamentos);
 
 
 
+
         btn_salvar_Tratamentos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                View v;
-                ArrayList<String> nomeTratamentosLista = new ArrayList<String>();
-                ArrayList<Integer> tipoTratamentosLista = new ArrayList<Integer>();
-                TextInputEditText nomeTratamento;
-                Spinner tipo_Tratamento;
-                TextInputLayout textInputLayoutNomeTratamento;
+
                 for (int i = 0; i < list_viewTratamentos.getCount(); i++) {
-                    v = list_viewTratamentos.getChildAt(i);
-                    nomeTratamento = (TextInputEditText) v.findViewById(R.id.input_nomeTratamento);
-                    tipo_Tratamento = (Spinner) v.findViewById(R.id.input_tipoTratamento);
-                    textInputLayoutNomeTratamento = (TextInputLayout) v.findViewById(R.id.input_layout_nomeTratamento);
-                    if(validarNomeTratamento(nomeTratamento,textInputLayoutNomeTratamento)) {
-                        nomeTratamentosLista.add(nomeTratamento.getText().toString());
-                        tipoTratamentosLista.add(tipo_Tratamento.getSelectedItemPosition());
+                    if(!validarNomeTratamento(i)) {
+                        View v = list_viewTratamentos.getChildAt(i);
+                        if(((TextInputEditText) v.findViewById(R.id.input_nomeTratamento)).getText().toString().isEmpty()){
+                            ((TextInputLayout) v.findViewById(R.id.input_layout_nomeTratamento)).setError(getText(R.string.err_msg_nomeTratamento));
+                            if(v.findViewById(R.id.input_nomeTratamento).isFocusable()){
+                                v.findViewById(R.id.input_nomeTratamento).requestFocus();
+                                return;
+                            }
+                        }
+                        else {
+                            ((TextInputLayout) v.findViewById(R.id.input_layout_nomeTratamento)).setError(getText(R.string.err_msg_tipoTratamento));
+                            if(v.findViewById(R.id.input_tipoTratamento).isFocusable()) {
+                                v.findViewById(R.id.input_tipoTratamento).requestFocus();
+                                return;
+                            }
+                            return;
+                        }
                     }
-                    else Log.i("Validação", "nada feito");
+                    else{
+                        View v = list_viewTratamentos.getChildAt(i);
+                        ((TextInputLayout) v.findViewById(R.id.input_layout_nomeTratamento)).setErrorEnabled(false);
+                    }
                 }
-                Log.d("TRATAMENTOS_nome",nomeTratamentosLista.toString());
-                Log.d("TRATAMENTOS_tipo",tipoTratamentosLista.toString());
+
+                Log.i("Validação", "Validação OK!");
+
             }
         });
-
-
 
 
 
@@ -101,12 +113,15 @@ public class CadastroTratamentos extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            return dic.getQuantidadeTratamentos_DIC();
+            if(dic.getQuantidadeTratamentos_DIC()!= null && dic.getQuantidadeTratamentos_DIC() != 0) {
+                return dic.getQuantidadeTratamentos_DIC();
+            }
+            return 0;
         }
 
         @Override
         public Object getItem(int position) {
-            return position;
+            return nomeTratamentosLista[position];
         }
 
         @Override
@@ -115,7 +130,7 @@ public class CadastroTratamentos extends AppCompatActivity {
         }
 
         @Override
-        public View getView(int position, View convertView, final ViewGroup parent) {
+        public View getView(final int position, View convertView, final ViewGroup parent) {
             final ViewHolder holder;
             if (convertView == null) {
                 holder = new ViewHolder();
@@ -124,6 +139,8 @@ public class CadastroTratamentos extends AppCompatActivity {
                 holder.inputLayoutNome_Tratamento = (TextInputLayout) convertView.findViewById(R.id.input_layout_nomeTratamento);
                 holder.inputNome_Tratamento = (TextInputEditText) convertView.findViewById(R.id.input_nomeTratamento);
                 holder.inputTipo_Tratamento = (Spinner) convertView.findViewById(R.id.input_tipoTratamento);
+                holder.inputTipo_Tratamento.setFocusable(true);
+                holder.inputTipo_Tratamento.setFocusableInTouchMode(true);
                 convertView.setTag(holder);
             }
             else{
@@ -131,6 +148,10 @@ public class CadastroTratamentos extends AppCompatActivity {
             }
 
             holder.ref = position;
+
+            if(nomeTratamentosLista.length>0){
+                holder.inputNome_Tratamento.setText(nomeTratamentosLista[position]);
+            }
 
             holder.inputNome_Tratamento.addTextChangedListener(new TextWatcher() {
                 @Override
@@ -145,10 +166,22 @@ public class CadastroTratamentos extends AppCompatActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
-                    Log.i("afterTextChanged", "OK");
-                    validarNomeTratamento(holder.inputNome_Tratamento, holder.inputLayoutNome_Tratamento);
+                    nomeTratamentosLista[holder.ref] = s.toString();
+                    validarNomeTratamento(holder.ref);
                 }
 
+            });
+
+            holder.inputTipo_Tratamento.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+                    tipoTratamentosLista[position] = parent.getSelectedItemPosition();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
             });
 
             return convertView;
@@ -162,23 +195,9 @@ public class CadastroTratamentos extends AppCompatActivity {
 
     }
 
-    private boolean validarNomeTratamento(EditText nome_Tratamento, TextInputLayout textInputLayoutNome_Tratamento){
-        Log.i("DentroDaFuncao","OK");
-        if(nome_Tratamento.getText().toString().trim().isEmpty()){
-            textInputLayoutNome_Tratamento.setError(getString(R.string.err_msg_nomeTratamento));
-            requestFocus(nome_Tratamento);
-            return false;
-        }
-        else {
-            textInputLayoutNome_Tratamento.setErrorEnabled(false);
-        }
-        return true;
-    }
+    private boolean validarNomeTratamento(Integer position) {
 
-    private void requestFocus(View view) {
-        if (view.requestFocus()) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        }
+        return !nomeTratamentosLista[position].isEmpty() && tipoTratamentosLista[position] != 0;
     }
 }
 

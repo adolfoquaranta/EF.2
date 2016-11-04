@@ -52,6 +52,7 @@
 
     <string name="spinnerTitulo_tipoTratamento">Tipo</string>
     <string name="dialog_close_button">Cancelar</string>
+    <string name="err_msg_tipoTratamento">Escolha um Tipo</string>
     <string-array name="spinnerArray_tipoTratamento">
         <item>Tipo</item>
         <item>a</item>
