@@ -55,7 +55,7 @@ public class CadastroTratamentos extends AppCompatActivity {
 
         DBAuxilar dbauxiliar = new DBAuxilar(getApplicationContext());
 
-        dic = dbauxiliar.lerDIC(id_DIC, id_Formulario_DIC);
+        dic = dbauxiliar.lerDIC(id_Formulario_DIC);
 
         nomeTratamentosLista = new String[dic.getQuantidadeTratamentos_DIC()];
         tipoTratamentosLista = new Integer[dic.getQuantidadeTratamentos_DIC()];
