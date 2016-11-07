@@ -23,10 +23,10 @@ import android.widget.Spinner;
 import me.adolfoquaranta.ef2.R;
 import me.adolfoquaranta.ef2.auxiliares.DBAuxilar;
 import me.adolfoquaranta.ef2.modelos.DIC;
-import me.adolfoquaranta.ef2.modelos.Tratamento;
 
 public class CadastroTratamentos extends AppCompatActivity {
     private ListView list_viewTratamentos;
+    private TratamentosListAdapter tratamentosListAdapter;
     private DIC dic;
     private String[] nomeTratamentosLista;
     private Integer[] tipoTratamentosLista;
@@ -49,24 +49,28 @@ public class CadastroTratamentos extends AppCompatActivity {
         });
 
 
-        final Intent cadastroTratamentos = getIntent();
+        Intent cadastroTratamentos = getIntent();
         Long id_Formulario_DIC = cadastroTratamentos.getLongExtra("id_Formulario_DIC", 0);
         Long id_DIC = cadastroTratamentos.getLongExtra("id_DIC", 0);
 
-        final DBAuxilar dbauxiliar = new DBAuxilar(getApplicationContext());
+        DBAuxilar dbauxiliar = new DBAuxilar(getApplicationContext());
 
-        dic = dbauxiliar.lerDIC(id_Formulario_DIC);
+        dic = dbauxiliar.lerDIC(id_DIC, id_Formulario_DIC);
 
         nomeTratamentosLista = new String[dic.getQuantidadeTratamentos_DIC()];
         tipoTratamentosLista = new Integer[dic.getQuantidadeTratamentos_DIC()];
 
-        TratamentosListAdapter tratamentosListAdapter = new TratamentosListAdapter();
+        tratamentosListAdapter = new TratamentosListAdapter();
         list_viewTratamentos = (ListView) findViewById(R.id.list_viewTratamentos);
         list_viewTratamentos.setAdapter(tratamentosListAdapter);
         //list_viewTratamentos.setFooterDividersEnabled(true);
 
 
         Button btn_salvar_Tratamentos = (Button) findViewById(R.id.btn_salvar_Tratamentos);
+
+
+
+
         btn_salvar_Tratamentos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -98,21 +102,7 @@ public class CadastroTratamentos extends AppCompatActivity {
 
                 Log.i("Validação", "Validação OK!");
 
-                for (int i=0; i<nomeTratamentosLista.length; i++){
-                    Tratamento tratamento = new Tratamento();
-                    tratamento.setNome_Tratamento(nomeTratamentosLista[i]);
-                    tratamento.setTipo_Tratamento(tipoTratamentosLista[i]);
-                    tratamento.setIdForm_Tratamento(dic.getIdFormulario_DIC());
-                    dbauxiliar.insertTratamento(tratamento);
-                }
-
-                Intent cadastroVariaveis = new Intent(CadastroTratamentos.this, CadastroVariaveis.class);
-                cadastroVariaveis.putExtra("idFormulario_DIC", dic.getIdFormulario_DIC());
-                cadastroVariaveis.putExtra("id_DIC", dic.getId_DIC());
-                startActivity(cadastroVariaveis);
-
             }
-
         });
 
 
@@ -150,7 +140,7 @@ public class CadastroTratamentos extends AppCompatActivity {
                 holder.inputNome_Tratamento = (TextInputEditText) convertView.findViewById(R.id.input_nomeTratamento);
                 holder.inputTipo_Tratamento = (Spinner) convertView.findViewById(R.id.input_tipoTratamento);
                 holder.inputTipo_Tratamento.setFocusable(true);
-                //holder.inputTipo_Tratamento.setFocusableInTouchMode(true);
+                holder.inputTipo_Tratamento.setFocusableInTouchMode(true);
                 convertView.setTag(holder);
             }
             else{
