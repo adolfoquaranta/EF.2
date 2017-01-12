@@ -23,6 +23,7 @@ import android.widget.Spinner;
 import me.adolfoquaranta.ef2.R;
 import me.adolfoquaranta.ef2.auxiliares.DBAuxilar;
 import me.adolfoquaranta.ef2.modelos.DIC;
+import me.adolfoquaranta.ef2.modelos.Tratamento;
 
 public class CadastroTratamentos extends AppCompatActivity {
     private ListView list_viewTratamentos;
@@ -50,12 +51,12 @@ public class CadastroTratamentos extends AppCompatActivity {
 
 
         Intent cadastroTratamentos = getIntent();
-        Long id_Formulario_DIC = cadastroTratamentos.getLongExtra("id_Formulario_DIC", 0);
         Long id_DIC = cadastroTratamentos.getLongExtra("id_DIC", 0);
+        Long idFormulario_DIC = cadastroTratamentos.getLongExtra("idFormulario_DIC", 0);
 
         DBAuxilar dbauxiliar = new DBAuxilar(getApplicationContext());
 
-        dic = dbauxiliar.lerDIC(id_Formulario_DIC);
+        dic = dbauxiliar.lerDICdoFormulario(idFormulario_DIC);
 
         nomeTratamentosLista = new String[dic.getQuantidadeTratamentos_DIC()];
         tipoTratamentosLista = new Integer[dic.getQuantidadeTratamentos_DIC()];
@@ -78,8 +79,11 @@ public class CadastroTratamentos extends AppCompatActivity {
                 for (int i = 0; i < list_viewTratamentos.getCount(); i++) {
                     if(!validarNomeTratamento(i)) {
                         View v = list_viewTratamentos.getChildAt(i);
+                        list_viewTratamentos.smoothScrollToPosition(i);
                         if(((TextInputEditText) v.findViewById(R.id.input_nomeTratamento)).getText().toString().isEmpty()){
-                            ((TextInputLayout) v.findViewById(R.id.input_layout_nomeTratamento)).setError(getText(R.string.err_msg_nomeTratamento));
+                            if(!((TextInputLayout) v.findViewById(R.id.input_layout_nomeTratamento)).isErrorEnabled()) {
+                                ((TextInputLayout) v.findViewById(R.id.input_layout_nomeTratamento)).setError(getText(R.string.err_msg_nomeTratamento));
+                            }
                             if(v.findViewById(R.id.input_nomeTratamento).isFocusable()){
                                 v.findViewById(R.id.input_nomeTratamento).requestFocus();
                                 return;
@@ -101,6 +105,21 @@ public class CadastroTratamentos extends AppCompatActivity {
                 }
 
                 Log.i("Validação", "Validação OK!");
+
+                DBAuxilar dbAuxilar = new DBAuxilar(getApplicationContext());
+
+                for (int i=0; i<nomeTratamentosLista.length; i++){
+                    Tratamento tratamento = new Tratamento();
+                    tratamento.setNome_Tratamento(nomeTratamentosLista[i]);
+                    tratamento.setTipo_Tratamento(tipoTratamentosLista[i]);
+                    tratamento.setIdForm_Tratamento(dic.getIdFormulario_DIC());
+                    dbAuxilar.insertTratamento(tratamento);
+                }
+
+                Intent cadastroVariaveis = new Intent(CadastroTratamentos.this, CadastroVariaveis.class);
+                cadastroVariaveis.putExtra("idFormulario_DIC", dic.getIdFormulario_DIC());
+                cadastroVariaveis.putExtra("id_DIC", dic.getId_DIC());
+                startActivity(cadastroVariaveis);
 
             }
         });
@@ -139,8 +158,6 @@ public class CadastroTratamentos extends AppCompatActivity {
                 holder.inputLayoutNome_Tratamento = (TextInputLayout) convertView.findViewById(R.id.input_layout_nomeTratamento);
                 holder.inputNome_Tratamento = (TextInputEditText) convertView.findViewById(R.id.input_nomeTratamento);
                 holder.inputTipo_Tratamento = (Spinner) convertView.findViewById(R.id.input_tipoTratamento);
-                holder.inputTipo_Tratamento.setFocusable(true);
-                holder.inputTipo_Tratamento.setFocusableInTouchMode(true);
                 convertView.setTag(holder);
             }
             else{
@@ -166,8 +183,12 @@ public class CadastroTratamentos extends AppCompatActivity {
 
                 @Override
                 public void afterTextChanged(Editable s) {
+                    Log.i("editable s", s.toString());
                     nomeTratamentosLista[holder.ref] = s.toString();
+                    Log.d("holder.ref", String.valueOf( holder.ref));
                     validarNomeTratamento(holder.ref);
+
+
                 }
 
             });

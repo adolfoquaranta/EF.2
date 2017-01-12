@@ -47,7 +47,7 @@ public class ListarFormularios extends AppCompatActivity {
 
         listarFormularios = getIntent();
 
-        modelo_Form = listarFormularios.getSerializableExtra("modelo_Form").toString();
+        modelo_Form = listarFormularios.getStringExtra("modelo_Form");
 
         getSupportActionBar().setTitle(getSupportActionBar().getTitle().toString() + " " + modelo_Form);
 

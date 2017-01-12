@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content_coletar"
@@ -14,6 +14,29 @@
     tools:showIn="@layout/activity_coletar"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_ColetaInfo"
+        android:textAlignment="center"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 
+    <android.support.v7.widget.ListViewCompat
+        android:id="@+id/list_viewColetar"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:scrollbars="vertical"
+        android:layout_weight="1"
+        android:divider="@android:color/transparent"
+        android:dividerHeight="10.0sp"/>
 
-</LinearLayout>
+    <Button android:id="@+id/btn_salvar_Coleta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_salvar"
+        android:background="@color/colorPrimary"
+        android:paddingTop="5dp"
+        android:textColor="@android:color/white"
+        android:layout_below="@id/list_viewTratamentos" />
+
+</android.support.v7.widget.LinearLayoutCompat>

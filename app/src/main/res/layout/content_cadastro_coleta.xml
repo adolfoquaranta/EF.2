@@ -23,7 +23,7 @@
             android:id="@+id/input_nomeColeta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
+            android:inputType="text"
             android:hint="@string/hint_nomeColeta" />
     </android.support.design.widget.TextInputLayout>
 
@@ -36,7 +36,7 @@
             android:id="@+id/input_descricaoColeta"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="number"
+            android:inputType="textMultiLine"
             android:hint="@string/hint_descricaoColeta" />
     </android.support.design.widget.TextInputLayout>
 

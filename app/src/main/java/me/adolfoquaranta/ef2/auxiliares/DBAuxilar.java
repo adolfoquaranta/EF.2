@@ -12,6 +12,7 @@ import java.util.List;
 
 import me.adolfoquaranta.ef2.modelos.Coleta;
 import me.adolfoquaranta.ef2.modelos.DIC;
+import me.adolfoquaranta.ef2.modelos.Dado;
 import me.adolfoquaranta.ef2.modelos.Formulario;
 import me.adolfoquaranta.ef2.modelos.Tratamento;
 import me.adolfoquaranta.ef2.modelos.Variavel;
@@ -28,61 +29,83 @@ public class DBAuxilar extends SQLiteOpenHelper {
 
     private static final String LOG = "DBAuxiliar";
 
-    public static final String DATABASE_NOME = "ef2.db";
+    private static final String DATABASE_NOME = "ef2.db";
 
     //
-    public static final String FORMULARIO_TABELA = "Formulario";
+    private static final String FORMULARIO_TABELA = "Formulario";
 
-    public static final String FORMULARIO_COL_ID = "id_Form";
-    public static final String FORMULARIO_COL_MODELO = "modelo_Form";
-    public static final String FORMULARIO_COL_NOME = "nome_Form";
-    public static final String FORMULARIO_COL_DESCRICAO = "descricao_Form";
-    public static final String FORMULARIO_COL_CRIADOR = "criador_Form";
-    public static final String FORMULARIO_COL_DATA_CRIACAO = "dataCriacao_Form";
-    public static final String FORMULARIO_COL_STATUS = "status_Form";
-
-
-    public static final String DIC_TABELA = "DIC";
-
-    public static final String DIC_COL_ID = "id_DIC";
-    public static final String DIC_COL_QUANTIDADE_TRATAMENTOS = "quantidadeTratamentos_DIC";
-    public static final String DIC_COL_QUANTIDADE_REPETICOES = "quantidadeRepeticoes_DIC";
-    public static final String DIC_COL_QUANTIDADE_REPLICACOES = "quantidadeReplicacoes_DIC";
-    public static final String DIC_COL_QUANTIDADE_VARIAVEIS = "quantidadeVariaveis_DIC";
-    public static final String DIC_COL_ID_FORMULARIO_DIC = "idFormulario_DIC";
-    public static final String DIC_CONSTRAINT_FK_DIC_FORMULARIO = "FK_DIC_Formulario";
+    private static final String FORMULARIO_COL_ID = "id_Form";
+    private static final String FORMULARIO_COL_MODELO = "modelo_Form";
+    private static final String FORMULARIO_COL_NOME = "nome_Form";
+    private static final String FORMULARIO_COL_DESCRICAO = "descricao_Form";
+    private static final String FORMULARIO_COL_CRIADOR = "criador_Form";
+    private static final String FORMULARIO_COL_DATA_CRIACAO = "dataCriacao_Form";
+    private static final String FORMULARIO_COL_STATUS = "status_Form";
 
 
-    public static final String TRATAMENTO_TABELA = "Tratamento";
+    private static final String DIC_TABELA = "DIC";
 
-    public static final String TRATAMENTO_COL_ID = "id_Tratamento";
-    public static final String TRATAMENTO_COL_NOME_TRATAMENTO = "nome_Tratamento";
-    public static final String TRATAMENTO_COL_TIPO_TRATAMENTO = "tipo_Tratamento";
-    public static final String TRATAMENTO_COL_ID_FORMULARIO_TRATAMENTO = "idForm_Tratamento";
-    public static final String TRATAMENTO_CONSTRAINT_FK_TRATAMENTO_FORMULARIO = "FK_DIC_Tratamento";
-
-
-    public static final String VARIAVEL_TABELA = "Variavel";
-
-    public static final String VARIAVEL_COL_ID = "id_Variavel";
-    public static final String VARIAVEL_COL_NOME_VARIAVEL = "nome_Variavel";
-    public static final String VARIAVEL_COL_TIPO_VARIAVEL = "tipo_Variavel";
-    public static final String VARIAVEL_COL_ID_FORMULARIO_VARIAVEL = "idForm_Variavel";
-    public static final String VARIAVEL_CONSTRAINT_FK_VARIAVEL_FORMULARIO = "FK_DIC_Variavel";
+    private static final String DIC_COL_ID = "id_DIC";
+    private static final String DIC_COL_QUANTIDADE_TRATAMENTOS = "quantidadeTratamentos_DIC";
+    private static final String DIC_COL_QUANTIDADE_REPETICOES = "quantidadeRepeticoes_DIC";
+    private static final String DIC_COL_QUANTIDADE_REPLICACOES = "quantidadeReplicacoes_DIC";
+    private static final String DIC_COL_QUANTIDADE_VARIAVEIS = "quantidadeVariaveis_DIC";
+    private static final String DIC_COL_ID_FORMULARIO = "idFormulario_DIC";
+    private static final String DIC_CONSTRAINT_FK_DIC_FORMULARIO = "FK_DIC_Formulario";
 
 
-    public static final String COLETA_TABELA = "Coleta";
+    private static final String TRATAMENTO_TABELA = "Tratamento";
 
-    public static final String COLETA_COL_ID = "id_Coleta";
-    public static final String COLETA_COL_NOME_COLETA = "nome_Coleta";
-    public static final String COLETA_COL_DESCRICAO_COLETA = "descricao_Coleta";
-    public static final String COLETA_COL_DATA_CRIACAO_COLETA = "dataCriacao_Coleta";
-    public static final String COLETA_COL_DATA_ULTIMA_EDICAO_COLETA = "dataUltimaEdicao_Coleta";
-    public static final String COLETA_COL_STATUS_COLETA = "status_Coleta";
-    public static final String COLETA_COL_TIPO_COLETA = "tipo_Coleta";
-    public static final String COLETA_COL_MODELO_FORM_COLETA = "modeloForm_Coleta";
-    public static final String COLETA_COL_ID_FORMULARIO_COLETA = "idForm_Coleta";
-    public static final String COLETA_CONSTRAINT_FK_COLETA_FORMULARIO = "FK_Coleta_Formulario";
+    private static final String TRATAMENTO_COL_ID = "id_Tratamento";
+    private static final String TRATAMENTO_COL_NOME = "nome_Tratamento";
+    private static final String TRATAMENTO_COL_TIPO = "tipo_Tratamento";
+    private static final String TRATAMENTO_COL_ID_FORMULARIO = "idForm_Tratamento";
+    private static final String TRATAMENTO_CONSTRAINT_FK_TRATAMENTO_FORMULARIO = "FK_DIC_Tratamento";
+
+
+    private static final String VARIAVEL_TABELA = "Variavel";
+
+    private static final String VARIAVEL_COL_ID = "id_Variavel";
+    private static final String VARIAVEL_COL_NOME = "nome_Variavel";
+    private static final String VARIAVEL_COL_TIPO = "tipo_Variavel";
+    private static final String VARIAVEL_COL_ID_FORMULARIO = "idForm_Variavel";
+    private static final String VARIAVEL_CONSTRAINT_FK_VARIAVEL_FORMULARIO = "FK_DIC_Variavel";
+
+
+    private static final String COLETA_TABELA = "Coleta";
+
+    private static final String COLETA_COL_ID = "id_Coleta";
+    private static final String COLETA_COL_NOME = "nome_Coleta";
+    private static final String COLETA_COL_DESCRICAO = "descricao_Coleta";
+    private static final String COLETA_COL_DATA_CRIACAO = "dataCriacao_Coleta";
+    private static final String COLETA_COL_DATA_ULTIMA_EDICAO = "dataUltimaEdicao_Coleta";
+    private static final String COLETA_COL_STATUS = "status_Coleta";
+    private static final String COLETA_COL_TIPO = "tipo_Coleta";
+    private static final String COLETA_COL_MODELO_FORM = "modeloForm_Coleta";
+    private static final String COLETA_COL_ID_FORMULARIO = "idForm_Coleta";
+    private static final String COLETA_CONSTRAINT_FK_COLETA_FORMULARIO = "FK_Coleta_Formulario";
+
+
+    private static final String DADO_TABELA = "Dado";
+
+    private static final String DADO_COL_ID = "id_Dado";
+    private static final String DADO_COL_VALOR = "valor_Dado";
+    private static final String DADO_COL_REPETICAO = "repeticao_Dado";
+    private static final String DADO_COL_REPLICACAO = "replicacao_Dado";
+    private static final String DADO_COL_BLOCO = "bloco_Dado";
+    private static final String DADO_COL_FATOR = "fator_Dado";
+    private static final String DADO_COL_DIVISAO = "divisao_Dado";
+    private static final String DADO_COL_NIVEL_FATOR = "nivelFator_Dado";
+    private static final String DADO_COL_NIVEL_DIVISAO = "nivelDivisao_Dado";
+    private static final String DADO_COL_ID_COLETA = "idColeta_Dado";
+    private static final String DADO_COL_ID_TRATAMENTO = "idTratamento_Dado";
+    private static final String DADO_COL_ID_VARIAVEL = "idVariavel_Dado";
+    private static final String DADO_CONSTRAINT_FK_DADO_COLETA = "FK_Dado_Coleta";
+    private static final String DADO_CONSTRAINT_FK_DADO_TRATAMENTO = "FK_Dado_Tratamento";
+    private static final String DADO_CONSTRAINT_FK_DADO_VARIAVEL = "FK_Dado_Variavel";
+
+
+
 
 
 
@@ -103,40 +126,55 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + DIC_COL_QUANTIDADE_REPETICOES + " INTEGER, "
             + DIC_COL_QUANTIDADE_REPLICACOES + " INTEGER, "
             + DIC_COL_QUANTIDADE_VARIAVEIS + " INTEGER, "
-            + DIC_COL_ID_FORMULARIO_DIC + " INTEGER, "
-            + "CONSTRAINT '" + DIC_CONSTRAINT_FK_DIC_FORMULARIO +"' FOREIGN KEY ('"+ DIC_COL_ID_FORMULARIO_DIC +"') REFERENCES "+ FORMULARIO_TABELA + " ('"+ FORMULARIO_COL_ID + "'), "
-            + "UNIQUE " + "('"+ DIC_COL_ID +"') "
+            + DIC_COL_ID_FORMULARIO + " INTEGER, "
+            + "CONSTRAINT '" + DIC_CONSTRAINT_FK_DIC_FORMULARIO +"' FOREIGN KEY ('"+ DIC_COL_ID_FORMULARIO +"') REFERENCES "+ FORMULARIO_TABELA + " ('"+ FORMULARIO_COL_ID + "') "
             + ")";
 
     private static final String CRIAR_TABELA_TRATAMENTO = "CREATE TABLE "
             + TRATAMENTO_TABELA + "("+ TRATAMENTO_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-            + TRATAMENTO_COL_NOME_TRATAMENTO + " TEXT, "
-            + TRATAMENTO_COL_TIPO_TRATAMENTO + " INTEGER, "
-            + TRATAMENTO_COL_ID_FORMULARIO_TRATAMENTO + " INTEGER, "
-            + "CONSTRAINT '" + TRATAMENTO_CONSTRAINT_FK_TRATAMENTO_FORMULARIO +"' FOREIGN KEY ('"+ TRATAMENTO_COL_ID_FORMULARIO_TRATAMENTO +"') REFERENCES "+ FORMULARIO_TABELA + " ('"+ FORMULARIO_COL_ID + "'), "
-            + "UNIQUE " + "('"+ TRATAMENTO_COL_ID +"') "
+            + TRATAMENTO_COL_NOME + " TEXT, "
+            + TRATAMENTO_COL_TIPO + " INTEGER, "
+            + TRATAMENTO_COL_ID_FORMULARIO + " INTEGER, "
+            + "CONSTRAINT '" + TRATAMENTO_CONSTRAINT_FK_TRATAMENTO_FORMULARIO +"' FOREIGN KEY ('"+ TRATAMENTO_COL_ID_FORMULARIO +"') REFERENCES "+ FORMULARIO_TABELA + " ('"+ FORMULARIO_COL_ID + "') "
             + ")";
 
     private static final String CRIAR_TABELA_VARIAVEL = "CREATE TABLE "
             + VARIAVEL_TABELA + "("+ VARIAVEL_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-            + VARIAVEL_COL_NOME_VARIAVEL + " TEXT, "
-            + VARIAVEL_COL_TIPO_VARIAVEL + " INTEGER, "
-            + VARIAVEL_COL_ID_FORMULARIO_VARIAVEL + " INTEGER, "
-            + "CONSTRAINT '" + VARIAVEL_CONSTRAINT_FK_VARIAVEL_FORMULARIO +"' FOREIGN KEY ('"+ VARIAVEL_COL_ID_FORMULARIO_VARIAVEL +"') REFERENCES "+ FORMULARIO_TABELA + " ('"+ FORMULARIO_COL_ID + "'), "
-            + "UNIQUE " + "('"+ VARIAVEL_COL_ID +"') "
+            + VARIAVEL_COL_NOME + " TEXT, "
+            + VARIAVEL_COL_TIPO + " INTEGER, "
+            + VARIAVEL_COL_ID_FORMULARIO + " INTEGER, "
+            + "CONSTRAINT '" + VARIAVEL_CONSTRAINT_FK_VARIAVEL_FORMULARIO +"' FOREIGN KEY ('"+ VARIAVEL_COL_ID_FORMULARIO +"') REFERENCES "+ FORMULARIO_TABELA + " ('"+ FORMULARIO_COL_ID + "') "
             + ")";
 
     private static final String CRIAR_TABELA_COLETA = "CREATE TABLE "
             + COLETA_TABELA + "(" + COLETA_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-            + COLETA_COL_NOME_COLETA + " TEXT NOT NULL, "
-            + COLETA_COL_DESCRICAO_COLETA + " TEXT, "
-            + COLETA_COL_DATA_CRIACAO_COLETA + " TEXT, "
-            + COLETA_COL_DATA_ULTIMA_EDICAO_COLETA + " TEXT, "
-            + COLETA_COL_STATUS_COLETA + " TEXT, "
-            + COLETA_COL_TIPO_COLETA + " TEXT, "
-            + COLETA_COL_MODELO_FORM_COLETA + " TEXT, "
-            + COLETA_COL_ID_FORMULARIO_COLETA + " INTEGER, "
-            + "CONSTRAINT '" + COLETA_CONSTRAINT_FK_COLETA_FORMULARIO +"' FOREIGN KEY ('"+ COLETA_COL_ID_FORMULARIO_COLETA +"') REFERENCES "+ FORMULARIO_TABELA + " ('"+ FORMULARIO_COL_ID + "') "
+            + COLETA_COL_NOME + " TEXT NOT NULL, "
+            + COLETA_COL_DESCRICAO + " TEXT, "
+            + COLETA_COL_DATA_CRIACAO + " TEXT, "
+            + COLETA_COL_DATA_ULTIMA_EDICAO + " TEXT, "
+            + COLETA_COL_STATUS + " TEXT, "
+            + COLETA_COL_TIPO + " TEXT, "
+            + COLETA_COL_MODELO_FORM + " TEXT, "
+            + COLETA_COL_ID_FORMULARIO + " INTEGER, "
+            + "CONSTRAINT '" + COLETA_CONSTRAINT_FK_COLETA_FORMULARIO +"' FOREIGN KEY ('"+ COLETA_COL_ID_FORMULARIO +"') REFERENCES "+ FORMULARIO_TABELA + " ('"+ FORMULARIO_COL_ID + "') "
+            + ")";
+
+    private static final String CRIAR_TABELA_DADO = "CREATE TABLE "
+            + DADO_TABELA + "(" + DADO_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+            + DADO_COL_VALOR + " TEXT, "
+            + DADO_COL_REPETICAO + " INTEGER, "
+            + DADO_COL_REPLICACAO + " INTEGER, "
+            + DADO_COL_BLOCO + " INTEGER, "
+            + DADO_COL_FATOR + " INTEGER, "
+            + DADO_COL_DIVISAO + " INTEGER, "
+            + DADO_COL_NIVEL_FATOR + " INTEGER, "
+            + DADO_COL_NIVEL_DIVISAO + " INTEGER, "
+            + DADO_COL_ID_COLETA + " INTEGER, "
+            + DADO_COL_ID_TRATAMENTO + " INTEGER, "
+            + DADO_COL_ID_VARIAVEL + " INTEGER, "
+            + "CONSTRAINT '" + DADO_CONSTRAINT_FK_DADO_COLETA +"' FOREIGN KEY ('"+ DADO_COL_ID_COLETA +"') REFERENCES "+ COLETA_TABELA + " ('"+ COLETA_COL_ID + "'), "
+            + "CONSTRAINT '" + DADO_CONSTRAINT_FK_DADO_TRATAMENTO +"' FOREIGN KEY ('"+ DADO_COL_ID_TRATAMENTO +"') REFERENCES "+ TRATAMENTO_TABELA + " ('"+ TRATAMENTO_COL_ID + "'), "
+            + "CONSTRAINT '" + DADO_CONSTRAINT_FK_DADO_VARIAVEL +"' FOREIGN KEY ('"+ DADO_COL_ID_VARIAVEL +"') REFERENCES "+ VARIAVEL_TABELA + " ('"+ VARIAVEL_COL_ID + "') "
             + ")";
 
 
@@ -147,6 +185,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
         db.execSQL(CRIAR_TABELA_TRATAMENTO);
         db.execSQL(CRIAR_TABELA_VARIAVEL);
         db.execSQL(CRIAR_TABELA_COLETA);
+        db.execSQL(CRIAR_TABELA_DADO);
 
     }
 
@@ -157,6 +196,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TRATAMENTO_TABELA);
         db.execSQL("DROP TABLE IF EXISTS " + VARIAVEL_TABELA);
         db.execSQL("DROP TABLE IF EXISTS " + COLETA_TABELA);
+        db.execSQL("DROP TABLE IF EXISTS " + DADO_TABELA);
+
     }
 
     //Formulario
@@ -247,16 +288,16 @@ public class DBAuxilar extends SQLiteOpenHelper {
         values.put(DIC_COL_QUANTIDADE_REPETICOES, dic.getQuantidadeRepeticoes_DIC());
         values.put(DIC_COL_QUANTIDADE_REPLICACOES, dic.getQuantidadeReplicacoes_DIC());
         values.put(DIC_COL_QUANTIDADE_VARIAVEIS, dic.getQuantidadeVariaveis_DIC());
-        values.put(DIC_COL_ID_FORMULARIO_DIC, dic.getIdFormulario_DIC());
+        values.put(DIC_COL_ID_FORMULARIO, dic.getIdFormulario_DIC());
 
 
         return db.insert(DIC_TABELA, null, values);
     }
 
-    public DIC lerDIC(Long idFormulario_DIC){
+    public DIC lerDICdoFormulario(Long idFormulario_DIC){
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectQuery = "SELECT * FROM " + DIC_TABELA + " JOIN " + FORMULARIO_TABELA + " ON " + FORMULARIO_COL_ID +" = " + idFormulario_DIC;
+        String selectQuery = "SELECT * FROM " + DIC_TABELA + " JOIN " + FORMULARIO_TABELA + " ON " + FORMULARIO_COL_ID +" = " + idFormulario_DIC + " WHERE " + DIC_COL_ID_FORMULARIO + " = " + idFormulario_DIC;
 
         Log.e(LOG, selectQuery);
 
@@ -277,7 +318,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
         dic.setQuantidadeRepeticoes_DIC(c.getInt(c.getColumnIndex(DIC_COL_QUANTIDADE_REPETICOES)));
         dic.setQuantidadeReplicacoes_DIC(c.getInt(c.getColumnIndex(DIC_COL_QUANTIDADE_REPLICACOES)));
         dic.setQuantidadeVariaveis_DIC(c.getInt(c.getColumnIndex(DIC_COL_QUANTIDADE_VARIAVEIS)));
-        dic.setIdFormulario_DIC(c.getLong(c.getColumnIndex(DIC_COL_ID_FORMULARIO_DIC)));
+        dic.setIdFormulario_DIC(c.getLong(c.getColumnIndex(DIC_COL_ID_FORMULARIO)));
 
         return dic;
     }
@@ -309,7 +350,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
                 dic.setQuantidadeRepeticoes_DIC(c.getInt(c.getColumnIndex(DIC_COL_QUANTIDADE_REPETICOES)));
                 dic.setQuantidadeReplicacoes_DIC(c.getInt(c.getColumnIndex(DIC_COL_QUANTIDADE_REPLICACOES)));
                 dic.setQuantidadeVariaveis_DIC(c.getInt(c.getColumnIndex(DIC_COL_QUANTIDADE_VARIAVEIS)));
-                dic.setIdFormulario_DIC(c.getLong(c.getColumnIndex(DIC_COL_ID_FORMULARIO_DIC)));
+                dic.setIdFormulario_DIC(c.getLong(c.getColumnIndex(DIC_COL_ID_FORMULARIO)));
 
             }while (c.moveToNext());
         }
@@ -326,9 +367,9 @@ public class DBAuxilar extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(TRATAMENTO_COL_NOME_TRATAMENTO, tratamento.getNome_Tratamento());
-        values.put(TRATAMENTO_COL_TIPO_TRATAMENTO, tratamento.getTipo_Tratamento());
-        values.put(TRATAMENTO_COL_ID_FORMULARIO_TRATAMENTO, tratamento.getIdForm_Tratamento());
+        values.put(TRATAMENTO_COL_NOME, tratamento.getNome_Tratamento());
+        values.put(TRATAMENTO_COL_TIPO, tratamento.getTipo_Tratamento());
+        values.put(TRATAMENTO_COL_ID_FORMULARIO, tratamento.getIdForm_Tratamento());
 
         return db.insert(TRATAMENTO_TABELA, null, values);
     }
@@ -337,7 +378,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
     public List<Tratamento> lerTodosTratamentos(Long id_Formulario){
         List<Tratamento> tratamentos = new ArrayList<>();
 
-        String selectQuery = "SELECT * FROM " + TRATAMENTO_TABELA + " WHERE " + TRATAMENTO_COL_ID_FORMULARIO_TRATAMENTO + " = " + id_Formulario;
+        String selectQuery = "SELECT * FROM " + TRATAMENTO_TABELA + " WHERE " + TRATAMENTO_COL_ID_FORMULARIO + " = " + id_Formulario;
 
         Log.e(LOG, selectQuery);
 
@@ -348,9 +389,9 @@ public class DBAuxilar extends SQLiteOpenHelper {
             do{
                 Tratamento tratamento = new Tratamento();
                 tratamento.setId_Tratamento(c.getLong(c.getColumnIndex(TRATAMENTO_COL_ID)));
-                tratamento.setNome_Tratamento(c.getString(c.getColumnIndex(TRATAMENTO_COL_NOME_TRATAMENTO)));
-                tratamento.setTipo_Tratamento(c.getInt(c.getColumnIndex(TRATAMENTO_COL_TIPO_TRATAMENTO)));
-                tratamento.setIdForm_Tratamento(c.getLong(c.getColumnIndex(TRATAMENTO_COL_ID_FORMULARIO_TRATAMENTO)));
+                tratamento.setNome_Tratamento(c.getString(c.getColumnIndex(TRATAMENTO_COL_NOME)));
+                tratamento.setTipo_Tratamento(c.getInt(c.getColumnIndex(TRATAMENTO_COL_TIPO)));
+                tratamento.setIdForm_Tratamento(c.getLong(c.getColumnIndex(TRATAMENTO_COL_ID_FORMULARIO)));
                 tratamentos.add(tratamento);
             }while (c.moveToNext());
         }
@@ -366,9 +407,9 @@ public class DBAuxilar extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(VARIAVEL_COL_NOME_VARIAVEL, variavel.getNome_Variavel());
-        values.put(VARIAVEL_COL_TIPO_VARIAVEL, variavel.getTipo_Variavel());
-        values.put(VARIAVEL_COL_ID_FORMULARIO_VARIAVEL, variavel.getIdForm_Variavel());
+        values.put(VARIAVEL_COL_NOME, variavel.getNome_Variavel());
+        values.put(VARIAVEL_COL_TIPO, variavel.getTipo_Variavel());
+        values.put(VARIAVEL_COL_ID_FORMULARIO, variavel.getIdForm_Variavel());
 
         return db.insert(VARIAVEL_TABELA, null, values);
     }
@@ -377,7 +418,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
     public List<Variavel> lerTodasVariaveis(Long id_Formulario){
         List<Variavel> variaveis = new ArrayList<>();
 
-        String selectQuery = "SELECT * FROM " + VARIAVEL_TABELA + " WHERE " + VARIAVEL_COL_ID_FORMULARIO_VARIAVEL + " = " + id_Formulario;
+        String selectQuery = "SELECT * FROM " + VARIAVEL_TABELA + " WHERE " + VARIAVEL_COL_ID_FORMULARIO + " = " + id_Formulario;
 
         Log.e(LOG, selectQuery);
 
@@ -388,9 +429,9 @@ public class DBAuxilar extends SQLiteOpenHelper {
             do{
                 Variavel variavel = new Variavel();
                 variavel.setId_Variavel(c.getLong(c.getColumnIndex(VARIAVEL_COL_ID)));
-                variavel.setNome_Variavel(c.getString(c.getColumnIndex(VARIAVEL_COL_NOME_VARIAVEL)));
-                variavel.setTipo_Variavel(c.getInt(c.getColumnIndex(VARIAVEL_COL_TIPO_VARIAVEL)));
-                variavel.setIdForm_Variavel(c.getLong(c.getColumnIndex(VARIAVEL_COL_ID_FORMULARIO_VARIAVEL)));
+                variavel.setNome_Variavel(c.getString(c.getColumnIndex(VARIAVEL_COL_NOME)));
+                variavel.setTipo_Variavel(c.getInt(c.getColumnIndex(VARIAVEL_COL_TIPO)));
+                variavel.setIdForm_Variavel(c.getLong(c.getColumnIndex(VARIAVEL_COL_ID_FORMULARIO)));
                 variaveis.add(variavel);
             }while (c.moveToNext());
         }
@@ -405,14 +446,14 @@ public class DBAuxilar extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(COLETA_COL_NOME_COLETA, coleta.getNome_Coleta());
-        values.put(COLETA_COL_DESCRICAO_COLETA, coleta.getDescricao_Coleta());
-        values.put(COLETA_COL_DATA_CRIACAO_COLETA, coleta.getDataCriacao_Coleta());
-        values.put(COLETA_COL_DATA_ULTIMA_EDICAO_COLETA, coleta.getDataUltimaEdicao_Coleta());
-        values.put(COLETA_COL_STATUS_COLETA, coleta.getStatus_Coleta());
-        values.put(COLETA_COL_TIPO_COLETA, coleta.getTipo_Coleta());
-        values.put(COLETA_COL_MODELO_FORM_COLETA, coleta.getModeloForm_Coleta());
-        values.put(COLETA_COL_ID_FORMULARIO_COLETA, coleta.getIdForm_Coleta());
+        values.put(COLETA_COL_NOME, coleta.getNome_Coleta());
+        values.put(COLETA_COL_DESCRICAO, coleta.getDescricao_Coleta());
+        values.put(COLETA_COL_DATA_CRIACAO, coleta.getDataCriacao_Coleta());
+        values.put(COLETA_COL_DATA_ULTIMA_EDICAO, coleta.getDataUltimaEdicao_Coleta());
+        values.put(COLETA_COL_STATUS, coleta.getStatus_Coleta());
+        values.put(COLETA_COL_TIPO, coleta.getTipo_Coleta());
+        values.put(COLETA_COL_MODELO_FORM, coleta.getModeloForm_Coleta());
+        values.put(COLETA_COL_ID_FORMULARIO, coleta.getIdForm_Coleta());
 
         return db.insert(COLETA_TABELA, null, values);
     }
@@ -430,16 +471,39 @@ public class DBAuxilar extends SQLiteOpenHelper {
 
         Coleta coleta = new Coleta();
         coleta.setIdForm_Coleta(c.getLong(c.getColumnIndex(COLETA_COL_ID)));
-        coleta.setNome_Coleta(c.getString(c.getColumnIndex(COLETA_COL_NOME_COLETA)));
-        coleta.setDescricao_Coleta(c.getString(c.getColumnIndex(COLETA_COL_DESCRICAO_COLETA)));
-        coleta.setDataCriacao_Coleta(c.getString(c.getColumnIndex(COLETA_COL_DATA_CRIACAO_COLETA)));
-        coleta.setDataUltimaEdicao_Coleta(c.getString(c.getColumnIndex(COLETA_COL_DATA_ULTIMA_EDICAO_COLETA)));
-        coleta.setStatus_Coleta(c.getString(c.getColumnIndex(COLETA_COL_STATUS_COLETA)));
-        coleta.setTipo_Coleta(c.getString(c.getColumnIndex(COLETA_COL_TIPO_COLETA)));
-        coleta.setModeloForm_Coleta(c.getString(c.getColumnIndex(COLETA_COL_MODELO_FORM_COLETA)));
-        coleta.setIdForm_Coleta(c.getLong(c.getColumnIndex(COLETA_COL_ID_FORMULARIO_COLETA)));
+        coleta.setNome_Coleta(c.getString(c.getColumnIndex(COLETA_COL_NOME)));
+        coleta.setDescricao_Coleta(c.getString(c.getColumnIndex(COLETA_COL_DESCRICAO)));
+        coleta.setDataCriacao_Coleta(c.getString(c.getColumnIndex(COLETA_COL_DATA_CRIACAO)));
+        coleta.setDataUltimaEdicao_Coleta(c.getString(c.getColumnIndex(COLETA_COL_DATA_ULTIMA_EDICAO)));
+        coleta.setStatus_Coleta(c.getString(c.getColumnIndex(COLETA_COL_STATUS)));
+        coleta.setTipo_Coleta(c.getString(c.getColumnIndex(COLETA_COL_TIPO)));
+        coleta.setModeloForm_Coleta(c.getString(c.getColumnIndex(COLETA_COL_MODELO_FORM)));
+        coleta.setIdForm_Coleta(c.getLong(c.getColumnIndex(COLETA_COL_ID_FORMULARIO)));
 
         return coleta;
+    }
+
+
+    //Dado
+
+    //Inserir Dado
+    public Long inserirDado(Dado dado){
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(DADO_COL_VALOR, dado.getValor_Dado());
+        values.put(DADO_COL_REPETICAO,dado.getRepeticao_Dado());
+        values.put(DADO_COL_REPLICACAO,dado.getReplicacao_Dado());
+        values.put(DADO_COL_BLOCO,dado.getBloco_Dado());
+        values.put(DADO_COL_FATOR,dado.getFator_Dado());
+        values.put(DADO_COL_DIVISAO,dado.getDivisao_Dado());
+        values.put(DADO_COL_NIVEL_FATOR,dado.getNivelFator_Dado());
+        values.put(DADO_COL_NIVEL_DIVISAO,dado.getNivelDivisao_Dado());
+        values.put(DADO_COL_ID_COLETA,dado.getIdColeta_Dado());
+        values.put(DADO_COL_ID_TRATAMENTO,dado.getIdTratamento_Dado());
+        values.put(DADO_COL_ID_VARIAVEL,dado.getIdVariavel_Dado());
+
+        return db.insert(DADO_TABELA, null, values);
     }
 
 

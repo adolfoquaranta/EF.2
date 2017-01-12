@@ -99,10 +99,10 @@ public class CadastroFormularioDIC extends AppCompatActivity {
 
         id_DIC = dbAuxilar.inserirDIC(dic);
 
-        Intent criarTratamentos = new Intent(CadastroFormularioDIC.this, CadastroTratamentos.class);
-        criarTratamentos.putExtra("id_Formulario_DIC", id_Form);
-        criarTratamentos.putExtra("id_DIC", id_DIC);
-        startActivity(criarTratamentos);
+        Intent cadastroTratamentos = new Intent(CadastroFormularioDIC.this, CadastroTratamentos.class);
+        cadastroTratamentos.putExtra("id_DIC", id_DIC);
+        cadastroTratamentos.putExtra("idFormulario_DIC", id_Form);
+        startActivity(cadastroTratamentos);
 
 
     }

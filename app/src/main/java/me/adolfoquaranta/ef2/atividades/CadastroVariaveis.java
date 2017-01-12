@@ -54,7 +54,7 @@ public class CadastroVariaveis extends AppCompatActivity {
 
         final DBAuxilar dbauxiliar = new DBAuxilar(getApplicationContext());
 
-        dic = dbauxiliar.lerDIC(idFormulario_DIC);
+        dic = dbauxiliar.lerDICdoFormulario(idFormulario_DIC);
 
         nomeVariaveisLista = new String[dic.getQuantidadeVariaveis_DIC()];
         tipoVariaveisLista = new Integer[dic.getQuantidadeVariaveis_DIC()];
@@ -143,8 +143,6 @@ public class CadastroVariaveis extends AppCompatActivity {
                 holder.inputLayoutNome_Variavel = (TextInputLayout) convertView.findViewById(R.id.input_layout_nomeVariavel);
                 holder.inputNome_Variavel = (TextInputEditText) convertView.findViewById(R.id.input_nomeVariavel);
                 holder.inputTipo_Variavel = (Spinner) convertView.findViewById(R.id.input_tipoVariavel);
-                holder.inputTipo_Variavel.setFocusable(true);
-                //holder.inputTipo_Variavel.setFocusableInTouchMode(true);
                 convertView.setTag(holder);
             }
             else{

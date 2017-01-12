@@ -81,4 +81,5 @@ public class DIC extends Formulario{
                 ", quantidadeVariaveis_DIC=" + quantidadeVariaveis_DIC +
                 '}';
     }
+
 }
