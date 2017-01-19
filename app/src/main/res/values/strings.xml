@@ -45,7 +45,7 @@
     <string name="hint_quantidadeRepeticoes_DIC">Quantidade de Repetições</string>
     <string name="hint_quantidadeTratatmentos_DIC">Quantidade de Tratamentos</string>
     <string name="title_activity_cadastro_tratamentos">Cadastro de Tratamentos</string>
-    <string name="hint_nomeTratamento">Nome do tratamento</string>
+    <string name="hint_nomeTratamento">Nome do tratamento </string>
     <string name="title_activity_cadastro_variaveis">Cadastro de Variáveis</string>
     <string name="hint_nomeVariavel">Nome da variável</string>
 

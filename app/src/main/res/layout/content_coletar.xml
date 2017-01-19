@@ -37,6 +37,6 @@
         android:background="@color/colorPrimary"
         android:paddingTop="5dp"
         android:textColor="@android:color/white"
-        android:layout_below="@id/list_viewTratamentos" />
+        android:layout_below="@id/list_viewColetar" />
 
 </android.support.v7.widget.LinearLayoutCompat>
