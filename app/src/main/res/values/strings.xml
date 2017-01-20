@@ -61,16 +61,10 @@
     <string name="err_msg_nomeColeta">Insira um nome</string>
     <string name="err_msg_descricaoColeta">Insira uma descrição</string>
 
-
     <string-array name="spinnerArray_tipoTratamento">
         <item>Tipo</item>
         <item>Qual.</item>
         <item>Quant.</item>
-    </string-array>
-    <string-array name="spinnerArray_tipoTratamentoValues">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
     </string-array>
 
     <string-array name="spinnerArray_tipoVariavel">
@@ -78,11 +72,7 @@
         <item>Disc.</item>
         <item>Cont.</item>
     </string-array>
-    <string-array name="spinnerArray_tipoVariavelValues">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
+
     <string name="title_activity_coletar">Coletar</string>
     <string name="nulo">Nulo</string>
     <string name="hint_valorDado">Valor da Variável</string>
