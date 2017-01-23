@@ -60,6 +60,8 @@
     <string name="hint_descricaoColeta">Descrição da Coleta</string>
     <string name="err_msg_nomeColeta">Insira um nome</string>
     <string name="err_msg_descricaoColeta">Insira uma descrição</string>
+    <string name="err_msg_preenchaTodosCampos">Todos os campos são necessários, por favor preencha-os!</string>
+
 
     <string-array name="spinnerArray_tipoTratamento">
         <item>Tipo</item>

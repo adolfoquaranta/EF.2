@@ -1,34 +1,48 @@
 package me.adolfoquaranta.ef2.atividades;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+
+import com.rengwuxian.materialedittext.MaterialEditText;
+import com.rengwuxian.materialedittext.validation.RegexpValidator;
+
+import java.util.ArrayList;
+
 import fr.ganfra.materialspinner.MaterialSpinner;
 import me.adolfoquaranta.ef2.R;
 import me.adolfoquaranta.ef2.auxiliares.DBAuxilar;
 import me.adolfoquaranta.ef2.modelos.DIC;
-import com.rengwuxian.materialedittext.MaterialEditText;
-
+import me.adolfoquaranta.ef2.modelos.Tratamento;
 
 
 public class CadastroTratamentos extends AppCompatActivity {
-
-
+    private DIC dic;
+    private RegexpValidator naoNulo = new RegexpValidator(getString(R.string.err_msg_nomeTratamento), "^(?!\\s*$).+");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_tratamentos);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+
+        final Intent cadastroTratamentos = getIntent();
+        final Long id_DIC = cadastroTratamentos.getLongExtra("id_DIC", 0);
+        final Long idFormulario_DIC = cadastroTratamentos.getLongExtra("idFormulario_DIC", 0);
+
+
+        final DBAuxilar dbauxiliar = new DBAuxilar(getApplicationContext());
+        dic = dbauxiliar.lerDICdoFormulario(idFormulario_DIC);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -40,32 +54,13 @@ public class CadastroTratamentos extends AppCompatActivity {
         });
 
 
-        Intent cadastroTratamentos = getIntent();
-        Long id_DIC = cadastroTratamentos.getLongExtra("id_DIC", 0);
-        Long idFormulario_DIC = cadastroTratamentos.getLongExtra("idFormulario_DIC", 0);
 
-        DBAuxilar dbauxiliar = new DBAuxilar(getApplicationContext());
-
-        DIC dic = dbauxiliar.lerDICdoFormulario(idFormulario_DIC);
-
-        LinearLayout myLayout = (LinearLayout) findViewById(R.id.ll_Tratamentos);
-        final Integer AuxiliarID = dic.getQuantidadeTratamentos_DIC();
-
-        final float scale = getResources().getDisplayMetrics().density;
-        int padding_5dp = (int) (5 * scale + 0.5f);
-
-        String[] opcoesSpinnerTipoTratamento = getResources().getStringArray(R.array.spinnerArray_tipoTratamento);
-
-
-        View.OnFocusChangeListener validar = new View.OnFocusChangeListener() {
+        final View.OnFocusChangeListener validar = new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if(v instanceof MaterialEditText){
                     MaterialEditText editText = (MaterialEditText) v;
-                    editText.validate("^(?!\\s*$).+","Insira um nome");
-                    if(v.hasFocus()){
-                        editText.clearValidators();
-                    }
+                    editText.validateWith(naoNulo);
                 }
                 if(v instanceof MaterialSpinner){
                     MaterialSpinner spinner = (MaterialSpinner) v;
@@ -79,13 +74,19 @@ public class CadastroTratamentos extends AppCompatActivity {
             }
         };
 
+        LinearLayout myLayout = (LinearLayout) findViewById(R.id.ll_Tratamentos);
+        final float scale = getResources().getDisplayMetrics().density;
+        int padding_5dp = (int) (5 * scale + 0.5f);
+        String[] opcoesSpinnerTipoTratamento = getResources().getStringArray(R.array.spinnerArray_tipoTratamento);
+
+
         for (int i = 0; i < dic.getQuantidadeTratamentos_DIC(); i++) {
             LinearLayout layoutInterno= new LinearLayout(CadastroTratamentos.this);
             layoutInterno.setOrientation(LinearLayout.HORIZONTAL);
             layoutInterno.setWeightSum(3);
 
             //nome tratamento
-            final MaterialEditText etNomeTratamento = new MaterialEditText(CadastroTratamentos.this); // Pass it an Activity or Context
+            MaterialEditText etNomeTratamento = new MaterialEditText(CadastroTratamentos.this); // Pass it an Activity or Context
             etNomeTratamento.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 1f)); // Pass two args; must be LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, or an integer pixel value.
             etNomeTratamento.setPaddings(0,padding_5dp,0,0);
             etNomeTratamento.setId(i);
@@ -101,7 +102,7 @@ public class CadastroTratamentos extends AppCompatActivity {
             ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, opcoesSpinnerTipoTratamento);
             spTipoTratamento.setAdapter(spinnerArrayAdapter);
             spTipoTratamento.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 2f)); // Pass two args; must be LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, or an integer pixel value.
-            spTipoTratamento.setId((i+AuxiliarID));
+            spTipoTratamento.setId((i+dic.getQuantidadeTratamentos_DIC()));
             spTipoTratamento.setOnFocusChangeListener(validar);
             layoutInterno.addView(spTipoTratamento);
             myLayout.addView(layoutInterno);
@@ -112,14 +113,44 @@ public class CadastroTratamentos extends AppCompatActivity {
 
         Button btnSalvar_Tratamentos = (Button) findViewById(R.id.btn_salvar_Tratamentos);
 
+
         btnSalvar_Tratamentos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                for(int i=0; i<AuxiliarID; i++){
+                ArrayList<Tratamento> tratamentos = new ArrayList<>(dic.getQuantidadeTratamentos_DIC());
+                for(int i=0; i<dic.getQuantidadeTratamentos_DIC(); i++) {
+                    Tratamento tratamento = new Tratamento();
                     MaterialEditText met = (MaterialEditText) findViewById(i);
-                    Log.d("Nome Trat"+(i+1), met.getText().toString());
-                    MaterialSpinner sp = (MaterialSpinner) findViewById((i+AuxiliarID));
-                    Log.d("Tipo Trat"+(i+1), String.valueOf(sp.getSelectedItemPosition()));
+                    if (met.validateWith(naoNulo)) {
+                        tratamento.setNome_Tratamento(met.getText().toString());
+                    } else {
+                        met.requestFocus();
+                        return;
+                    }
+                    MaterialSpinner sp = (MaterialSpinner) findViewById((i + dic.getQuantidadeTratamentos_DIC()));
+                    if (sp.getSelectedItemPosition() == 0) {
+                        sp.setError("Error");
+                        sp.requestFocus();
+                        return;
+                    } else {
+                        tratamento.setTipo_Tratamento(sp.getSelectedItemPosition());
+                        sp.setError(null);
+                    }
+                    tratamento.setIdForm_Tratamento(idFormulario_DIC);
+                    tratamentos.add(i, tratamento);
+                }
+                if(tratamentos.size()==dic.getQuantidadeTratamentos_DIC()){
+                    for (Tratamento trat:tratamentos) {
+                        dbauxiliar.insertTratamento(trat);
+                    }
+                    Intent cadastroVariaveis = new Intent(CadastroTratamentos.this, CadastroVariaveis.class);
+                    cadastroVariaveis.putExtra("id_DIC", id_DIC);
+                    cadastroVariaveis.putExtra("idFormulario_DIC", idFormulario_DIC);
+                }
+                else{
+                    Snackbar.make(v, getString(R.string.err_msg_preenchaTodosCampos), Snackbar.LENGTH_LONG)
+                            .setActionTextColor(Color.RED)
+                            .setAction("Action", null).show();
                 }
             }
         });
@@ -128,10 +159,8 @@ public class CadastroTratamentos extends AppCompatActivity {
 
 
 
+
     }
-
-
-
 
 }
 
