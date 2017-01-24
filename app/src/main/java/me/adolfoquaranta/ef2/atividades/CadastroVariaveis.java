@@ -1,6 +1,7 @@
 package me.adolfoquaranta.ef2.atividades;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -26,7 +27,6 @@ import me.adolfoquaranta.ef2.modelos.Variavel;
 public class CadastroVariaveis extends AppCompatActivity {
 
     private DIC dic;
-    private RegexpValidator naoNulo = new RegexpValidator(getString(R.string.err_msg_nomeVariavel), "^(?!\\s*$).+");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +51,8 @@ public class CadastroVariaveis extends AppCompatActivity {
         final DBAuxilar dbauxiliar = new DBAuxilar(getApplicationContext());
 
         dic = dbauxiliar.lerDICdoFormulario(idFormulario_DIC);
+
+        final RegexpValidator naoNulo = new RegexpValidator(getString(R.string.err_msg_nomeVariavel), "^(?!\\s*$).+");
 
         final View.OnFocusChangeListener validar = new View.OnFocusChangeListener() {
             @Override
@@ -120,12 +122,18 @@ public class CadastroVariaveis extends AppCompatActivity {
                         tratamento.setNome_Variavel(met.getText().toString());
                     } else {
                         met.requestFocus();
+                        Snackbar.make(v, getString(R.string.err_msg_preenchaTodosCampos), Snackbar.LENGTH_LONG)
+                                .setActionTextColor(Color.RED)
+                                .setAction("Action", null).show();
                         return;
                     }
                     MaterialSpinner sp = (MaterialSpinner) findViewById((i + dic.getQuantidadeVariaveis_DIC()));
                     if (sp.getSelectedItemPosition() == 0) {
                         sp.setError("Error");
                         sp.requestFocus();
+                        Snackbar.make(v, getString(R.string.err_msg_preenchaTodosCampos), Snackbar.LENGTH_LONG)
+                                .setActionTextColor(Color.RED)
+                                .setAction("Action", null).show();
                         return;
                     } else {
                         tratamento.setTipo_Variavel(sp.getSelectedItemPosition());
@@ -137,6 +145,8 @@ public class CadastroVariaveis extends AppCompatActivity {
                 if (tratamentos.size() == dic.getQuantidadeVariaveis_DIC()) {
                     for (Variavel var : tratamentos) {
                         dbauxiliar.insertVariavel(var);
+                        Intent inicio = new Intent(CadastroVariaveis.this, Inicio.class);
+                        startActivity(inicio);
                     }
                 }
             }

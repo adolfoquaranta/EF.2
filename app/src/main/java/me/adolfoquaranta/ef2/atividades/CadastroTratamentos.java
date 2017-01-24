@@ -26,8 +26,10 @@ import me.adolfoquaranta.ef2.modelos.Tratamento;
 
 
 public class CadastroTratamentos extends AppCompatActivity {
+
     private DIC dic;
-    private RegexpValidator naoNulo = new RegexpValidator(getString(R.string.err_msg_nomeTratamento), "^(?!\\s*$).+");
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,11 +37,10 @@ public class CadastroTratamentos extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         final Intent cadastroTratamentos = getIntent();
         final Long id_DIC = cadastroTratamentos.getLongExtra("id_DIC", 0);
         final Long idFormulario_DIC = cadastroTratamentos.getLongExtra("idFormulario_DIC", 0);
-
+        final RegexpValidator naoNulo = new RegexpValidator(getString(R.string.err_msg_nomeTratamento), "^(?!\\s*$).+");
 
         final DBAuxilar dbauxiliar = new DBAuxilar(getApplicationContext());
         dic = dbauxiliar.lerDICdoFormulario(idFormulario_DIC);
@@ -125,12 +126,18 @@ public class CadastroTratamentos extends AppCompatActivity {
                         tratamento.setNome_Tratamento(met.getText().toString());
                     } else {
                         met.requestFocus();
+                        Snackbar.make(v, getString(R.string.err_msg_preenchaTodosCampos), Snackbar.LENGTH_LONG)
+                                .setActionTextColor(Color.RED)
+                                .setAction("Action", null).show();
                         return;
                     }
                     MaterialSpinner sp = (MaterialSpinner) findViewById((i + dic.getQuantidadeTratamentos_DIC()));
                     if (sp.getSelectedItemPosition() == 0) {
                         sp.setError("Error");
                         sp.requestFocus();
+                        Snackbar.make(v, getString(R.string.err_msg_preenchaTodosCampos), Snackbar.LENGTH_LONG)
+                                .setActionTextColor(Color.RED)
+                                .setAction("Action", null).show();
                         return;
                     } else {
                         tratamento.setTipo_Tratamento(sp.getSelectedItemPosition());
@@ -146,11 +153,7 @@ public class CadastroTratamentos extends AppCompatActivity {
                     Intent cadastroVariaveis = new Intent(CadastroTratamentos.this, CadastroVariaveis.class);
                     cadastroVariaveis.putExtra("id_DIC", id_DIC);
                     cadastroVariaveis.putExtra("idFormulario_DIC", idFormulario_DIC);
-                }
-                else{
-                    Snackbar.make(v, getString(R.string.err_msg_preenchaTodosCampos), Snackbar.LENGTH_LONG)
-                            .setActionTextColor(Color.RED)
-                            .setAction("Action", null).show();
+                    startActivity(cadastroVariaveis);
                 }
             }
         });
