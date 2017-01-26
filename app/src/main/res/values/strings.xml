@@ -46,6 +46,7 @@
     <string name="hint_quantidadeTratatmentos_DIC">Quantidade de Tratamentos</string>
     <string name="title_activity_cadastro_tratamentos">Cadastro de Tratamentos</string>
     <string name="hint_nomeTratamento">Nome do tratamento </string>
+    <string name="string_Tratamento">Tratamento </string>
     <string name="title_activity_cadastro_variaveis">Cadastro de Variáveis</string>
     <string name="hint_nomeVariavel">Nome da variável</string>
 
@@ -54,6 +55,8 @@
     <string name="err_msg_tipoTratamento">Escolha um Tipo</string>
     <string name="err_msg_nomeVariavel">Insira um nome</string>
     <string name="err_msg_tipoVariavel">Insira um tipo</string>
+    <string name="err_msg_valorVariavel">Insira um valor</string>
+
 
     <string name="title_activity_cadastro_coleta">Cadastro de Coleta</string>
     <string name="hint_nomeColeta">Nome da Coleta</string>
@@ -79,6 +82,8 @@
     <string name="nulo">Nulo</string>
     <string name="hint_valorDado">Valor da Variável</string>
     <string name="anular">Anular</string>
+    <string name="title_activity_coleta_dados">ColetaDados</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 
 
 </resources>

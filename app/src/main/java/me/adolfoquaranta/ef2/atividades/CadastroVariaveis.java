@@ -146,6 +146,7 @@ public class CadastroVariaveis extends AppCompatActivity {
                     for (Variavel var : tratamentos) {
                         dbauxiliar.insertVariavel(var);
                         Intent inicio = new Intent(CadastroVariaveis.this, Inicio.class);
+                        inicio.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         startActivity(inicio);
                     }
                 }

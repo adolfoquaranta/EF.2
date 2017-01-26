@@ -48,8 +48,8 @@
             android:label="@string/title_activity_cadastro_coleta"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".atividades.ColetarDados"
-            android:label="@string/title_activity_coletar"
+            android:name=".atividades.ColetaDados"
+            android:label="@string/title_activity_coleta_dados"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

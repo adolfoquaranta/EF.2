@@ -102,10 +102,10 @@ public class CadastroColeta extends AppCompatActivity {
         Long id_Coleta = dbAuxilar.insertColeta(coleta);
         Log.d("id_Coleta", id_Coleta.toString());
 
-        Intent coletarDados = new Intent(CadastroColeta.this, ColetarDados.class);
-        coletarDados.putExtra("id_Form", id_Form);
-        coletarDados.putExtra("id_Coleta", id_Coleta);
-        startActivity(coletarDados);
+        Intent coletaDados = new Intent(CadastroColeta.this, ColetaDados.class);
+        coletaDados.putExtra("id_Form", id_Form);
+        coletaDados.putExtra("id_Coleta", id_Coleta);
+        startActivity(coletaDados);
     }
 
 
