@@ -11,9 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import me.adolfoquaranta.ef2.modelos.Coleta;
-import me.adolfoquaranta.ef2.modelos.DIC;
 import me.adolfoquaranta.ef2.modelos.Dado;
 import me.adolfoquaranta.ef2.modelos.Formulario;
+import me.adolfoquaranta.ef2.modelos.Modelo;
 import me.adolfoquaranta.ef2.modelos.Tratamento;
 import me.adolfoquaranta.ef2.modelos.Variavel;
 
@@ -23,57 +23,41 @@ import me.adolfoquaranta.ef2.modelos.Variavel;
 
 public class DBAuxilar extends SQLiteOpenHelper {
 
-    public DBAuxilar(Context context) {
-        super(context, DATABASE_NOME , null, 1);
-    }
-
     private static final String LOG = "DBAuxiliar";
-
     private static final String DATABASE_NOME = "ef2.db";
-
-    //
     private static final String FORMULARIO_TABELA = "Formulario";
-
     private static final String FORMULARIO_COL_ID = "id_Form";
-    private static final String FORMULARIO_COL_MODELO = "modelo_Form";
+    private static final String FORMULARIO_COL_TIPO = "tipo_Form";
     private static final String FORMULARIO_COL_NOME = "nome_Form";
     private static final String FORMULARIO_COL_DESCRICAO = "descricao_Form";
     private static final String FORMULARIO_COL_CRIADOR = "criador_Form";
     private static final String FORMULARIO_COL_DATA_CRIACAO = "dataCriacao_Form";
     private static final String FORMULARIO_COL_STATUS = "status_Form";
-
-
-    private static final String DIC_TABELA = "DIC";
-
-    private static final String DIC_COL_ID = "id_DIC";
-    private static final String DIC_COL_QUANTIDADE_TRATAMENTOS = "quantidadeTratamentos_DIC";
-    private static final String DIC_COL_QUANTIDADE_REPETICOES = "quantidadeRepeticoes_DIC";
-    private static final String DIC_COL_QUANTIDADE_REPLICACOES = "quantidadeReplicacoes_DIC";
-    private static final String DIC_COL_QUANTIDADE_VARIAVEIS = "quantidadeVariaveis_DIC";
-    private static final String DIC_COL_ID_FORMULARIO = "idFormulario_DIC";
-    private static final String DIC_CONSTRAINT_FK_DIC_FORMULARIO = "FK_DIC_Formulario";
-
-
+    private static final String MODELO_TABELA = "Modelo";
+    private static final String MODELO_COL_ID = "id_Modelo";
+    private static final String MODELO_COL_MODELO = "modelo_Modelo";
+    private static final String MODELO_COL_QUANTIDADE_TRATAMENTOS = "quantidadeTratamentos_Modelo";
+    private static final String MODELO_COL_QUANTIDADE_REPETICOES = "quantidadeRepeticoes_Modelo";
+    private static final String MODELO_COL_QUANTIDADE_REPLICACOES = "quantidadeReplicacoes_Modelo";
+    private static final String MODELO_COL_QUANTIDADE_VARIAVEIS = "quantidadeVariaveis_Modelo";
+    private static final String MODELO_COL_QUANTIDADE_BLOCOS = "quantidadeBlocos_Modelo";
+    private static final String MODELO_COL_QUANTIDADE_FATORES = "quantidadeFatores_Modelo";
+    private static final String MODELO_COL_QUANTIDADE_DIVISOES = "quantidadeDivisoes_Modelo";
+    private static final String MODELO_COL_ID_FORMULARIO = "idFormulario_Modelo";
+    private static final String MODELO_CONSTRAINT_FK_MODELO_FORMULARIO = "FK_Modelo_Formulario";
     private static final String TRATAMENTO_TABELA = "Tratamento";
-
     private static final String TRATAMENTO_COL_ID = "id_Tratamento";
     private static final String TRATAMENTO_COL_NOME = "nome_Tratamento";
     private static final String TRATAMENTO_COL_TIPO = "tipo_Tratamento";
     private static final String TRATAMENTO_COL_ID_FORMULARIO = "idForm_Tratamento";
-    private static final String TRATAMENTO_CONSTRAINT_FK_TRATAMENTO_FORMULARIO = "FK_DIC_Tratamento";
-
-
+    private static final String TRATAMENTO_CONSTRAINT_FK_TRATAMENTO_FORMULARIO = "FK_Modelo_Tratamento";
     private static final String VARIAVEL_TABELA = "Variavel";
-
     private static final String VARIAVEL_COL_ID = "id_Variavel";
     private static final String VARIAVEL_COL_NOME = "nome_Variavel";
     private static final String VARIAVEL_COL_TIPO = "tipo_Variavel";
     private static final String VARIAVEL_COL_ID_FORMULARIO = "idForm_Variavel";
-    private static final String VARIAVEL_CONSTRAINT_FK_VARIAVEL_FORMULARIO = "FK_DIC_Variavel";
-
-
+    private static final String VARIAVEL_CONSTRAINT_FK_VARIAVEL_FORMULARIO = "FK_Modelo_Variavel";
     private static final String COLETA_TABELA = "Coleta";
-
     private static final String COLETA_COL_ID = "id_Coleta";
     private static final String COLETA_COL_NOME = "nome_Coleta";
     private static final String COLETA_COL_DESCRICAO = "descricao_Coleta";
@@ -84,10 +68,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
     private static final String COLETA_COL_MODELO_FORM = "modeloForm_Coleta";
     private static final String COLETA_COL_ID_FORMULARIO = "idForm_Coleta";
     private static final String COLETA_CONSTRAINT_FK_COLETA_FORMULARIO = "FK_Coleta_Formulario";
-
-
     private static final String DADO_TABELA = "Dado";
-
     private static final String DADO_COL_ID = "id_Dado";
     private static final String DADO_COL_VALOR = "valor_Dado";
     private static final String DADO_COL_REPETICAO = "repeticao_Dado";
@@ -103,33 +84,28 @@ public class DBAuxilar extends SQLiteOpenHelper {
     private static final String DADO_CONSTRAINT_FK_DADO_COLETA = "FK_Dado_Coleta";
     private static final String DADO_CONSTRAINT_FK_DADO_TRATAMENTO = "FK_Dado_Tratamento";
     private static final String DADO_CONSTRAINT_FK_DADO_VARIAVEL = "FK_Dado_Variavel";
-
-
-
-
-
-
     private static final String CRIAR_TABELA_FORMULARIO = "CREATE TABLE "
             + FORMULARIO_TABELA + "(" + FORMULARIO_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-            + FORMULARIO_COL_MODELO + " TEXT NOT NULL, "
+            + FORMULARIO_COL_TIPO + " TEXT NOT NULL, "
             + FORMULARIO_COL_NOME + " TEXT, "
             + FORMULARIO_COL_DESCRICAO + " TEXT, "
             + FORMULARIO_COL_CRIADOR + " TEXT, "
             + FORMULARIO_COL_DATA_CRIACAO + " TEXT, "
             + FORMULARIO_COL_STATUS + " TEXT "
             + ")";
-
-
-    private static final String CRIAR_TABELA_DIC = "CREATE TABLE "
-            + DIC_TABELA + "(" + DIC_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-            + DIC_COL_QUANTIDADE_TRATAMENTOS + " INTEGER, "
-            + DIC_COL_QUANTIDADE_REPETICOES + " INTEGER, "
-            + DIC_COL_QUANTIDADE_REPLICACOES + " INTEGER, "
-            + DIC_COL_QUANTIDADE_VARIAVEIS + " INTEGER, "
-            + DIC_COL_ID_FORMULARIO + " INTEGER, "
-            + "CONSTRAINT '" + DIC_CONSTRAINT_FK_DIC_FORMULARIO +"' FOREIGN KEY ('"+ DIC_COL_ID_FORMULARIO +"') REFERENCES "+ FORMULARIO_TABELA + " ('"+ FORMULARIO_COL_ID + "') "
+    private static final String CRIAR_TABELA_MODELO = "CREATE TABLE "
+            + MODELO_TABELA + "(" + MODELO_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+            + MODELO_COL_MODELO + " TEXT, "
+            + MODELO_COL_QUANTIDADE_TRATAMENTOS + " INTEGER, "
+            + MODELO_COL_QUANTIDADE_REPETICOES + " INTEGER, "
+            + MODELO_COL_QUANTIDADE_REPLICACOES + " INTEGER, "
+            + MODELO_COL_QUANTIDADE_VARIAVEIS + " INTEGER, "
+            + MODELO_COL_QUANTIDADE_BLOCOS + " INTEGER, "
+            + MODELO_COL_QUANTIDADE_FATORES + " INTEGER, "
+            + MODELO_COL_QUANTIDADE_DIVISOES + " INTEGER, "
+            + MODELO_COL_ID_FORMULARIO + " INTEGER, "
+            + "CONSTRAINT '" + MODELO_CONSTRAINT_FK_MODELO_FORMULARIO + "' FOREIGN KEY ('" + MODELO_COL_ID_FORMULARIO + "') REFERENCES " + FORMULARIO_TABELA + " ('" + FORMULARIO_COL_ID + "') "
             + ")";
-
     private static final String CRIAR_TABELA_TRATAMENTO = "CREATE TABLE "
             + TRATAMENTO_TABELA + "("+ TRATAMENTO_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             + TRATAMENTO_COL_NOME + " TEXT, "
@@ -137,7 +113,6 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + TRATAMENTO_COL_ID_FORMULARIO + " INTEGER, "
             + "CONSTRAINT '" + TRATAMENTO_CONSTRAINT_FK_TRATAMENTO_FORMULARIO +"' FOREIGN KEY ('"+ TRATAMENTO_COL_ID_FORMULARIO +"') REFERENCES "+ FORMULARIO_TABELA + " ('"+ FORMULARIO_COL_ID + "') "
             + ")";
-
     private static final String CRIAR_TABELA_VARIAVEL = "CREATE TABLE "
             + VARIAVEL_TABELA + "("+ VARIAVEL_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             + VARIAVEL_COL_NOME + " TEXT, "
@@ -145,7 +120,6 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + VARIAVEL_COL_ID_FORMULARIO + " INTEGER, "
             + "CONSTRAINT '" + VARIAVEL_CONSTRAINT_FK_VARIAVEL_FORMULARIO +"' FOREIGN KEY ('"+ VARIAVEL_COL_ID_FORMULARIO +"') REFERENCES "+ FORMULARIO_TABELA + " ('"+ FORMULARIO_COL_ID + "') "
             + ")";
-
     private static final String CRIAR_TABELA_COLETA = "CREATE TABLE "
             + COLETA_TABELA + "(" + COLETA_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             + COLETA_COL_NOME + " TEXT NOT NULL, "
@@ -158,7 +132,6 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + COLETA_COL_ID_FORMULARIO + " INTEGER, "
             + "CONSTRAINT '" + COLETA_CONSTRAINT_FK_COLETA_FORMULARIO +"' FOREIGN KEY ('"+ COLETA_COL_ID_FORMULARIO +"') REFERENCES "+ FORMULARIO_TABELA + " ('"+ FORMULARIO_COL_ID + "') "
             + ")";
-
     private static final String CRIAR_TABELA_DADO = "CREATE TABLE "
             + DADO_TABELA + "(" + DADO_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             + DADO_COL_VALOR + " TEXT, "
@@ -177,11 +150,14 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + "CONSTRAINT '" + DADO_CONSTRAINT_FK_DADO_VARIAVEL +"' FOREIGN KEY ('"+ DADO_COL_ID_VARIAVEL +"') REFERENCES "+ VARIAVEL_TABELA + " ('"+ VARIAVEL_COL_ID + "') "
             + ")";
 
+    public DBAuxilar(Context context) {
+        super(context, DATABASE_NOME, null, 4);
+    }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CRIAR_TABELA_FORMULARIO);
-        db.execSQL(CRIAR_TABELA_DIC);
+        db.execSQL(CRIAR_TABELA_MODELO);
         db.execSQL(CRIAR_TABELA_TRATAMENTO);
         db.execSQL(CRIAR_TABELA_VARIAVEL);
         db.execSQL(CRIAR_TABELA_COLETA);
@@ -191,7 +167,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + DIC_TABELA);
+        db.execSQL("DROP TABLE IF EXISTS " + MODELO_TABELA);
         db.execSQL("DROP TABLE IF EXISTS " + FORMULARIO_TABELA);
         db.execSQL("DROP TABLE IF EXISTS " + TRATAMENTO_TABELA);
         db.execSQL("DROP TABLE IF EXISTS " + VARIAVEL_TABELA);
@@ -205,15 +181,15 @@ public class DBAuxilar extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(FORMULARIO_COL_MODELO, formulario.getModelo_Form());
+        values.put(FORMULARIO_COL_TIPO, formulario.getTipo_Form());
         values.put(FORMULARIO_COL_NOME, formulario.getNome_Form());
         values.put(FORMULARIO_COL_DESCRICAO, formulario.getDescricao_Form());
         values.put(FORMULARIO_COL_CRIADOR, formulario.getCriador_Form());
         values.put(FORMULARIO_COL_DATA_CRIACAO, formulario.getDataCriacao_Form());
         values.put(FORMULARIO_COL_STATUS, formulario.getStatus_Form());
 
-
         return db.insert(FORMULARIO_TABELA, null, values);
+
     }
 
     public Formulario lerFormulario(Long id_Form){
@@ -229,7 +205,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
 
         Formulario formulario = new Formulario();
         formulario.setId_Form(c.getLong(c.getColumnIndex(FORMULARIO_COL_ID)));
-        formulario.setModelo_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_MODELO)));
+        formulario.setTipo_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_TIPO)));
         formulario.setNome_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_NOME)));
         formulario.setDescricao_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_DESCRICAO)));
         formulario.setCriador_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_CRIADOR)));
@@ -241,10 +217,10 @@ public class DBAuxilar extends SQLiteOpenHelper {
 
 
     //ler todos os formularios
-    public List<Formulario> lerTodosFormularios(String modelo_Form){
+    public List<Formulario> lerTodosFormularios(String tipo_Formulario) {
         List<Formulario> formularios = new ArrayList<>();
 
-        String selectQuery = "SELECT * FROM " + FORMULARIO_TABELA + " WHERE " + FORMULARIO_COL_MODELO + " = '" + modelo_Form + "'";
+        String selectQuery = "SELECT * FROM " + FORMULARIO_TABELA + " WHERE " + FORMULARIO_COL_TIPO + " = " + "'" + tipo_Formulario + "'";
 
         Log.e(LOG, selectQuery);
 
@@ -255,7 +231,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
             do{
                 Formulario formulario = new Formulario();
                 formulario.setId_Form(c.getLong(c.getColumnIndex(FORMULARIO_COL_ID)));
-                formulario.setModelo_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_MODELO)));
+                formulario.setTipo_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_TIPO)));
                 formulario.setNome_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_NOME)));
                 formulario.setDescricao_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_DESCRICAO)));
                 formulario.setCriador_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_CRIADOR)));
@@ -279,25 +255,27 @@ public class DBAuxilar extends SQLiteOpenHelper {
     }
 
 
-    //DIC
-    public Long inserirDIC(DIC dic){
+    //Modelo
+    public Long inserirModelo(Modelo modelo) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(DIC_COL_QUANTIDADE_TRATAMENTOS, dic.getQuantidadeTratamentos_DIC());
-        values.put(DIC_COL_QUANTIDADE_REPETICOES, dic.getQuantidadeRepeticoes_DIC());
-        values.put(DIC_COL_QUANTIDADE_REPLICACOES, dic.getQuantidadeReplicacoes_DIC());
-        values.put(DIC_COL_QUANTIDADE_VARIAVEIS, dic.getQuantidadeVariaveis_DIC());
-        values.put(DIC_COL_ID_FORMULARIO, dic.getIdFormulario_DIC());
+        if (modelo.getModelo_Modelo().equals("DIC")) {
+            values.put(MODELO_COL_MODELO, modelo.getModelo_Modelo());
+            values.put(MODELO_COL_QUANTIDADE_TRATAMENTOS, modelo.getQuantidadeTratamentos_Modelo());
+            values.put(MODELO_COL_QUANTIDADE_REPETICOES, modelo.getQuantidadeRepeticoes_Modelo());
+            values.put(MODELO_COL_QUANTIDADE_REPLICACOES, modelo.getQuantidadeReplicacoes_Modelo());
+            values.put(MODELO_COL_QUANTIDADE_VARIAVEIS, modelo.getQuantidadeVariaveis_Modelo());
+            values.put(MODELO_COL_ID_FORMULARIO, modelo.getIdFormulario_Modelo());
+        }
 
-
-        return db.insert(DIC_TABELA, null, values);
+        return db.insert(MODELO_TABELA, null, values);
     }
 
-    public DIC lerDICdoFormulario(Long idFormulario_DIC){
+    public Modelo lerModeloDoFormulario(Long id_Modelo, Long idFormulario_Modelo) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectQuery = "SELECT * FROM " + DIC_TABELA + " JOIN " + FORMULARIO_TABELA + " ON " + FORMULARIO_COL_ID +" = " + idFormulario_DIC + " WHERE " + DIC_COL_ID_FORMULARIO + " = " + idFormulario_DIC;
+        String selectQuery = "SELECT * FROM " + MODELO_TABELA + " JOIN " + FORMULARIO_TABELA + " ON " + FORMULARIO_COL_ID + " = " + idFormulario_Modelo + " WHERE " + MODELO_COL_ID + " = " + id_Modelo;
 
         Log.e(LOG, selectQuery);
 
@@ -305,30 +283,65 @@ public class DBAuxilar extends SQLiteOpenHelper {
 
         if(c != null) c.moveToFirst();
 
-        DIC dic = new DIC();
-        dic.setId_Form(c.getLong(c.getColumnIndex(FORMULARIO_COL_ID)));
-        dic.setModelo_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_MODELO)));
-        dic.setNome_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_NOME)));
-        dic.setDescricao_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_DESCRICAO)));
-        dic.setCriador_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_CRIADOR)));
-        dic.setDataCriacao_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_DATA_CRIACAO)));
-        dic.setStatus_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_STATUS)));
-        dic.setId_DIC(c.getLong(c.getColumnIndex(DIC_COL_ID)));
-        dic.setQuantidadeTratamentos_DIC(c.getInt(c.getColumnIndex(DIC_COL_QUANTIDADE_TRATAMENTOS)));
-        dic.setQuantidadeRepeticoes_DIC(c.getInt(c.getColumnIndex(DIC_COL_QUANTIDADE_REPETICOES)));
-        dic.setQuantidadeReplicacoes_DIC(c.getInt(c.getColumnIndex(DIC_COL_QUANTIDADE_REPLICACOES)));
-        dic.setQuantidadeVariaveis_DIC(c.getInt(c.getColumnIndex(DIC_COL_QUANTIDADE_VARIAVEIS)));
-        dic.setIdFormulario_DIC(c.getLong(c.getColumnIndex(DIC_COL_ID_FORMULARIO)));
+        Modelo modelo = new Modelo();
+        modelo.setId_Form(c.getLong(c.getColumnIndex(FORMULARIO_COL_ID)));
+        modelo.setTipo_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_TIPO)));
+        modelo.setNome_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_NOME)));
+        modelo.setDescricao_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_DESCRICAO)));
+        modelo.setCriador_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_CRIADOR)));
+        modelo.setDataCriacao_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_DATA_CRIACAO)));
+        modelo.setStatus_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_STATUS)));
+        modelo.setId_Modelo(c.getLong(c.getColumnIndex(MODELO_COL_ID)));
+        modelo.setQuantidadeTratamentos_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_TRATAMENTOS)));
+        modelo.setQuantidadeRepeticoes_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_REPETICOES)));
+        modelo.setQuantidadeReplicacoes_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_REPLICACOES)));
+        modelo.setQuantidadeVariaveis_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_VARIAVEIS)));
+        modelo.setIdFormulario_Modelo(c.getLong(c.getColumnIndex(MODELO_COL_ID_FORMULARIO)));
 
-        return dic;
+        return modelo;
+    }
+
+    public Modelo lerModelo(Long idFormulario_Modelo, String modelo_Modelo) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + MODELO_TABELA + " JOIN " + FORMULARIO_TABELA + " ON " + FORMULARIO_COL_ID + " = " + idFormulario_Modelo + " WHERE " + MODELO_COL_MODELO + " = " + "'" + modelo_Modelo + "'";
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c != null) c.moveToFirst();
+
+        Modelo modelo = new Modelo();
+        modelo.setId_Modelo(c.getLong(c.getColumnIndex(MODELO_COL_ID)));
+        modelo.setModelo_Modelo(c.getString(c.getColumnIndex(MODELO_COL_MODELO)));
+        modelo.setQuantidadeTratamentos_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_TRATAMENTOS)));
+        modelo.setQuantidadeRepeticoes_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_REPETICOES)));
+        modelo.setQuantidadeReplicacoes_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_REPLICACOES)));
+        modelo.setQuantidadeVariaveis_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_VARIAVEIS)));
+        modelo.setQuantidadeBlocos_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_BLOCOS)));
+        modelo.setQuantidadeFatores_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_FATORES)));
+        modelo.setQuantidadeDivisoes_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_DIVISOES)));
+        modelo.setIdFormulario_Modelo(c.getLong(c.getColumnIndex(MODELO_COL_ID_FORMULARIO)));
+        modelo.setId_Form(c.getLong(c.getColumnIndex(FORMULARIO_COL_ID)));
+        modelo.setTipo_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_TIPO)));
+        modelo.setNome_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_NOME)));
+        modelo.setDescricao_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_DESCRICAO)));
+        modelo.setCriador_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_CRIADOR)));
+        modelo.setDataCriacao_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_DATA_CRIACAO)));
+        modelo.setStatus_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_STATUS)));
+
+        c.close();
+
+        return modelo;
     }
 
 
     //ler todos os DICs
-    public List<DIC> lerTodosDICs(String modelo_Form, Long idFormulario_DIC){
-        List<DIC> dics = new ArrayList<>();
+    public List<Modelo> lerTodosModelos(Long idFormulario) {
+        List<Modelo> modelos = new ArrayList<>();
 
-        String selectQuery = "SELECT * FROM " + DIC_TABELA + " JOIN " + FORMULARIO_TABELA + " ON " + FORMULARIO_COL_ID +" = " + idFormulario_DIC + " WHERE " + FORMULARIO_COL_MODELO + " = " + modelo_Form;
+        String selectQuery = "SELECT * FROM " + MODELO_TABELA + " JOIN " + FORMULARIO_TABELA + " ON " + FORMULARIO_COL_ID + " = " + idFormulario;
 
         Log.e(LOG, selectQuery);
 
@@ -337,25 +350,25 @@ public class DBAuxilar extends SQLiteOpenHelper {
 
         if(c.moveToFirst()){
             do{
-                DIC dic = new DIC();
-                dic.setId_Form(c.getLong(c.getColumnIndex(FORMULARIO_COL_ID)));
-                dic.setModelo_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_MODELO)));
-                dic.setNome_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_NOME)));
-                dic.setDescricao_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_DESCRICAO)));
-                dic.setCriador_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_CRIADOR)));
-                dic.setDataCriacao_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_DATA_CRIACAO)));
-                dic.setStatus_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_STATUS)));
-                dic.setId_DIC(c.getLong(c.getColumnIndex(DIC_COL_ID)));
-                dic.setQuantidadeTratamentos_DIC(c.getInt(c.getColumnIndex(DIC_COL_QUANTIDADE_TRATAMENTOS)));
-                dic.setQuantidadeRepeticoes_DIC(c.getInt(c.getColumnIndex(DIC_COL_QUANTIDADE_REPETICOES)));
-                dic.setQuantidadeReplicacoes_DIC(c.getInt(c.getColumnIndex(DIC_COL_QUANTIDADE_REPLICACOES)));
-                dic.setQuantidadeVariaveis_DIC(c.getInt(c.getColumnIndex(DIC_COL_QUANTIDADE_VARIAVEIS)));
-                dic.setIdFormulario_DIC(c.getLong(c.getColumnIndex(DIC_COL_ID_FORMULARIO)));
+                Modelo modelo = new Modelo();
+                modelo.setId_Form(c.getLong(c.getColumnIndex(FORMULARIO_COL_ID)));
+                modelo.setTipo_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_TIPO)));
+                modelo.setNome_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_NOME)));
+                modelo.setDescricao_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_DESCRICAO)));
+                modelo.setCriador_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_CRIADOR)));
+                modelo.setDataCriacao_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_DATA_CRIACAO)));
+                modelo.setStatus_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_STATUS)));
+                modelo.setId_Modelo(c.getLong(c.getColumnIndex(MODELO_COL_ID)));
+                modelo.setQuantidadeTratamentos_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_TRATAMENTOS)));
+                modelo.setQuantidadeRepeticoes_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_REPETICOES)));
+                modelo.setQuantidadeReplicacoes_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_REPLICACOES)));
+                modelo.setQuantidadeVariaveis_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_VARIAVEIS)));
+                modelo.setIdFormulario_Modelo(c.getLong(c.getColumnIndex(MODELO_COL_ID_FORMULARIO)));
 
             }while (c.moveToNext());
         }
 
-        return dics;
+        return modelos;
     }
 
 
@@ -452,7 +465,6 @@ public class DBAuxilar extends SQLiteOpenHelper {
         values.put(COLETA_COL_DATA_ULTIMA_EDICAO, coleta.getDataUltimaEdicao_Coleta());
         values.put(COLETA_COL_STATUS, coleta.getStatus_Coleta());
         values.put(COLETA_COL_TIPO, coleta.getTipo_Coleta());
-        values.put(COLETA_COL_MODELO_FORM, coleta.getModeloForm_Coleta());
         values.put(COLETA_COL_ID_FORMULARIO, coleta.getIdForm_Coleta());
 
         return db.insert(COLETA_TABELA, null, values);
@@ -477,7 +489,6 @@ public class DBAuxilar extends SQLiteOpenHelper {
         coleta.setDataUltimaEdicao_Coleta(c.getString(c.getColumnIndex(COLETA_COL_DATA_ULTIMA_EDICAO)));
         coleta.setStatus_Coleta(c.getString(c.getColumnIndex(COLETA_COL_STATUS)));
         coleta.setTipo_Coleta(c.getString(c.getColumnIndex(COLETA_COL_TIPO)));
-        coleta.setModeloForm_Coleta(c.getString(c.getColumnIndex(COLETA_COL_MODELO_FORM)));
         coleta.setIdForm_Coleta(c.getLong(c.getColumnIndex(COLETA_COL_ID_FORMULARIO)));
 
         return coleta;

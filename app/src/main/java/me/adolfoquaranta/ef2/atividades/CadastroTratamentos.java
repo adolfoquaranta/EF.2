@@ -21,13 +21,13 @@ import java.util.ArrayList;
 import fr.ganfra.materialspinner.MaterialSpinner;
 import me.adolfoquaranta.ef2.R;
 import me.adolfoquaranta.ef2.auxiliares.DBAuxilar;
-import me.adolfoquaranta.ef2.modelos.DIC;
+import me.adolfoquaranta.ef2.modelos.Modelo;
 import me.adolfoquaranta.ef2.modelos.Tratamento;
 
 
 public class CadastroTratamentos extends AppCompatActivity {
 
-    private DIC dic;
+    private Modelo modelo;
 
 
     @Override
@@ -38,12 +38,12 @@ public class CadastroTratamentos extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final Intent cadastroTratamentos = getIntent();
-        final Long id_DIC = cadastroTratamentos.getLongExtra("id_DIC", 0);
-        final Long idFormulario_DIC = cadastroTratamentos.getLongExtra("idFormulario_DIC", 0);
+        final Long id_Modelo = cadastroTratamentos.getLongExtra("id_Modelo", 0);
+        final Long idFormulario_Modelo = cadastroTratamentos.getLongExtra("idFormulario_Modelo", 0);
         final RegexpValidator naoNulo = new RegexpValidator(getString(R.string.err_msg_nomeTratamento), "^(?!\\s*$).+");
 
         final DBAuxilar dbauxiliar = new DBAuxilar(getApplicationContext());
-        dic = dbauxiliar.lerDICdoFormulario(idFormulario_DIC);
+        modelo = dbauxiliar.lerModeloDoFormulario(id_Modelo, idFormulario_Modelo);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +81,7 @@ public class CadastroTratamentos extends AppCompatActivity {
         String[] opcoesSpinnerTipoTratamento = getResources().getStringArray(R.array.spinnerArray_tipoTratamento);
 
 
-        for (int i = 0; i < dic.getQuantidadeTratamentos_DIC(); i++) {
+        for (int i = 0; i < modelo.getQuantidadeTratamentos_Modelo(); i++) {
             LinearLayout layoutInterno= new LinearLayout(CadastroTratamentos.this);
             layoutInterno.setOrientation(LinearLayout.HORIZONTAL);
             layoutInterno.setWeightSum(3);
@@ -103,7 +103,7 @@ public class CadastroTratamentos extends AppCompatActivity {
             ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, opcoesSpinnerTipoTratamento);
             spTipoTratamento.setAdapter(spinnerArrayAdapter);
             spTipoTratamento.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 2f)); // Pass two args; must be LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, or an integer pixel value.
-            spTipoTratamento.setId((i+dic.getQuantidadeTratamentos_DIC()));
+            spTipoTratamento.setId((i + modelo.getQuantidadeTratamentos_Modelo()));
             spTipoTratamento.setOnFocusChangeListener(validar);
             layoutInterno.addView(spTipoTratamento);
             myLayout.addView(layoutInterno);
@@ -118,8 +118,8 @@ public class CadastroTratamentos extends AppCompatActivity {
         btnSalvar_Tratamentos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Tratamento> tratamentos = new ArrayList<>(dic.getQuantidadeTratamentos_DIC());
-                for(int i=0; i<dic.getQuantidadeTratamentos_DIC(); i++) {
+                ArrayList<Tratamento> tratamentos = new ArrayList<>(modelo.getQuantidadeTratamentos_Modelo());
+                for (int i = 0; i < modelo.getQuantidadeTratamentos_Modelo(); i++) {
                     Tratamento tratamento = new Tratamento();
                     MaterialEditText met = (MaterialEditText) findViewById(i);
                     if (met.validateWith(naoNulo)) {
@@ -130,8 +130,8 @@ public class CadastroTratamentos extends AppCompatActivity {
                                 .setActionTextColor(Color.RED)
                                 .setAction("Action", null).show();
                         return;
-                    }
-                    MaterialSpinner sp = (MaterialSpinner) findViewById((i + dic.getQuantidadeTratamentos_DIC()));
+                }
+                    MaterialSpinner sp = (MaterialSpinner) findViewById((i + modelo.getQuantidadeTratamentos_Modelo()));
                     if (sp.getSelectedItemPosition() == 0) {
                         sp.setError("Error");
                         sp.requestFocus();
@@ -142,26 +142,21 @@ public class CadastroTratamentos extends AppCompatActivity {
                     } else {
                         tratamento.setTipo_Tratamento(sp.getSelectedItemPosition());
                         sp.setError(null);
-                    }
-                    tratamento.setIdForm_Tratamento(idFormulario_DIC);
-                    tratamentos.add(i, tratamento);
                 }
-                if(tratamentos.size()==dic.getQuantidadeTratamentos_DIC()){
-                    for (Tratamento trat:tratamentos) {
+                    tratamento.setIdForm_Tratamento(idFormulario_Modelo);
+                    tratamentos.add(i, tratamento);
+            }
+                if (tratamentos.size() == modelo.getQuantidadeTratamentos_Modelo()) {
+                    for (Tratamento trat : tratamentos) {
                         dbauxiliar.insertTratamento(trat);
                     }
                     Intent cadastroVariaveis = new Intent(CadastroTratamentos.this, CadastroVariaveis.class);
-                    cadastroVariaveis.putExtra("id_DIC", id_DIC);
-                    cadastroVariaveis.putExtra("idFormulario_DIC", idFormulario_DIC);
+                    cadastroVariaveis.putExtra("id_Modelo", id_Modelo);
+                    cadastroVariaveis.putExtra("idFormulario_Modelo", idFormulario_Modelo);
                     startActivity(cadastroVariaveis);
                 }
             }
         });
-
-
-
-
-
 
     }
 

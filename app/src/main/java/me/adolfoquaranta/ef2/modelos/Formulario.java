@@ -6,15 +6,15 @@ package me.adolfoquaranta.ef2.modelos;
 
 public class Formulario {
     private Long id_Form;
-    private String modelo_Form, nome_Form, descricao_Form, criador_Form, dataCriacao_Form, status_Form;
+    private String tipo_Form, nome_Form, descricao_Form, criador_Form, dataCriacao_Form, status_Form;
 
     public Formulario(){
 
     }
 
-    public Formulario(Long id_Form, String modelo_Form, String nome_Form, String descricao_Form, String criador_Form, String dataCriacao_Form, String status_Form){
+    public Formulario(Long id_Form, String tipo_Form, String nome_Form, String descricao_Form, String criador_Form, String dataCriacao_Form, String status_Form) {
         this.id_Form = id_Form;
-        this.modelo_Form = modelo_Form;
+        this.tipo_Form = tipo_Form;
         this.nome_Form = nome_Form;
         this.descricao_Form = descricao_Form;
         this.criador_Form = criador_Form;
@@ -30,12 +30,12 @@ public class Formulario {
         this.id_Form = id_Form;
     }
 
-    public String getModelo_Form() {
-        return modelo_Form;
+    public String getTipo_Form() {
+        return tipo_Form;
     }
 
-    public void setModelo_Form(String modelo_Form) {
-        this.modelo_Form = modelo_Form;
+    public void setTipo_Form(String tipo_Form) {
+        this.tipo_Form = tipo_Form;
     }
 
     public String getNome_Form() {
@@ -82,7 +82,7 @@ public class Formulario {
     public String toString() {
         return "Formulario{" +
                 "id_Form=" + id_Form +
-                ", modelo_Form='" + modelo_Form + '\'' +
+                ", tipo_Form='" + tipo_Form + '\'' +
                 ", nome_Form='" + nome_Form + '\'' +
                 ", descricao_Form='" + descricao_Form + '\'' +
                 ", criador_Form='" + criador_Form + '\'' +

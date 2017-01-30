@@ -37,7 +37,6 @@ public class Inicio extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
         inicio_btnEXE = (Button) findViewById(R.id.inicio_btnEXE);
         inicio_btnINV = (Button) findViewById(R.id.inicio_btnINV);
         inicio_btnFITO = (Button) findViewById(R.id.inicio_btnFITO);
@@ -120,20 +119,20 @@ public class Inicio extends AppCompatActivity
 
     @Override
     public void onClick(View v) {
-        Button modelo_Form = (Button) v;
+        Button tipoForm = (Button) v;
         switch (opcaoMenu_Usuario){
             case R.id.nav_formularioNovo:
                 Intent cadastroFormulario = new Intent(Inicio.this, CadastroFormulario.class);
-                cadastroFormulario.putExtra("modelo_Form", modelo_Form.getText().toString());
+                cadastroFormulario.putExtra("tipo_Formulario", tipoForm.getText().toString());
                 startActivity(cadastroFormulario);
                 break;
             case R.id.nav_coletaContinuar:
                 Intent mostrarFormularios = new Intent(Inicio.this, ListarFormularios.class);
-                mostrarFormularios.putExtra("modelo_Form", modelo_Form.getText().toString());
+                mostrarFormularios.putExtra("tipo_Formulario", tipoForm.getText().toString());
                 startActivity(mostrarFormularios);
                 break;
             default:
-                Toast.makeText(this, "Em Breve!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.info_EmBreve, Toast.LENGTH_SHORT).show();
                 break;
         }
     }

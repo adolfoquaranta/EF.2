@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -28,13 +29,11 @@ public class CadastroFormulario extends AppCompatActivity {
     private TextInputEditText inputNome_Form, inputDescricao_Form, inputCriador_Form;
     private TextInputLayout inputLayoutNome_Form, inputLayoutDescricao_Form, inputLayoutCriador_Form;
 
-    private TextView tv_tipo_Form;
+    private TextView tv_modelo_Modelo;
 
-    private RadioGroup radioGroup_tipo_Form;
+    private RadioGroup radioGroup_modelo_Modelo;
 
-    private String modelo_Form;
-
-    private String tipo_Form;
+    private String tipoFormulario, modelo_Modelo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +43,12 @@ public class CadastroFormulario extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         Intent cadastroFormulario = getIntent();
-        modelo_Form = cadastroFormulario.getSerializableExtra("modelo_Form").toString();
+        tipoFormulario = cadastroFormulario.getSerializableExtra("tipo_Formulario").toString();
 
-        getSupportActionBar().setTitle( getSupportActionBar().getTitle().toString() + " " + modelo_Form);
+        getSupportActionBar().setTitle(getSupportActionBar().getTitle().toString() + " " + tipoFormulario);
 
-        radioGroup_tipo_Form = (RadioGroup) findViewById(R.id.input_tipo_Form);
-        tv_tipo_Form = (TextView) findViewById(R.id.tv_radio_tipo_Form);
+        radioGroup_modelo_Modelo = (RadioGroup) findViewById(R.id.input_modelo_Modelo);
+        tv_modelo_Modelo = (TextView) findViewById(R.id.tv_radio_modelo_Modelo);
 
         inputNome_Form = (TextInputEditText) findViewById(R.id.input_nome_Form);
         inputDescricao_Form = (TextInputEditText) findViewById(R.id.input_descricao_Form);
@@ -74,11 +73,11 @@ public class CadastroFormulario extends AppCompatActivity {
             }
         });
 
-        radioGroup_tipo_Form.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        radioGroup_modelo_Modelo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                tv_tipo_Form.setError(null);
-                tv_tipo_Form.setTextAppearance(getApplicationContext(), R.style.TextAppearence_App_TextInputLayout);
+                tv_modelo_Modelo.setError(null);
+                tv_modelo_Modelo.setTextAppearance(getApplicationContext(), R.style.TextAppearence_App_TextInputLayout);
             }
         });
 
@@ -115,19 +114,24 @@ public class CadastroFormulario extends AppCompatActivity {
         Formulario formulario = new Formulario();
         DBAuxilar dbAuxilar = new DBAuxilar(getApplicationContext());
 
-        formulario.setModelo_Form(modelo_Form);
+        formulario.setTipo_Form(tipoFormulario);
         formulario.setNome_Form(inputNome_Form.getText().toString());
         formulario.setDescricao_Form(inputDescricao_Form.getText().toString());
         formulario.setCriador_Form(inputCriador_Form.getText().toString());
         formulario.setDataCriacao_Form(date.toString());
         formulario.setStatus_Form("Incompleto");
 
-        Long id_Form = dbAuxilar.inserirFormulario(formulario);
+        Long id_Formulario = dbAuxilar.inserirFormulario(formulario);
 
-        if(tipo_Form.equals(getString(R.string.radio_dic))) {
-            Intent cadastroFomularioDIC = new Intent(CadastroFormulario.this, CadastroFormularioDIC.class);
-            cadastroFomularioDIC.putExtra("id_Form", id_Form);
-            startActivity(cadastroFomularioDIC);
+        Log.d("modelo_Modelo_aIF", modelo_Modelo);
+        if (radioGroup_modelo_Modelo.getCheckedRadioButtonId() == R.id.radio_DIC) {
+            Log.d("modelo_Modelo_dIF", modelo_Modelo);
+            modelo_Modelo = getString(R.string.radio_dic);
+            Log.d("modelo_ModeloDsetIF", modelo_Modelo);
+            Intent cadastroModeloFomulario = new Intent(CadastroFormulario.this, CadastroModeloFormulario.class);
+            cadastroModeloFomulario.putExtra("id_Formulario", id_Formulario);
+            cadastroModeloFomulario.putExtra("modelo_Modelo", modelo_Modelo);
+            startActivity(cadastroModeloFomulario);
         }
         else Toast.makeText(getApplicationContext(), "Em Breve", Toast.LENGTH_SHORT).show();
 
@@ -135,23 +139,23 @@ public class CadastroFormulario extends AppCompatActivity {
     }
 
     public boolean validarTipo_Form() {
-        int checked = radioGroup_tipo_Form.getCheckedRadioButtonId();
-        tv_tipo_Form.setError(null);
+        int checked = radioGroup_modelo_Modelo.getCheckedRadioButtonId();
+        tv_modelo_Modelo.setError(null);
         switch (checked){
             case R.id.radio_DIC:
-                tipo_Form = getText(R.string.radio_dic).toString();
+                modelo_Modelo = getText(R.string.radio_dic).toString();
                 return true;
             case R.id.radio_DBC:
-                tipo_Form = getText(R.string.radio_dbc).toString();
+                modelo_Modelo = getText(R.string.radio_dbc).toString();
                 return true;
             case R.id.radio_FAT:
-                tipo_Form = getText(R.string.radio_fat).toString();
+                modelo_Modelo = getText(R.string.radio_fat).toString();
                 return true;
             case R.id.radio_SUB:
-                tipo_Form = getText(R.string.radio_sub).toString();
+                modelo_Modelo = getText(R.string.radio_sub).toString();
                 return true;
             default:
-                tv_tipo_Form.setError(getText(R.string.err_msg_selecioneUmRadio));
+                tv_modelo_Modelo.setError(getText(R.string.err_msg_selecioneUmRadio));
                 return false;
         }
     }

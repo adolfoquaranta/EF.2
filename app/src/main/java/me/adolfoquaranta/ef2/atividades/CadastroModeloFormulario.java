@@ -10,25 +10,27 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
 import me.adolfoquaranta.ef2.R;
 import me.adolfoquaranta.ef2.auxiliares.DBAuxilar;
-import me.adolfoquaranta.ef2.modelos.DIC;
+import me.adolfoquaranta.ef2.modelos.Modelo;
 
-public class CadastroFormularioDIC extends AppCompatActivity {
+public class CadastroModeloFormulario extends AppCompatActivity {
 
     private TextInputEditText input_quantidadeTratamentos_DIC, input_quantidadeRepeticoes_DIC, input_quantidadeReplicacoes_DIC, input_quantidadeVariaveis_DIC;
     private TextInputLayout inputLayoutQuantidadeTratamentos_DIC, inputLayoutQuantidadeRepeticoes_DIC, inputLayoutQuantidadeReplicacoes_DIC, inputLayoutQuantidadeVariaveis_DIC;
 
-    private Long id_Form, id_DIC;
+    private Long id_Formulario, id_Modelo;
+    private String modelo_Modelo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_cadastro_formulario_dic);
+        setContentView(R.layout.activity_cadastro_modelo_formulario);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -42,8 +44,11 @@ public class CadastroFormularioDIC extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Intent cadastroFormularioDIC = getIntent();
-        id_Form = cadastroFormularioDIC.getLongExtra("id_Form", 0);
+        Intent cadastroModeloFormulario = getIntent();
+        id_Formulario = cadastroModeloFormulario.getLongExtra("id_Formulario", 0);
+        modelo_Modelo = cadastroModeloFormulario.getSerializableExtra("modelo_Modelo").toString();
+
+        Log.d("modelo_ModeloIntent", modelo_Modelo);
 
         input_quantidadeTratamentos_DIC = (TextInputEditText) findViewById(R.id.input_quantidadeTratatmentos_DIC);
         input_quantidadeRepeticoes_DIC = (TextInputEditText) findViewById(R.id.input_quantidadeRepeticoes_DIC);
@@ -90,18 +95,21 @@ public class CadastroFormularioDIC extends AppCompatActivity {
 
         DBAuxilar dbAuxilar = new DBAuxilar(getApplicationContext());
 
-        DIC dic = new DIC();
-        dic.setIdFormulario_DIC(id_Form);
-        dic.setQuantidadeTratamentos_DIC(Integer.parseInt(input_quantidadeTratamentos_DIC.getText().toString()));
-        dic.setQuantidadeRepeticoes_DIC(Integer.parseInt(input_quantidadeRepeticoes_DIC.getText().toString()));
-        dic.setQuantidadeReplicacoes_DIC(Integer.parseInt(input_quantidadeReplicacoes_DIC.getText().toString()));
-        dic.setQuantidadeVariaveis_DIC(Integer.parseInt(input_quantidadeVariaveis_DIC.getText().toString()));
 
-        id_DIC = dbAuxilar.inserirDIC(dic);
+        Modelo modelo = new Modelo();
+        Log.d("modelo_ModeloSetModelo", modelo_Modelo);
+        modelo.setModelo_Modelo(modelo_Modelo);
+        modelo.setIdFormulario_Modelo(id_Formulario);
+        modelo.setQuantidadeTratamentos_Modelo(Integer.parseInt(input_quantidadeTratamentos_DIC.getText().toString()));
+        modelo.setQuantidadeRepeticoes_Modelo(Integer.parseInt(input_quantidadeRepeticoes_DIC.getText().toString()));
+        modelo.setQuantidadeReplicacoes_Modelo(Integer.parseInt(input_quantidadeReplicacoes_DIC.getText().toString()));
+        modelo.setQuantidadeVariaveis_Modelo(Integer.parseInt(input_quantidadeVariaveis_DIC.getText().toString()));
 
-        Intent cadastroTratamentos = new Intent(CadastroFormularioDIC.this, CadastroTratamentos.class);
-        cadastroTratamentos.putExtra("id_DIC", id_DIC);
-        cadastroTratamentos.putExtra("idFormulario_DIC", id_Form);
+        id_Modelo = dbAuxilar.inserirModelo(modelo);
+
+        Intent cadastroTratamentos = new Intent(CadastroModeloFormulario.this, CadastroTratamentos.class);
+        cadastroTratamentos.putExtra("id_Modelo", id_Modelo);
+        cadastroTratamentos.putExtra("idFormulario_Modelo", id_Formulario);
         startActivity(cadastroTratamentos);
 
 
@@ -155,6 +163,11 @@ public class CadastroFormularioDIC extends AppCompatActivity {
         return true;
     }
 
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
+    }
 
     public class FormularioDICTextWatcher implements TextWatcher{
 
@@ -192,12 +205,6 @@ public class CadastroFormularioDIC extends AppCompatActivity {
 
             }
 
-        }
-    }
-
-    private void requestFocus(View view) {
-        if (view.requestFocus()) {
-            getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
 

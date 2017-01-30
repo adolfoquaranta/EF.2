@@ -27,7 +27,7 @@
             android:label="@string/title_activity_cadastro_formulario"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".atividades.CadastroFormularioDIC"
+            android:name=".atividades.CadastroModeloFormulario"
             android:label="@string/title_activity_cadastro_formulario_dic"
             android:parentActivityName=".atividades.CadastroFormulario"
             android:theme="@style/AppTheme.NoActionBar">
@@ -48,8 +48,8 @@
             android:label="@string/title_activity_cadastro_coleta"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".atividades.ColetaDados"
-            android:label="@string/title_activity_coleta_dados"
+            android:name=".atividades.ColetarDados"
+            android:label="@string/title_activity_coletar_dados"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 

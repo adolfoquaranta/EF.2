@@ -84,6 +84,11 @@
     <string name="anular">Anular</string>
     <string name="title_activity_coleta_dados">ColetaDados</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="title_activity_coletar_dados">"Coletar Dados "</string>
+    <string name="info_ColetaCompleta">Você completou a Coleta!</string>
+    <string name="info_sairDaColeta">Sair da Coleta?</string>
+    <string name="info_PreechaOuAnule">Preencha ou anule os campo com erro para prosseguir.</string>
+    <string name="info_EmBreve">Em Breve!</string>
 
 
 </resources>

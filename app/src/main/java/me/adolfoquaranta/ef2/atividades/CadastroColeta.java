@@ -20,14 +20,14 @@ import java.util.Date;
 import me.adolfoquaranta.ef2.R;
 import me.adolfoquaranta.ef2.auxiliares.DBAuxilar;
 import me.adolfoquaranta.ef2.modelos.Coleta;
-import me.adolfoquaranta.ef2.modelos.Formulario;
+import me.adolfoquaranta.ef2.modelos.Modelo;
 
 public class CadastroColeta extends AppCompatActivity {
     private TextInputEditText inputNome_Coleta, inputDescricao_Coleta;
     private TextInputLayout inputLayoutNome_Coleta, inputLayoutDescricao_Coleta;
 
-    private Long id_Form;
-    private String modelo_Form;
+    private Long id_Formulario;
+    private String tipo_Formulario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +46,8 @@ public class CadastroColeta extends AppCompatActivity {
         });
 
         Intent cadastroColeta = getIntent();
-        id_Form = cadastroColeta.getLongExtra("id_Form", 0);
-        modelo_Form = cadastroColeta.getStringExtra("modelo_Form");
+        id_Formulario = cadastroColeta.getLongExtra("id_Formulario", 0);
+        tipo_Formulario = cadastroColeta.getStringExtra("tipo_Formulario");
 
         inputNome_Coleta = (TextInputEditText) findViewById(R.id.input_nomeColeta);
         inputDescricao_Coleta = (TextInputEditText) findViewById(R.id.input_descricaoColeta);
@@ -86,7 +86,7 @@ public class CadastroColeta extends AppCompatActivity {
         Date date = new Date();
         DBAuxilar dbAuxilar = new DBAuxilar(getApplicationContext());
 
-        Formulario formulario = dbAuxilar.lerFormulario(id_Form);
+        Modelo modelo = dbAuxilar.lerModelo(id_Formulario, "DIC");
 
         Coleta coleta = new Coleta();
         coleta.setNome_Coleta(inputNome_Coleta.getText().toString());
@@ -94,18 +94,21 @@ public class CadastroColeta extends AppCompatActivity {
         coleta.setDataCriacao_Coleta(date.toString());
         coleta.setDataUltimaEdicao_Coleta(date.toString());
         coleta.setStatus_Coleta("");
-        coleta.setTipo_Coleta(modelo_Form);
-        coleta.setModeloForm_Coleta(formulario.getModelo_Form());
-        coleta.setIdForm_Coleta(id_Form);
+        coleta.setTipo_Coleta(tipo_Formulario);
+        coleta.setIdForm_Coleta(id_Formulario);
+        coleta.setIdModelo_Coleta(modelo.getId_Modelo());
 
 
         Long id_Coleta = dbAuxilar.insertColeta(coleta);
         Log.d("id_Coleta", id_Coleta.toString());
 
-        Intent coletaDados = new Intent(CadastroColeta.this, ColetaDados.class);
-        coletaDados.putExtra("id_Form", id_Form);
-        coletaDados.putExtra("id_Coleta", id_Coleta);
-        startActivity(coletaDados);
+        Intent coletarDados = new Intent(CadastroColeta.this, ColetarDados.class);
+        coletarDados.putExtra("id_Formulario", id_Formulario);
+        coletarDados.putExtra("id_Coleta", id_Coleta);
+        coletarDados.putExtra("tratamentoAtual", 0);
+        coletarDados.putExtra("replicacaoAtual", 0);
+        coletarDados.putExtra("repeticaoAtual", 0);
+        startActivity(coletarDados);
     }
 
 

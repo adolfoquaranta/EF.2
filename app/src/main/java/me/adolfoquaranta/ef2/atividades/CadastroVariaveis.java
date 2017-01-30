@@ -21,12 +21,12 @@ import java.util.ArrayList;
 import fr.ganfra.materialspinner.MaterialSpinner;
 import me.adolfoquaranta.ef2.R;
 import me.adolfoquaranta.ef2.auxiliares.DBAuxilar;
-import me.adolfoquaranta.ef2.modelos.DIC;
+import me.adolfoquaranta.ef2.modelos.Modelo;
 import me.adolfoquaranta.ef2.modelos.Variavel;
 
 public class CadastroVariaveis extends AppCompatActivity {
 
-    private DIC dic;
+    private Modelo modelo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,11 +46,13 @@ public class CadastroVariaveis extends AppCompatActivity {
 
 
         final Intent cadastroVariaveis = getIntent();
-        final Long idFormulario_DIC = cadastroVariaveis.getLongExtra("idFormulario_DIC", 0);
+
+        final Long id_Modelo = cadastroVariaveis.getLongExtra("id_Modelo", 0);
+        final Long idFormulario_Modelo = cadastroVariaveis.getLongExtra("idFormulario_Modelo", 0);
 
         final DBAuxilar dbauxiliar = new DBAuxilar(getApplicationContext());
 
-        dic = dbauxiliar.lerDICdoFormulario(idFormulario_DIC);
+        modelo = dbauxiliar.lerModeloDoFormulario(id_Modelo, idFormulario_Modelo);
 
         final RegexpValidator naoNulo = new RegexpValidator(getString(R.string.err_msg_nomeVariavel), "^(?!\\s*$).+");
 
@@ -78,7 +80,7 @@ public class CadastroVariaveis extends AppCompatActivity {
         String[] opcoesSpinnerTipoVariaveis = getResources().getStringArray(R.array.spinnerArray_tipoVariavel);
 
 
-        for (int i = 0; i < dic.getQuantidadeVariaveis_DIC(); i++) {
+        for (int i = 0; i < modelo.getQuantidadeVariaveis_Modelo(); i++) {
             LinearLayout layoutInterno = new LinearLayout(CadastroVariaveis.this);
             layoutInterno.setOrientation(LinearLayout.HORIZONTAL);
             layoutInterno.setWeightSum(3);
@@ -100,7 +102,7 @@ public class CadastroVariaveis extends AppCompatActivity {
             ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, opcoesSpinnerTipoVariaveis);
             spTipoVariavel.setAdapter(spinnerArrayAdapter);
             spTipoVariavel.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 2f)); // Pass two args; must be LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, or an integer pixel value.
-            spTipoVariavel.setId((i + dic.getQuantidadeVariaveis_DIC()));
+            spTipoVariavel.setId((i + modelo.getQuantidadeVariaveis_Modelo()));
             spTipoVariavel.setOnFocusChangeListener(validar);
             layoutInterno.addView(spTipoVariavel);
             myLayout.addView(layoutInterno);
@@ -114,8 +116,8 @@ public class CadastroVariaveis extends AppCompatActivity {
         btnSalvar_Variaveis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Variavel> tratamentos = new ArrayList<>(dic.getQuantidadeVariaveis_DIC());
-                for (int i = 0; i < dic.getQuantidadeVariaveis_DIC(); i++) {
+                ArrayList<Variavel> tratamentos = new ArrayList<>(modelo.getQuantidadeVariaveis_Modelo());
+                for (int i = 0; i < modelo.getQuantidadeVariaveis_Modelo(); i++) {
                     Variavel tratamento = new Variavel();
                     MaterialEditText met = (MaterialEditText) findViewById(i);
                     if (met.validateWith(naoNulo)) {
@@ -127,7 +129,7 @@ public class CadastroVariaveis extends AppCompatActivity {
                                 .setAction("Action", null).show();
                         return;
                     }
-                    MaterialSpinner sp = (MaterialSpinner) findViewById((i + dic.getQuantidadeVariaveis_DIC()));
+                    MaterialSpinner sp = (MaterialSpinner) findViewById((i + modelo.getQuantidadeVariaveis_Modelo()));
                     if (sp.getSelectedItemPosition() == 0) {
                         sp.setError("Error");
                         sp.requestFocus();
@@ -139,10 +141,10 @@ public class CadastroVariaveis extends AppCompatActivity {
                         tratamento.setTipo_Variavel(sp.getSelectedItemPosition());
                         sp.setError(null);
                     }
-                    tratamento.setIdForm_Variavel(idFormulario_DIC);
+                    tratamento.setIdForm_Variavel(idFormulario_Modelo);
                     tratamentos.add(i, tratamento);
                 }
-                if (tratamentos.size() == dic.getQuantidadeVariaveis_DIC()) {
+                if (tratamentos.size() == modelo.getQuantidadeVariaveis_Modelo()) {
                     for (Variavel var : tratamentos) {
                         dbauxiliar.insertVariavel(var);
                         Intent inicio = new Intent(CadastroVariaveis.this, Inicio.class);

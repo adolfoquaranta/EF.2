@@ -34,7 +34,7 @@ public class ListarFormularios extends AppCompatActivity {
 
     private RelativeLayout mostrar_formularios_root;
 
-    private String modelo_Form;
+    private String tipoFormulario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +47,13 @@ public class ListarFormularios extends AppCompatActivity {
 
         listarFormularios = getIntent();
 
-        modelo_Form = listarFormularios.getStringExtra("modelo_Form");
+        tipoFormulario = listarFormularios.getStringExtra("tipo_Formulario");
 
-        getSupportActionBar().setTitle(getSupportActionBar().getTitle().toString() + " " + modelo_Form);
+        getSupportActionBar().setTitle(getSupportActionBar().getTitle().toString() + " " + tipoFormulario);
 
         dbAuxilar = new DBAuxilar(getApplicationContext());
-        formularioList = new ArrayList<Formulario>(dbAuxilar.lerTodosFormularios(modelo_Form));
 
+        formularioList = dbAuxilar.lerTodosFormularios(tipoFormulario);
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -103,8 +103,8 @@ public class ListarFormularios extends AppCompatActivity {
         public void onItemClick(View childView, int position) {
             // Do something when an item is clicked, or override something else.
             Intent cadastroColeta = new Intent(ListarFormularios.this, CadastroColeta.class);
-            cadastroColeta.putExtra("id_Form", formularioList.get(position).getId_Form());
-            cadastroColeta.putExtra("modelo_Form", modelo_Form);
+            cadastroColeta.putExtra("id_Formulario", formularioList.get(position).getId_Form());
+            cadastroColeta.putExtra("tipo_Formulario", tipoFormulario);
             startActivity(cadastroColeta);
 
         }
