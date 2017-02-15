@@ -132,7 +132,7 @@ public class ColetarDados extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if ((replicacaoAtual + 1) >= modelo.getQuantidadeReplicacoes_Modelo() && (tratamentoAtual) >= modelo.getQuantidadeTratamentos_Modelo()) {
+                if ((replicacaoAtual + 1) == modelo.getQuantidadeReplicacoes_Modelo() && (tratamentoAtual) == modelo.getQuantidadeTratamentos_Modelo()) {
                     Snackbar infoColetaCompleta = Snackbar.make(view, R.string.info_ColetaCompleta, Snackbar.LENGTH_LONG).setAction("OK", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
