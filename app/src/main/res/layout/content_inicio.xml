@@ -11,80 +11,70 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="me.adolfoquaranta.ef2.atividades.Inicio"
-    tools:showIn="@layout/app_bar_inicio">
+    tools:showIn="@layout/activity_inicio">
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/rl_inicio"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:orientation="vertical">
 
-        <Button
-            android:text="@string/inicio_btnEXE"
+        <!--<TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
+            android:text="@string/tv_EscolhaTipo"
+            style="@style/TextAppearance.AppCompat.Title"/>-->
+
+        <Button
             android:id="@+id/inicio_btnEXE"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
-            android:layout_marginTop="10dp"
+            android:text="@string/inicio_btnEXE"
             android:textColor="@android:color/white"/>
+        <!--android:layout_marginTop="10dp"/>-->
 
         <Button
-            android:text="@string/inicio_btnINV"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
             android:id="@+id/inicio_btnINV"
-            android:layout_below="@+id/inicio_btnEXE"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="@color/colorPrimary"
-            android:layout_marginTop="10dp"
-            android:textColor="@android:color/white"/>
-        <Button
-            android:text="@string/inicio_btnFITO"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimary"
+            android:text="@string/inicio_btnINV"
+            android:textColor="@android:color/white"/>
+        <Button
             android:id="@+id/inicio_btnFITO"
-            android:layout_below="@+id/inicio_btnINV"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="@color/colorPrimary"
-            android:layout_marginTop="10dp"
-            android:textColor="@android:color/white"/>
-        <Button
-            android:text="@string/inicio_btnSOLOS"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimary"
+            android:text="@string/inicio_btnFITO"
+            android:textColor="@android:color/white"/>
+        <Button
             android:id="@+id/inicio_btnSOLOS"
-            android:layout_below="@+id/inicio_btnFITO"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="@color/colorPrimary"
-            android:layout_marginTop="10dp"
-            android:textColor="@android:color/white"/>
-        <Button
-            android:text="@string/inicio_btnFOLHA"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimary"
+            android:text="@string/inicio_btnSOLOS"
+            android:textColor="@android:color/white"/>
+        <Button
             android:id="@+id/inicio_btnFOLHA"
-            android:layout_below="@+id/inicio_btnSOLOS"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="@color/colorPrimary"
-            android:layout_marginTop="10dp"
-            android:textColor="@android:color/white"/>
-        <Button
-            android:text="@string/inicio_btnINS"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/inicio_btnINS"
-            android:layout_below="@+id/inicio_btnFOLHA"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:background="@color/colorPrimary"
             android:layout_marginTop="10dp"
+            android:background="@color/colorPrimary"
+            android:text="@string/inicio_btnFOLHA"
             android:textColor="@android:color/white"/>
-    </RelativeLayout>
+        <Button
+            android:id="@+id/inicio_btnINS"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimary"
+            android:text="@string/inicio_btnINS"
+            android:textColor="@android:color/white"/>
+    </LinearLayout>
 
 </ScrollView>

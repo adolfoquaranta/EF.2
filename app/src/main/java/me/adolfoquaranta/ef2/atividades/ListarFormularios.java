@@ -1,18 +1,22 @@
 package me.adolfoquaranta.ef2.atividades;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +28,8 @@ import me.adolfoquaranta.ef2.componentes_recycler.DividerItemDecoration;
 import me.adolfoquaranta.ef2.componentes_recycler.RecyclerItemClickListener;
 import me.adolfoquaranta.ef2.modelos.Formulario;
 
-public class ListarFormularios extends AppCompatActivity {
+public class ListarFormularios extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
     private List<Formulario> formularioList = new ArrayList<>();
     private RecyclerView recyclerView;
     private FormulariosAdapter mAdapter;
@@ -35,6 +40,7 @@ public class ListarFormularios extends AppCompatActivity {
     private RelativeLayout mostrar_formularios_root;
 
     private String tipoFormulario;
+    private Integer escolhaUsuario = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +48,15 @@ public class ListarFormularios extends AppCompatActivity {
         setContentView(R.layout.activity_listar_formularios);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         mostrar_formularios_root = (RelativeLayout) findViewById(R.id.mostrar_formularios_root);
 
@@ -54,16 +69,6 @@ public class ListarFormularios extends AppCompatActivity {
         dbAuxilar = new DBAuxilar(getApplicationContext());
 
         formularioList = dbAuxilar.lerTodosFormularios(tipoFormulario);
-
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
 
         if(formularioList.isEmpty()){
@@ -95,6 +100,69 @@ public class ListarFormularios extends AppCompatActivity {
                     new OnItemClickListener()));
         }
 
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_adicionarFormulario);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cadastroFormulario = new Intent(ListarFormularios.this, CadastroFormulario.class);
+                cadastroFormulario.putExtra("tipo_Formulario", tipoFormulario);
+                startActivity(cadastroFormulario);
+            }
+        });
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.nav_coletaNova) {
+            // Handle the camera action
+            escolhaUsuario = id;
+        } else if (id == R.id.nav_coletaContinuar) {
+            escolhaUsuario = id;
+        } else if (id == R.id.nav_coletaRemedir) {
+            escolhaUsuario = id;
+        } else if (id == R.id.nav_coletaEditar) {
+            escolhaUsuario = id;
+        } else if (id == R.id.nav_coletaRemover) {
+            escolhaUsuario = id;
+        } else if (id == R.id.nav_formularioEditar) {
+            escolhaUsuario = id;
+        } else if (id == R.id.nav_formularioRemover) {
+            escolhaUsuario = id;
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     private class OnItemClickListener extends RecyclerItemClickListener.SimpleOnItemClickListener {
@@ -103,12 +171,22 @@ public class ListarFormularios extends AppCompatActivity {
         public void onItemClick(View childView, int position) {
             // Do something when an item is clicked, or override something else.
             Intent cadastroColeta = new Intent(ListarFormularios.this, CadastroColeta.class);
-            cadastroColeta.putExtra("id_Formulario", formularioList.get(position).getId_Form());
-            cadastroColeta.putExtra("tipo_Formulario", tipoFormulario);
-            startActivity(cadastroColeta);
+            switch (escolhaUsuario) {
+                case 0:
+                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    drawer.openDrawer(GravityCompat.START);
+                    break;
+                case R.id.nav_coletaNova:
+                    cadastroColeta.putExtra("id_Formulario", formularioList.get(position).getId_Form());
+                    cadastroColeta.putExtra("tipo_Formulario", tipoFormulario);
+                    startActivity(cadastroColeta);
+                    break;
+                default:
+                    Toast.makeText(ListarFormularios.this, getString(R.string.info_EmBreve), Toast.LENGTH_SHORT).show();
+                    break;
+            }
 
         }
 
     }
-
 }

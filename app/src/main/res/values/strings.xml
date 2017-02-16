@@ -89,6 +89,23 @@
     <string name="info_sairDaColeta">Sair da Coleta?</string>
     <string name="info_PreechaOuAnule">Preencha ou anule os campo com erro para prosseguir.</string>
     <string name="info_EmBreve">Em Breve!</string>
+    <string name="tv_EscolhaTipo">Escolha o Tipo</string>
+
+    <string name="title_activity_teste">teste</string>
+    <string name="title_activity_listar_formularios">Lista de</string>
+
+    <string name="nav_titulo_coleta_de_dados">Coleta de Dados</string>
+    <string name="nav_titulo_coletaNova">Nova</string>
+    <string name="nav_titulo_coletaContinuar">Continuar</string>
+    <string name="nav_titulo_coletaRemedir">Remedir</string>
+    <string name="nav_titulo_coletaEditar">Editar</string>
+    <string name="nav_titulo_coletaRemover">Remover</string>
+
+    <string name="nav_titulo_formularioEditar">Editar</string>
+    <string name="nav_titulo_formularioRemover">Remover</string>
+    <string name="modelo_de_coleta">Modelo de Coleta</string>
+    <string name="nav_header_titulo">(EF).2 - Experimento Fácil</string>
+    <string name="nav_header_subtitulo">Engenharia Florestal</string>
 
 
 </resources>

@@ -4,7 +4,7 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_assignment_turned_in_black_48dp"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -14,14 +14,10 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="me.adolfoquaranta.ef2.atividades.Inicio" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".atividades.ListarFormularios"
-            android:label="@string/title_activity_formularios"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".atividades.CadastroFormulario"
             android:label="@string/title_activity_cadastro_formulario"
@@ -50,7 +46,16 @@
         <activity
             android:name=".atividades.ColetarDados"
             android:label="@string/title_activity_coletar_dados"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".atividades.ListarFormularios"
+            android:label="@string/title_activity_listar_formularios"
+            android:parentActivityName=".atividades.Inicio"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="me.adolfoquaranta.ef2.atividades.Inicio" />
+        </activity>
     </application>
 
 </manifest>

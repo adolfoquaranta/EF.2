@@ -53,11 +53,18 @@ public class ColetarDados extends AppCompatActivity {
         replicacaoAtual = coletarDados.getIntExtra("replicacaoAtual", 0);
         repeticaoAtual = coletarDados.getIntExtra("repeticaoAtual", 0);
 
+
         Log.d("tratamentoAtual", tratamentoAtual.toString());
+        Log.d("replicacaoAtual", replicacaoAtual.toString());
+
 
         modelo = dbAuxilar.lerModelo(id_Formulario, "DIC");
         tratamentos = dbAuxilar.lerTodosTratamentos(id_Formulario);
         variaveis = dbAuxilar.lerTodasVariaveis(id_Formulario);
+
+        Log.d("tratamentosSize", String.valueOf(tratamentos.size()));
+        Log.d("replicacoesSize", String.valueOf(modelo.getQuantidadeReplicacoes_Modelo()));
+
 
         final RegexpValidator naoNulo = new RegexpValidator(getString(R.string.err_msg_valorVariavel), "^(?!\\s*$).+");
 
@@ -132,7 +139,7 @@ public class ColetarDados extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if ((replicacaoAtual + 1) == modelo.getQuantidadeReplicacoes_Modelo() && (tratamentoAtual) == modelo.getQuantidadeTratamentos_Modelo()) {
+                if ((replicacaoAtual + 1) == modelo.getQuantidadeReplicacoes_Modelo() && (tratamentoAtual + 1) == modelo.getQuantidadeTratamentos_Modelo()) {
                     Snackbar infoColetaCompleta = Snackbar.make(view, R.string.info_ColetaCompleta, Snackbar.LENGTH_LONG).setAction("OK", new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
