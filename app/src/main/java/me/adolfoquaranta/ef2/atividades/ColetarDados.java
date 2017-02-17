@@ -1,10 +1,8 @@
 package me.adolfoquaranta.ef2.atividades;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,6 +16,7 @@ import android.widget.ToggleButton;
 import com.rengwuxian.materialedittext.MaterialEditText;
 import com.rengwuxian.materialedittext.validation.RegexpValidator;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import fr.ganfra.materialspinner.MaterialSpinner;
@@ -44,17 +43,18 @@ public class ColetarDados extends AppCompatActivity {
 
         dbAuxilar = new DBAuxilar(getApplicationContext());
 
-        Intent coletarDados = getIntent();
-        final Long id_Formulario = coletarDados.getLongExtra("id_Formulario", 0);
-        final Long id_Coleta = coletarDados.getLongExtra("id_Coleta", 0);
+        final Intent coletarDadosIntent = getIntent();
+        final Long id_Formulario = coletarDadosIntent.getLongExtra("id_Formulario", 0);
+        final Long id_Coleta = coletarDadosIntent.getLongExtra("id_Coleta", 0);
 
         //recarregar dados
-        tratamentoAtual = coletarDados.getIntExtra("tratamentoAtual", 0);
-        replicacaoAtual = coletarDados.getIntExtra("replicacaoAtual", 0);
-        repeticaoAtual = coletarDados.getIntExtra("repeticaoAtual", 0);
+        tratamentoAtual = coletarDadosIntent.getIntExtra("tratamentoAtual", 0);
+        replicacaoAtual = coletarDadosIntent.getIntExtra("replicacaoAtual", 0);
+        repeticaoAtual = coletarDadosIntent.getIntExtra("repeticaoAtual", 0);
 
 
         Log.d("tratamentoAtual", tratamentoAtual.toString());
+        Log.d("repeticaoAtual", repeticaoAtual.toString());
         Log.d("replicacaoAtual", replicacaoAtual.toString());
 
 
@@ -62,8 +62,8 @@ public class ColetarDados extends AppCompatActivity {
         tratamentos = dbAuxilar.lerTodosTratamentos(id_Formulario);
         variaveis = dbAuxilar.lerTodasVariaveis(id_Formulario);
 
-        Log.d("tratamentosSize", String.valueOf(tratamentos.size()));
-        Log.d("replicacoesSize", String.valueOf(modelo.getQuantidadeReplicacoes_Modelo()));
+        //Log.d("tratamentosSize", String.valueOf(tratamentos.size()));
+        //Log.d("replicacoesSize", String.valueOf(modelo.getQuantidadeReplicacoes_Modelo()));
 
 
         final RegexpValidator naoNulo = new RegexpValidator(getString(R.string.err_msg_valorVariavel), "^(?!\\s*$).+");
@@ -86,7 +86,7 @@ public class ColetarDados extends AppCompatActivity {
             }
         };
 
-        LinearLayout myLayout = (LinearLayout) findViewById(R.id.ll_ColetarDados);
+        final LinearLayout myLayout = (LinearLayout) findViewById(R.id.ll_ColetarDados);
 
         final TextView infoColetaAtual = (TextView) findViewById(R.id.tv_infoColetaAtual);
         infoColetaAtual.setText("TRAT " + (tratamentoAtual + 1) + " | REP " + (repeticaoAtual + 1) + " | REPLI " + (replicacaoAtual + 1));
@@ -135,56 +135,59 @@ public class ColetarDados extends AppCompatActivity {
 
         }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton proximoDado = (FloatingActionButton) findViewById(R.id.fab_proximoDado);
+        proximoDado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if ((replicacaoAtual + 1) == modelo.getQuantidadeReplicacoes_Modelo() && (tratamentoAtual + 1) == modelo.getQuantidadeTratamentos_Modelo()) {
-                    Snackbar infoColetaCompleta = Snackbar.make(view, R.string.info_ColetaCompleta, Snackbar.LENGTH_LONG).setAction("OK", new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            Intent inicio = new Intent(ColetarDados.this, Inicio.class);
-                            startActivity(inicio);
-                        }
-                    });
-                    infoColetaCompleta.setActionTextColor(Color.WHITE);
-                    infoColetaCompleta.show();
+                Intent recarregar = new Intent(ColetarDados.this, ColetarDados.class);
+                final Intent inicio = new Intent(ColetarDados.this, Inicio.class);
+                recarregar.putExtra("id_Formulario", id_Formulario);
+                recarregar.putExtra("id_Coleta", id_Coleta);
+
+
+                if (replicacaoAtual + 1 < modelo.getQuantidadeReplicacoes_Modelo()) {
+                    replicacaoAtual++;
+                    coletarDados(id_Coleta);
+                    recarregar.putExtra("replicacaoAtual", replicacaoAtual);
+                    recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                    recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+                    startActivity(recarregar);
                 } else {
-                    Intent recarregar = new Intent(ColetarDados.this, ColetarDados.class);
-                    recarregar.putExtra("id_Formulario", id_Formulario);
-                    recarregar.putExtra("id_Coleta", id_Coleta);
-                    Integer id = 0;
-
-                    while (findViewById(id) instanceof MaterialEditText) {
-                        Dado dado = new Dado();
-                        dado.setIdColeta_Dado(id_Coleta);
-                        dado.setIdTratamento_Dado(tratamentos.get(tratamentoAtual).getId_Tratamento());
-                        dado.setIdVariavel_Dado(variaveis.get(id).getId_Variavel());
-                        MaterialEditText etVariavel = (MaterialEditText) findViewById(id);
-                        if (etVariavel.isEnabled() && etVariavel.getText().toString().equals("")) {
-                            Snackbar.make(view, R.string.info_PreechaOuAnule, Snackbar.LENGTH_LONG).show();
-                            return;
-                        } else if (!etVariavel.isEnabled()) {
-                            Log.d("etVariavel", " ");
-                            dado.setValor_Dado(" ");
-                        } else {
-                            Log.d("etVariavel", etVariavel.getText().toString());
-                            dado.setValor_Dado(etVariavel.getText().toString());
-                        }
-                        id++;
-                    }
-
-                    if ((tratamentoAtual + 1) >= tratamentos.size()) {
-                        replicacaoAtual++;
-                        tratamentoAtual = 0;
+                    if (replicacaoAtual + 1 == modelo.getQuantidadeReplicacoes_Modelo()) {
+                        replicacaoAtual = 0;
+                        coletarDados(id_Coleta);
                         recarregar.putExtra("replicacaoAtual", replicacaoAtual);
+                        recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                        recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+                        startActivity(recarregar);
+                    }
+                    if (repeticaoAtual + 1 < modelo.getQuantidadeRepeticoes_Modelo()) {
+                        repeticaoAtual++;
+                        coletarDados(id_Coleta);
+                        recarregar.putExtra("replicacaoAtual", replicacaoAtual);
+                        recarregar.putExtra("repeticaoAtual", repeticaoAtual);
                         recarregar.putExtra("tratamentoAtual", tratamentoAtual);
                         startActivity(recarregar);
                     } else {
-                        tratamentoAtual++;
-                        recarregar.putExtra("tratamentoAtual", tratamentoAtual);
-                        recarregar.putExtra("replicacaoAtual", replicacaoAtual);
-                        startActivity(recarregar);
+                        if (repeticaoAtual + 1 == modelo.getQuantidadeRepeticoes_Modelo()) {
+                            repeticaoAtual = 0;
+                            coletarDados(id_Coleta);
+                            recarregar.putExtra("replicacaoAtual", replicacaoAtual);
+                            recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                            recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+                            startActivity(recarregar);
+                        }
+                        if (tratamentoAtual + 1 == modelo.getQuantidadeTratamentos_Modelo()) {
+                            coletarDados(id_Coleta);
+                            startActivity(inicio);
+                        } else {
+                            tratamentoAtual++;
+                            coletarDados(id_Coleta);
+                            recarregar.putExtra("replicacaoAtual", replicacaoAtual);
+                            recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                            recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+                            startActivity(recarregar);
+                        }
                     }
                 }
             }
@@ -192,12 +195,32 @@ public class ColetarDados extends AppCompatActivity {
 
     }
 
-    public void onBackPressed() {
-        if (tratamentoAtual != 0) {
-            tratamentoAtual--;
-            finish();
-        } else {
-            Toast.makeText(this, R.string.info_EmBreve, Toast.LENGTH_SHORT).show();
+    public String coletarDados(Long id_Coleta) {
+        ArrayList<Dado> dados = new ArrayList<>();
+        Integer id = 0;
+
+        while (findViewById(id) instanceof MaterialEditText) {
+            Dado dado = new Dado();
+            dado.setIdColeta_Dado(id_Coleta);
+            dado.setIdTratamento_Dado(tratamentos.get(tratamentoAtual).getId_Tratamento());
+            dado.setIdVariavel_Dado(variaveis.get(id).getId_Variavel());
+            MaterialEditText etVariavel = (MaterialEditText) findViewById(id);
+            if (etVariavel.isEnabled() && etVariavel.getText().toString().equals("")) {
+                return getString(R.string.info_PreechaOuAnule);
+            } else if (!etVariavel.isEnabled()) {
+                Log.d("etVariavel", " ");
+                dado.setValor_Dado(" ");
+            } else {
+                Log.d("etVariavel", etVariavel.getText().toString());
+                dado.setValor_Dado(etVariavel.getText().toString());
+            }
+            dados.add(dado);
+            id++;
         }
+        return dados.toString();
+    }
+
+    public void onBackPressed() {
+        Toast.makeText(this, R.string.info_EmBreve, Toast.LENGTH_SHORT).show();
     }
 }

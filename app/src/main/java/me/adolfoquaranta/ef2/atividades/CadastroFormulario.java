@@ -64,8 +64,8 @@ public class CadastroFormulario extends AppCompatActivity {
 
         Button btnSalvar_Formulario = (Button) findViewById(R.id.btn_salvar_Formulario);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton novoFormulario = (FloatingActionButton) findViewById(R.id.fab_novoFormulario);
+        novoFormulario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
