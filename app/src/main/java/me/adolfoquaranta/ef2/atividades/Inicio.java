@@ -8,13 +8,13 @@ import android.view.View;
 import android.widget.Button;
 
 import me.adolfoquaranta.ef2.R;
+import me.adolfoquaranta.ef2.auxiliares.DBAuxilar;
 
 public class Inicio extends AppCompatActivity implements View.OnClickListener {
 
     //Botões
     private Button inicio_btnEXE, inicio_btnINV, inicio_btnFITO, inicio_btnSOLOS, inicio_btnFOLHA,
             inicio_btnINS;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,8 +43,15 @@ public class Inicio extends AppCompatActivity implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Button tipoForm = (Button) v;
-        Intent mostrarFormularios = new Intent(Inicio.this, ListarFormularios.class);
-        mostrarFormularios.putExtra("tipo_Formulario", tipoForm.getText().toString());
-        startActivity(mostrarFormularios);
+        DBAuxilar dbAuxilar = new DBAuxilar(getApplicationContext());
+        if (dbAuxilar.lerTodosFormularios(((Button) v).getText().toString()).size() == 0) {
+            Intent cadastroFormulario = new Intent(Inicio.this, CadastroFormulario.class);
+            cadastroFormulario.putExtra("tipo_Formulario", tipoForm.getText().toString());
+            startActivity(cadastroFormulario);
+        } else {
+            Intent mostrarFormularios = new Intent(Inicio.this, ListarFormularios.class);
+            mostrarFormularios.putExtra("tipo_Formulario", tipoForm.getText().toString());
+            startActivity(mostrarFormularios);
+        }
     }
 }

@@ -106,6 +106,7 @@
     <string name="modelo_de_coleta">Modelo de Coleta</string>
     <string name="nav_header_titulo">(EF).2 - Experimento Fácil</string>
     <string name="nav_header_subtitulo">Engenharia Florestal</string>
+    <string name="info_SelecioneUmaOpcao">Selecione o que deseja fazer</string>
 
 
 </resources>

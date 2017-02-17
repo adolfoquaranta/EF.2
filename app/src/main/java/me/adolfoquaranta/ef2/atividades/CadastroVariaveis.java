@@ -3,7 +3,6 @@ package me.adolfoquaranta.ef2.atividades;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -34,15 +33,6 @@ public class CadastroVariaveis extends AppCompatActivity {
         setContentView(R.layout.activity_cadastro_variaveis);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
 
         final Intent cadastroVariaveis = getIntent();
@@ -99,12 +89,13 @@ public class CadastroVariaveis extends AppCompatActivity {
 
             //tipo variavel
             MaterialSpinner spTipoVariavel = new MaterialSpinner(this);
-            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, opcoesSpinnerTipoVariaveis);
+            ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, opcoesSpinnerTipoVariaveis);
             spTipoVariavel.setAdapter(spinnerArrayAdapter);
             spTipoVariavel.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 2f)); // Pass two args; must be LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, or an integer pixel value.
             spTipoVariavel.setId((i + modelo.getQuantidadeVariaveis_Modelo()));
             spTipoVariavel.setOnFocusChangeListener(validar);
             layoutInterno.addView(spTipoVariavel);
+            assert myLayout != null;
             myLayout.addView(layoutInterno);
 
         }
@@ -113,6 +104,7 @@ public class CadastroVariaveis extends AppCompatActivity {
         Button btnSalvar_Variaveis = (Button) findViewById(R.id.btn_salvar_Variaveis);
 
 
+        assert btnSalvar_Variaveis != null;
         btnSalvar_Variaveis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,6 +112,7 @@ public class CadastroVariaveis extends AppCompatActivity {
                 for (int i = 0; i < modelo.getQuantidadeVariaveis_Modelo(); i++) {
                     Variavel tratamento = new Variavel();
                     MaterialEditText met = (MaterialEditText) findViewById(i);
+                    assert met != null;
                     if (met.validateWith(naoNulo)) {
                         tratamento.setNome_Variavel(met.getText().toString());
                     } else {
@@ -130,6 +123,7 @@ public class CadastroVariaveis extends AppCompatActivity {
                         return;
                     }
                     MaterialSpinner sp = (MaterialSpinner) findViewById((i + modelo.getQuantidadeVariaveis_Modelo()));
+                    assert sp != null;
                     if (sp.getSelectedItemPosition() == 0) {
                         sp.setError("Error");
                         sp.requestFocus();
@@ -147,9 +141,10 @@ public class CadastroVariaveis extends AppCompatActivity {
                 if (tratamentos.size() == modelo.getQuantidadeVariaveis_Modelo()) {
                     for (Variavel var : tratamentos) {
                         dbauxiliar.insertVariavel(var);
-                        Intent inicio = new Intent(CadastroVariaveis.this, Inicio.class);
-                        inicio.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(inicio);
+                        Intent listarFormularios = new Intent(CadastroVariaveis.this, ListarFormularios.class);
+                        listarFormularios.putExtra("tipo_Formulario", modelo.getTipo_Form());
+                        listarFormularios.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(listarFormularios);
                     }
                 }
             }

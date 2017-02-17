@@ -2,15 +2,12 @@ package me.adolfoquaranta.ef2.atividades;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -34,21 +31,12 @@ public class CadastroModeloFormulario extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Intent cadastroModeloFormulario = getIntent();
         id_Formulario = cadastroModeloFormulario.getLongExtra("id_Formulario", 0);
         modelo_Modelo = cadastroModeloFormulario.getSerializableExtra("modelo_Modelo").toString();
-
-        Log.d("modelo_ModeloIntent", modelo_Modelo);
 
         input_quantidadeTratamentos_DIC = (TextInputEditText) findViewById(R.id.input_quantidadeTratatmentos_DIC);
         input_quantidadeRepeticoes_DIC = (TextInputEditText) findViewById(R.id.input_quantidadeRepeticoes_DIC);
@@ -67,6 +55,7 @@ public class CadastroModeloFormulario extends AppCompatActivity {
 
         Button btnSalvar_DIC = (Button) findViewById(R.id.btn_salvar_DIC);
 
+        assert btnSalvar_DIC != null;
         btnSalvar_DIC.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -97,7 +86,6 @@ public class CadastroModeloFormulario extends AppCompatActivity {
 
 
         Modelo modelo = new Modelo();
-        Log.d("modelo_ModeloSetModelo", modelo_Modelo);
         modelo.setModelo_Modelo(modelo_Modelo);
         modelo.setIdFormulario_Modelo(id_Formulario);
         modelo.setQuantidadeTratamentos_Modelo(Integer.parseInt(input_quantidadeTratamentos_DIC.getText().toString()));

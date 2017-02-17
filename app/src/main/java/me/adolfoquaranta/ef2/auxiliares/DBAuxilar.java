@@ -19,6 +19,7 @@ import me.adolfoquaranta.ef2.modelos.Variavel;
 
 /**
  * Created by adolfo on 13/10/16.
+ * Classe de auxilio a base de dados
  */
 
 public class DBAuxilar extends SQLiteOpenHelper {
@@ -84,6 +85,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
     private static final String DADO_CONSTRAINT_FK_DADO_COLETA = "FK_Dado_Coleta";
     private static final String DADO_CONSTRAINT_FK_DADO_TRATAMENTO = "FK_Dado_Tratamento";
     private static final String DADO_CONSTRAINT_FK_DADO_VARIAVEL = "FK_Dado_Variavel";
+
+
     private static final String CRIAR_TABELA_FORMULARIO = "CREATE TABLE "
             + FORMULARIO_TABELA + "(" + FORMULARIO_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             + FORMULARIO_COL_TIPO + " TEXT NOT NULL, "
@@ -93,6 +96,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + FORMULARIO_COL_DATA_CRIACAO + " TEXT, "
             + FORMULARIO_COL_STATUS + " TEXT "
             + ")";
+
     private static final String CRIAR_TABELA_MODELO = "CREATE TABLE "
             + MODELO_TABELA + "(" + MODELO_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             + MODELO_COL_MODELO + " TEXT, "
@@ -104,21 +108,21 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + MODELO_COL_QUANTIDADE_FATORES + " INTEGER, "
             + MODELO_COL_QUANTIDADE_DIVISOES + " INTEGER, "
             + MODELO_COL_ID_FORMULARIO + " INTEGER, "
-            + "CONSTRAINT '" + MODELO_CONSTRAINT_FK_MODELO_FORMULARIO + "' FOREIGN KEY ('" + MODELO_COL_ID_FORMULARIO + "') REFERENCES " + FORMULARIO_TABELA + " ('" + FORMULARIO_COL_ID + "') "
+            + "CONSTRAINT '" + MODELO_CONSTRAINT_FK_MODELO_FORMULARIO + "' FOREIGN KEY ('" + MODELO_COL_ID_FORMULARIO + "') REFERENCES " + FORMULARIO_TABELA + " ('" + FORMULARIO_COL_ID + "') ON DELETE CASCADE"
             + ")";
     private static final String CRIAR_TABELA_TRATAMENTO = "CREATE TABLE "
             + TRATAMENTO_TABELA + "("+ TRATAMENTO_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             + TRATAMENTO_COL_NOME + " TEXT, "
             + TRATAMENTO_COL_TIPO + " INTEGER, "
             + TRATAMENTO_COL_ID_FORMULARIO + " INTEGER, "
-            + "CONSTRAINT '" + TRATAMENTO_CONSTRAINT_FK_TRATAMENTO_FORMULARIO +"' FOREIGN KEY ('"+ TRATAMENTO_COL_ID_FORMULARIO +"') REFERENCES "+ FORMULARIO_TABELA + " ('"+ FORMULARIO_COL_ID + "') "
+            + "CONSTRAINT '" + TRATAMENTO_CONSTRAINT_FK_TRATAMENTO_FORMULARIO + "' FOREIGN KEY ('" + TRATAMENTO_COL_ID_FORMULARIO + "') REFERENCES " + FORMULARIO_TABELA + " ('" + FORMULARIO_COL_ID + "') ON DELETE CASCADE"
             + ")";
     private static final String CRIAR_TABELA_VARIAVEL = "CREATE TABLE "
             + VARIAVEL_TABELA + "("+ VARIAVEL_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             + VARIAVEL_COL_NOME + " TEXT, "
             + VARIAVEL_COL_TIPO + " INTEGER, "
             + VARIAVEL_COL_ID_FORMULARIO + " INTEGER, "
-            + "CONSTRAINT '" + VARIAVEL_CONSTRAINT_FK_VARIAVEL_FORMULARIO +"' FOREIGN KEY ('"+ VARIAVEL_COL_ID_FORMULARIO +"') REFERENCES "+ FORMULARIO_TABELA + " ('"+ FORMULARIO_COL_ID + "') "
+            + "CONSTRAINT '" + VARIAVEL_CONSTRAINT_FK_VARIAVEL_FORMULARIO + "' FOREIGN KEY ('" + VARIAVEL_COL_ID_FORMULARIO + "') REFERENCES " + FORMULARIO_TABELA + " ('" + FORMULARIO_COL_ID + "') ON DELETE CASCADE"
             + ")";
     private static final String CRIAR_TABELA_COLETA = "CREATE TABLE "
             + COLETA_TABELA + "(" + COLETA_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
@@ -130,7 +134,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + COLETA_COL_TIPO + " TEXT, "
             + COLETA_COL_MODELO_FORM + " TEXT, "
             + COLETA_COL_ID_FORMULARIO + " INTEGER, "
-            + "CONSTRAINT '" + COLETA_CONSTRAINT_FK_COLETA_FORMULARIO +"' FOREIGN KEY ('"+ COLETA_COL_ID_FORMULARIO +"') REFERENCES "+ FORMULARIO_TABELA + " ('"+ FORMULARIO_COL_ID + "') "
+            + "CONSTRAINT '" + COLETA_CONSTRAINT_FK_COLETA_FORMULARIO + "' FOREIGN KEY ('" + COLETA_COL_ID_FORMULARIO + "') REFERENCES " + FORMULARIO_TABELA + " ('" + FORMULARIO_COL_ID + "') ON DELETE CASCADE"
             + ")";
     private static final String CRIAR_TABELA_DADO = "CREATE TABLE "
             + DADO_TABELA + "(" + DADO_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
@@ -151,7 +155,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + ")";
 
     public DBAuxilar(Context context) {
-        super(context, DATABASE_NOME, null, 4);
+        super(context, DATABASE_NOME, null, 5);
     }
 
     @Override
@@ -204,6 +208,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
         if(c != null) c.moveToFirst();
 
         Formulario formulario = new Formulario();
+        assert c != null;
         formulario.setId_Form(c.getLong(c.getColumnIndex(FORMULARIO_COL_ID)));
         formulario.setTipo_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_TIPO)));
         formulario.setNome_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_NOME)));
@@ -211,6 +216,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
         formulario.setCriador_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_CRIADOR)));
         formulario.setDataCriacao_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_DATA_CRIACAO)));
         formulario.setStatus_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_STATUS)));
+
+        c.close();
 
         return formulario;
     }
@@ -242,6 +249,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
             }while (c.moveToNext());
         }
 
+        c.close();
+
         return formularios;
     }
 
@@ -252,6 +261,12 @@ public class DBAuxilar extends SQLiteOpenHelper {
         values.put(FORMULARIO_COL_STATUS, formulario.getStatus_Form());
 
         return (long) db.update(FORMULARIO_TABELA, values, "id=" + formulario.getId_Form(), null);
+    }
+
+    public int deleteFormulario(Long id_Form) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        return db.delete(FORMULARIO_TABELA, FORMULARIO_COL_ID + " = " + id_Form, null);
     }
 
 
@@ -284,6 +299,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
         if(c != null) c.moveToFirst();
 
         Modelo modelo = new Modelo();
+        assert c != null;
         modelo.setId_Form(c.getLong(c.getColumnIndex(FORMULARIO_COL_ID)));
         modelo.setTipo_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_TIPO)));
         modelo.setNome_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_NOME)));
@@ -297,6 +313,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
         modelo.setQuantidadeReplicacoes_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_REPLICACOES)));
         modelo.setQuantidadeVariaveis_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_VARIAVEIS)));
         modelo.setIdFormulario_Modelo(c.getLong(c.getColumnIndex(MODELO_COL_ID_FORMULARIO)));
+
+        c.close();
 
         return modelo;
     }
@@ -313,6 +331,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
         if (c != null) c.moveToFirst();
 
         Modelo modelo = new Modelo();
+        assert c != null;
         modelo.setId_Modelo(c.getLong(c.getColumnIndex(MODELO_COL_ID)));
         modelo.setModelo_Modelo(c.getString(c.getColumnIndex(MODELO_COL_MODELO)));
         modelo.setQuantidadeTratamentos_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_TRATAMENTOS)));
@@ -368,6 +387,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
             }while (c.moveToNext());
         }
 
+        c.close();
+
         return modelos;
     }
 
@@ -408,7 +429,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
                 tratamentos.add(tratamento);
             }while (c.moveToNext());
         }
-
+        c.close();
         return tratamentos;
     }
 
@@ -448,7 +469,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
                 variaveis.add(variavel);
             }while (c.moveToNext());
         }
-
+        c.close();
         return variaveis;
     }
 
@@ -482,6 +503,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
         if(c != null) c.moveToFirst();
 
         Coleta coleta = new Coleta();
+        assert c != null;
         coleta.setIdForm_Coleta(c.getLong(c.getColumnIndex(COLETA_COL_ID)));
         coleta.setNome_Coleta(c.getString(c.getColumnIndex(COLETA_COL_NOME)));
         coleta.setDescricao_Coleta(c.getString(c.getColumnIndex(COLETA_COL_DESCRICAO)));
@@ -490,6 +512,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
         coleta.setStatus_Coleta(c.getString(c.getColumnIndex(COLETA_COL_STATUS)));
         coleta.setTipo_Coleta(c.getString(c.getColumnIndex(COLETA_COL_TIPO)));
         coleta.setIdForm_Coleta(c.getLong(c.getColumnIndex(COLETA_COL_ID_FORMULARIO)));
+
+        c.close();
 
         return coleta;
     }

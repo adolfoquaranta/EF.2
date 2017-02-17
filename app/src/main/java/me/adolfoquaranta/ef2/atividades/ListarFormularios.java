@@ -52,10 +52,12 @@ public class ListarFormularios extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        assert drawer != null;
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(this);
 
         mostrar_formularios_root = (RelativeLayout) findViewById(R.id.mostrar_formularios_root);
@@ -64,6 +66,7 @@ public class ListarFormularios extends AppCompatActivity
 
         tipoFormulario = listarFormularios.getStringExtra("tipo_Formulario");
 
+        //noinspection ConstantConditions
         getSupportActionBar().setTitle(getSupportActionBar().getTitle().toString() + " " + tipoFormulario);
 
         dbAuxilar = new DBAuxilar(getApplicationContext());
@@ -101,6 +104,7 @@ public class ListarFormularios extends AppCompatActivity
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_adicionarFormulario);
+        assert fab != null;
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,6 +119,7 @@ public class ListarFormularios extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        assert drawer != null;
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
@@ -161,6 +166,7 @@ public class ListarFormularios extends AppCompatActivity
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        assert drawer != null;
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
@@ -174,12 +180,20 @@ public class ListarFormularios extends AppCompatActivity
             switch (escolhaUsuario) {
                 case 0:
                     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    assert drawer != null;
                     drawer.openDrawer(GravityCompat.START);
                     break;
                 case R.id.nav_coletaNova:
                     cadastroColeta.putExtra("id_Formulario", formularioList.get(position).getId_Form());
                     cadastroColeta.putExtra("tipo_Formulario", tipoFormulario);
                     startActivity(cadastroColeta);
+                    break;
+                case R.id.nav_formularioRemover:
+                    dbAuxilar.deleteFormulario(formularioList.get(position).getId_Form());
+                    Intent recarregar = new Intent(ListarFormularios.this, ListarFormularios.class);
+                    recarregar.putExtra("tipo_Formulario", tipoFormulario);
+                    finish();
+                    startActivity(recarregar);
                     break;
                 default:
                     Toast.makeText(ListarFormularios.this, getString(R.string.info_EmBreve), Toast.LENGTH_SHORT).show();
