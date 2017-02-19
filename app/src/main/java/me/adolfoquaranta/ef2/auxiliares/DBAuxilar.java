@@ -155,7 +155,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + ")";
 
     public DBAuxilar(Context context) {
-        super(context, DATABASE_NOME, null, 5);
+        super(context, DATABASE_NOME, null, 6);
     }
 
     @Override
@@ -322,7 +322,12 @@ public class DBAuxilar extends SQLiteOpenHelper {
     public Modelo lerModelo(Long idFormulario_Modelo, String modelo_Modelo) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectQuery = "SELECT * FROM " + MODELO_TABELA + " JOIN " + FORMULARIO_TABELA + " ON " + FORMULARIO_COL_ID + " = " + idFormulario_Modelo + " WHERE " + MODELO_COL_MODELO + " = " + "'" + modelo_Modelo + "'";
+        String selectQuery = "SELECT * FROM " + MODELO_TABELA + " JOIN " + FORMULARIO_TABELA
+                + " ON " + FORMULARIO_COL_ID
+                + " = " + idFormulario_Modelo
+                + " WHERE " + MODELO_COL_MODELO
+                + " = " + "'" + modelo_Modelo + "'"
+                + " AND " + MODELO_COL_ID_FORMULARIO + " = " + idFormulario_Modelo;
 
         Log.e(LOG, selectQuery);
 

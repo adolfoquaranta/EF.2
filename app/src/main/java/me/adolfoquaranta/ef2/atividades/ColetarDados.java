@@ -33,6 +33,8 @@ public class ColetarDados extends AppCompatActivity {
     private List<Variavel> variaveis;
     private Modelo modelo;
     private Integer tratamentoAtual, repeticaoAtual, replicacaoAtual;
+    private ArrayList<Dado> dados;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,24 +48,20 @@ public class ColetarDados extends AppCompatActivity {
         final Intent coletarDadosIntent = getIntent();
         final Long id_Formulario = coletarDadosIntent.getLongExtra("id_Formulario", 0);
         final Long id_Coleta = coletarDadosIntent.getLongExtra("id_Coleta", 0);
-
-        //recarregar dados
         tratamentoAtual = coletarDadosIntent.getIntExtra("tratamentoAtual", 0);
         replicacaoAtual = coletarDadosIntent.getIntExtra("replicacaoAtual", 0);
         repeticaoAtual = coletarDadosIntent.getIntExtra("repeticaoAtual", 0);
-
+        dados = coletarDadosIntent.getParcelableArrayListExtra("dados");
 
         Log.d("tratamentoAtual", tratamentoAtual.toString());
         Log.d("repeticaoAtual", repeticaoAtual.toString());
         Log.d("replicacaoAtual", replicacaoAtual.toString());
+        Log.d("dados", dados.toString());
 
 
         modelo = dbAuxilar.lerModelo(id_Formulario, "DIC");
         tratamentos = dbAuxilar.lerTodosTratamentos(id_Formulario);
         variaveis = dbAuxilar.lerTodasVariaveis(id_Formulario);
-
-        //Log.d("tratamentosSize", String.valueOf(tratamentos.size()));
-        //Log.d("replicacoesSize", String.valueOf(modelo.getQuantidadeReplicacoes_Modelo()));
 
 
         final RegexpValidator naoNulo = new RegexpValidator(getString(R.string.err_msg_valorVariavel), "^(?!\\s*$).+");
@@ -139,6 +137,9 @@ public class ColetarDados extends AppCompatActivity {
         proximoDado.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Integer quantidadeDados = modelo.getQuantidadeTratamentos_Modelo()
+                        * modelo.getQuantidadeReplicacoes_Modelo()
+                        * modelo.getQuantidadeRepeticoes_Modelo();
                 Intent recarregar = new Intent(ColetarDados.this, ColetarDados.class);
                 final Intent inicio = new Intent(ColetarDados.this, Inicio.class);
                 recarregar.putExtra("id_Formulario", id_Formulario);
@@ -151,6 +152,8 @@ public class ColetarDados extends AppCompatActivity {
                     recarregar.putExtra("replicacaoAtual", replicacaoAtual);
                     recarregar.putExtra("repeticaoAtual", repeticaoAtual);
                     recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+                    recarregar.putParcelableArrayListExtra("dados", dados);
+                    finish();
                     startActivity(recarregar);
                 } else {
                     if (replicacaoAtual + 1 == modelo.getQuantidadeReplicacoes_Modelo()) {
@@ -159,6 +162,8 @@ public class ColetarDados extends AppCompatActivity {
                         recarregar.putExtra("replicacaoAtual", replicacaoAtual);
                         recarregar.putExtra("repeticaoAtual", repeticaoAtual);
                         recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+                        recarregar.putParcelableArrayListExtra("dados", dados);
+                        finish();
                         startActivity(recarregar);
                     }
                     if (repeticaoAtual + 1 < modelo.getQuantidadeRepeticoes_Modelo()) {
@@ -167,6 +172,8 @@ public class ColetarDados extends AppCompatActivity {
                         recarregar.putExtra("replicacaoAtual", replicacaoAtual);
                         recarregar.putExtra("repeticaoAtual", repeticaoAtual);
                         recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+                        recarregar.putParcelableArrayListExtra("dados", dados);
+                        finish();
                         startActivity(recarregar);
                     } else {
                         if (repeticaoAtual + 1 == modelo.getQuantidadeRepeticoes_Modelo()) {
@@ -175,10 +182,13 @@ public class ColetarDados extends AppCompatActivity {
                             recarregar.putExtra("replicacaoAtual", replicacaoAtual);
                             recarregar.putExtra("repeticaoAtual", repeticaoAtual);
                             recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+                            recarregar.putParcelableArrayListExtra("dados", dados);
+                            finish();
                             startActivity(recarregar);
                         }
                         if (tratamentoAtual + 1 == modelo.getQuantidadeTratamentos_Modelo()) {
                             coletarDados(id_Coleta);
+                            finish();
                             startActivity(inicio);
                         } else {
                             tratamentoAtual++;
@@ -186,6 +196,8 @@ public class ColetarDados extends AppCompatActivity {
                             recarregar.putExtra("replicacaoAtual", replicacaoAtual);
                             recarregar.putExtra("repeticaoAtual", repeticaoAtual);
                             recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+                            recarregar.putParcelableArrayListExtra("dados", dados);
+                            finish();
                             startActivity(recarregar);
                         }
                     }
@@ -196,25 +208,39 @@ public class ColetarDados extends AppCompatActivity {
     }
 
     public String coletarDados(Long id_Coleta) {
-        ArrayList<Dado> dados = new ArrayList<>();
         Integer id = 0;
-
         while (findViewById(id) instanceof MaterialEditText) {
             Dado dado = new Dado();
             dado.setIdColeta_Dado(id_Coleta);
             dado.setIdTratamento_Dado(tratamentos.get(tratamentoAtual).getId_Tratamento());
             dado.setIdVariavel_Dado(variaveis.get(id).getId_Variavel());
+            dado.setRepeticao_Dado(repeticaoAtual);
+            dado.setReplicacao_Dado(replicacaoAtual);
             MaterialEditText etVariavel = (MaterialEditText) findViewById(id);
             if (etVariavel.isEnabled() && etVariavel.getText().toString().equals("")) {
                 return getString(R.string.info_PreechaOuAnule);
             } else if (!etVariavel.isEnabled()) {
-                Log.d("etVariavel", " ");
+                //Log.d("etVariavel", " ");
                 dado.setValor_Dado(" ");
             } else {
-                Log.d("etVariavel", etVariavel.getText().toString());
+                //Log.d("etVariavel", etVariavel.getText().toString());
                 dado.setValor_Dado(etVariavel.getText().toString());
             }
+
+
+            //if(dados.size()==0){
             dados.add(dado);
+            //}
+            /*else {
+                for(Dado d : dados){
+                    if(d.getIdVariavel_Dado()==variaveis.get(id).getId_Variavel()
+                            && d.getIdTratamento_Dado() == tratamentos.get(tratamentoAtual).getId_Tratamento()
+                            && d.getRepeticao_Dado()==repeticaoAtual && d.getReplicacao_Dado() == replicacaoAtual){
+                        dados.set(dados.indexOf(d), dado);
+                    }
+                    dados.add(dado);
+                }
+            }*/
             id++;
         }
         return dados.toString();
