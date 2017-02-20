@@ -178,6 +178,7 @@ public class ListarFormularios extends AppCompatActivity
         public void onItemClick(View childView, int position) {
             // Do something when an item is clicked, or override something else.
             Intent cadastroColeta = new Intent(ListarFormularios.this, CadastroColeta.class);
+            Intent listarColetas = new Intent(ListarFormularios.this, ListarColetas.class);
             switch (escolhaUsuario) {
                 case 0:
                     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutListarFormularios);
@@ -185,7 +186,6 @@ public class ListarFormularios extends AppCompatActivity
                     drawer.openDrawer(GravityCompat.START);
                     break;
                 case R.id.nav_coletaExportar:
-                    Intent listarColetas = new Intent(ListarFormularios.this, ListarColetas.class);
                     listarColetas.putExtra("id_Formulario", formularioList.get(position).getId_Form());
                     listarColetas.putExtra("tipo_Formulario", tipoFormulario);
                     startActivity(listarColetas);
@@ -194,6 +194,11 @@ public class ListarFormularios extends AppCompatActivity
                     cadastroColeta.putExtra("id_Formulario", formularioList.get(position).getId_Form());
                     cadastroColeta.putExtra("tipo_Formulario", tipoFormulario);
                     startActivity(cadastroColeta);
+                    break;
+                case R.id.nav_coletaContinuar:
+                    listarColetas.putExtra("id_Formulario", formularioList.get(position).getId_Form());
+                    listarColetas.putExtra("tipo_Formulario", tipoFormulario);
+                    startActivity(listarColetas);
                     break;
                 case R.id.nav_formularioRemover:
                     dbAuxilar.deleteFormulario(formularioList.get(position).getId_Form());
