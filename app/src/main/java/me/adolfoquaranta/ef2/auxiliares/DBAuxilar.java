@@ -26,6 +26,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
 
     private static final String LOG = "DBAuxiliar";
     private static final String DATABASE_NOME = "ef2.db";
+    private static final Integer DATABASE_VERSAO = 1;
     private static final String FORMULARIO_TABELA = "Formulario";
     private static final String FORMULARIO_COL_ID = "id_Form";
     private static final String FORMULARIO_COL_TIPO = "tipo_Form";
@@ -66,9 +67,10 @@ public class DBAuxilar extends SQLiteOpenHelper {
     private static final String COLETA_COL_DATA_ULTIMA_EDICAO = "dataUltimaEdicao_Coleta";
     private static final String COLETA_COL_STATUS = "status_Coleta";
     private static final String COLETA_COL_TIPO = "tipo_Coleta";
-    private static final String COLETA_COL_MODELO_FORM = "modeloForm_Coleta";
     private static final String COLETA_COL_ID_FORMULARIO = "idForm_Coleta";
+    private static final String COLETA_COL_ID_MODELO = "idModelo_Coleta";
     private static final String COLETA_CONSTRAINT_FK_COLETA_FORMULARIO = "FK_Coleta_Formulario";
+    private static final String COLETA_CONSTRAINT_FK_COLETA_MODELO = "FK_Coleta_Modelo";
     private static final String DADO_TABELA = "Dado";
     private static final String DADO_COL_ID = "id_Dado";
     private static final String DADO_COL_VALOR = "valor_Dado";
@@ -132,9 +134,11 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + COLETA_COL_DATA_ULTIMA_EDICAO + " TEXT, "
             + COLETA_COL_STATUS + " TEXT, "
             + COLETA_COL_TIPO + " TEXT, "
-            + COLETA_COL_MODELO_FORM + " TEXT, "
             + COLETA_COL_ID_FORMULARIO + " INTEGER, "
-            + "CONSTRAINT '" + COLETA_CONSTRAINT_FK_COLETA_FORMULARIO + "' FOREIGN KEY ('" + COLETA_COL_ID_FORMULARIO + "') REFERENCES " + FORMULARIO_TABELA + " ('" + FORMULARIO_COL_ID + "') ON DELETE CASCADE"
+            + COLETA_COL_ID_MODELO + " INTEGER, "
+            + "CONSTRAINT '" + COLETA_CONSTRAINT_FK_COLETA_FORMULARIO + "' FOREIGN KEY ('" + COLETA_COL_ID_FORMULARIO + "') REFERENCES " + FORMULARIO_TABELA + " ('" + FORMULARIO_COL_ID + "') ON DELETE CASCADE,"
+            + "CONSTRAINT '" + COLETA_CONSTRAINT_FK_COLETA_MODELO + "' FOREIGN KEY ('" + COLETA_COL_ID_MODELO + "') REFERENCES " + MODELO_TABELA + " ('" + MODELO_COL_ID + "') ON DELETE CASCADE"
+
             + ")";
     private static final String CRIAR_TABELA_DADO = "CREATE TABLE "
             + DADO_TABELA + "(" + DADO_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
@@ -155,7 +159,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + ")";
 
     public DBAuxilar(Context context) {
-        super(context, DATABASE_NOME, null, 6);
+        super(context, DATABASE_NOME, null, DATABASE_VERSAO);
+        //context.deleteDatabase(DATABASE_NOME);
     }
 
     @Override
@@ -254,13 +259,13 @@ public class DBAuxilar extends SQLiteOpenHelper {
         return formularios;
     }
 
-    public Long updateFormularioStatus(Formulario formulario){
+    public int updateFormularioStatus(Formulario formulario) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(FORMULARIO_COL_STATUS, formulario.getStatus_Form());
 
-        return (long) db.update(FORMULARIO_TABELA, values, "id=" + formulario.getId_Form(), null);
+        return db.update(FORMULARIO_TABELA, values, "id=" + formulario.getId_Form(), null);
     }
 
     public int deleteFormulario(Long id_Form) {
@@ -492,6 +497,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
         values.put(COLETA_COL_STATUS, coleta.getStatus_Coleta());
         values.put(COLETA_COL_TIPO, coleta.getTipo_Coleta());
         values.put(COLETA_COL_ID_FORMULARIO, coleta.getIdForm_Coleta());
+        values.put(COLETA_COL_ID_MODELO, coleta.getIdModelo_Coleta());
 
         return db.insert(COLETA_TABELA, null, values);
     }
@@ -523,6 +529,37 @@ public class DBAuxilar extends SQLiteOpenHelper {
         return coleta;
     }
 
+    public ArrayList<Coleta> lerTodasColetas(Long id_Formulario) {
+        ArrayList<Coleta> coletas = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + COLETA_TABELA + " WHERE " + COLETA_COL_ID_FORMULARIO + " = " + id_Formulario;
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()) {
+            do {
+                Coleta coleta = new Coleta();
+                coleta.setIdForm_Coleta(c.getLong(c.getColumnIndex(COLETA_COL_ID)));
+                coleta.setNome_Coleta(c.getString(c.getColumnIndex(COLETA_COL_NOME)));
+                coleta.setDescricao_Coleta(c.getString(c.getColumnIndex(COLETA_COL_DESCRICAO)));
+                coleta.setDataCriacao_Coleta(c.getString(c.getColumnIndex(COLETA_COL_DATA_CRIACAO)));
+                coleta.setDataUltimaEdicao_Coleta(c.getString(c.getColumnIndex(COLETA_COL_DATA_ULTIMA_EDICAO)));
+                coleta.setStatus_Coleta(c.getString(c.getColumnIndex(COLETA_COL_STATUS)));
+                coleta.setTipo_Coleta(c.getString(c.getColumnIndex(COLETA_COL_TIPO)));
+                coleta.setIdForm_Coleta(c.getLong(c.getColumnIndex(COLETA_COL_ID_FORMULARIO)));
+                coletas.add(coleta);
+            } while (c.moveToNext());
+        }
+
+        c.close();
+        return coletas;
+    }
+
+
+
 
     //Dado
 
@@ -546,5 +583,74 @@ public class DBAuxilar extends SQLiteOpenHelper {
         return db.insert(DADO_TABELA, null, values);
     }
 
+    public Dado lerDado(Long id_Dado) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + DADO_TABELA + " WHERE " + DADO_COL_ID + " = " + id_Dado;
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c != null) c.moveToFirst();
+        Dado dado = new Dado();
+        assert c != null;
+        dado.setId_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID)));
+        dado.setValor_Dado(c.getString(c.getColumnIndex(DADO_COL_VALOR)));
+        dado.setRepeticao_Dado(c.getInt(c.getColumnIndex(DADO_COL_REPETICAO)));
+        dado.setReplicacao_Dado(c.getInt(c.getColumnIndex(DADO_COL_REPLICACAO)));
+        dado.setBloco_Dado(c.getInt(c.getColumnIndex(DADO_COL_BLOCO)));
+        dado.setFator_Dado(c.getInt(c.getColumnIndex(DADO_COL_FATOR)));
+        dado.setDivisao_Dado(c.getInt(c.getColumnIndex(DADO_COL_DIVISAO)));
+        dado.setNivelFator_Dado(c.getInt(c.getColumnIndex(DADO_COL_NIVEL_FATOR)));
+        dado.setNivelDivisao_Dado(c.getInt(c.getColumnIndex(DADO_COL_NIVEL_DIVISAO)));
+        dado.setIdColeta_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID_COLETA)));
+        dado.setIdTratamento_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID_TRATAMENTO)));
+        dado.setIdVariavel_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID_VARIAVEL)));
+
+        c.close();
+
+        return dado;
+
+    }
+
+    public int updateDado(Dado dado) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(DADO_COL_VALOR, dado.getValor_Dado());
+
+        return db.update(DADO_TABELA, values, "id_Dado=" + dado.getId_Dado(), null);
+    }
+
+    public Long checarDado(Dado dado) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + DADO_TABELA + " WHERE " + DADO_COL_ID_COLETA + " = " + dado.getIdColeta_Dado()
+                + " AND " + DADO_COL_ID_TRATAMENTO + " = " + dado.getIdTratamento_Dado()
+                + " AND " + DADO_COL_ID_VARIAVEL + " = " + dado.getIdVariavel_Dado()
+                + " AND " + DADO_COL_REPETICAO + " = " + dado.getRepeticao_Dado()
+                + " AND " + DADO_COL_REPLICACAO + " = " + dado.getReplicacao_Dado();
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        Long id_Dado;
+        if (c.moveToFirst()) {
+            id_Dado = c.getLong(c.getColumnIndex(DADO_COL_ID));
+        } else {
+            id_Dado = 0L;
+        }
+
+        c.close();
+
+        return id_Dado;
+
+    }
+
+
+
 
 }
+
+

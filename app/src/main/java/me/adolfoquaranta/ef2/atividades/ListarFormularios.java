@@ -49,7 +49,7 @@ public class ListarFormularios extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutListarFormularios);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         assert drawer != null;
@@ -84,9 +84,9 @@ public class ListarFormularios extends AppCompatActivity
             this.mostrar_formularios_root.addView(tv);
         }
         else{
-            recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+            recyclerView = (RecyclerView) findViewById(R.id.recycler_viewListarFormularios);
             recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
-            recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+            recyclerView = (RecyclerView) findViewById(R.id.recycler_viewListarFormularios);
 
             mAdapter = new FormulariosAdapter(formularioList);
             recyclerView.setHasFixedSize(true);
@@ -97,7 +97,7 @@ public class ListarFormularios extends AppCompatActivity
             recyclerView.setAdapter(mAdapter);
 
             mAdapter.notifyDataSetChanged();
-            recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+            recyclerView = (RecyclerView) findViewById(R.id.recycler_viewListarFormularios);
 
             recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this,
                     new OnItemClickListener()));
@@ -118,7 +118,7 @@ public class ListarFormularios extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutListarFormularios);
         assert drawer != null;
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
@@ -148,8 +148,9 @@ public class ListarFormularios extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_coletaNova) {
-            // Handle the camera action
+        if (id == R.id.nav_coletaExportar) {
+            escolhaUsuario = id;
+        } else if (id == R.id.nav_coletaNova) {
             escolhaUsuario = id;
         } else if (id == R.id.nav_coletaContinuar) {
             escolhaUsuario = id;
@@ -165,7 +166,7 @@ public class ListarFormularios extends AppCompatActivity
             escolhaUsuario = id;
         }
 
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutListarFormularios);
         assert drawer != null;
         drawer.closeDrawer(GravityCompat.START);
         return true;
@@ -179,9 +180,15 @@ public class ListarFormularios extends AppCompatActivity
             Intent cadastroColeta = new Intent(ListarFormularios.this, CadastroColeta.class);
             switch (escolhaUsuario) {
                 case 0:
-                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutListarFormularios);
                     assert drawer != null;
                     drawer.openDrawer(GravityCompat.START);
+                    break;
+                case R.id.nav_coletaExportar:
+                    Intent listarColetas = new Intent(ListarFormularios.this, ListarColetas.class);
+                    listarColetas.putExtra("id_Formulario", formularioList.get(position).getId_Form());
+                    listarColetas.putExtra("tipo_Formulario", tipoFormulario);
+                    startActivity(listarColetas);
                     break;
                 case R.id.nav_coletaNova:
                     cadastroColeta.putExtra("id_Formulario", formularioList.get(position).getId_Form());

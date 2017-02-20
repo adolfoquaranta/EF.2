@@ -4,6 +4,10 @@
         <menu>
             <group android:checkableBehavior="single">
                 <item
+                    android:id="@+id/nav_coletaExportar"
+                    android:icon="@drawable/ic_import_export_black_48dp"
+                    android:title="@string/nav_titulo_coletaExportar" />
+                <item
                     android:id="@+id/nav_coletaNova"
                     android:icon="@drawable/ic_note_add_black_48dp"
                     android:title="@string/nav_titulo_coletaNova" />

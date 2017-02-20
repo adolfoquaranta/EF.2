@@ -107,6 +107,9 @@
     <string name="nav_header_titulo">(EF).2 - Experimento Fácil</string>
     <string name="nav_header_subtitulo">Engenharia Florestal</string>
     <string name="info_SelecioneUmaOpcao">Selecione o que deseja fazer</string>
+    <string name="actionOK">OK</string>
+    <string name="title_activity_listar_coletas">Coletas de </string>
+    <string name="nav_titulo_coletaExportar">Exportar</string>
 
 
 </resources>

@@ -36,7 +36,7 @@ public class CadastroModeloFormulario extends AppCompatActivity {
 
         Intent cadastroModeloFormulario = getIntent();
         id_Formulario = cadastroModeloFormulario.getLongExtra("id_Formulario", 0);
-        modelo_Modelo = cadastroModeloFormulario.getSerializableExtra("modelo_Modelo").toString();
+        modelo_Modelo = cadastroModeloFormulario.getStringExtra("modelo_Modelo");
 
         input_quantidadeTratamentos_DIC = (TextInputEditText) findViewById(R.id.input_quantidadeTratatmentos_DIC);
         input_quantidadeRepeticoes_DIC = (TextInputEditText) findViewById(R.id.input_quantidadeRepeticoes_DIC);

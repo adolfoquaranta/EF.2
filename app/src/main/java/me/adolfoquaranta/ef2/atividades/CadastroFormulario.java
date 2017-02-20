@@ -2,15 +2,12 @@ package me.adolfoquaranta.ef2.atividades;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -64,15 +61,6 @@ public class CadastroFormulario extends AppCompatActivity {
 
         Button btnSalvar_Formulario = (Button) findViewById(R.id.btn_salvar_Formulario);
 
-        FloatingActionButton novoFormulario = (FloatingActionButton) findViewById(R.id.fab_novoFormulario);
-        novoFormulario.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         radioGroup_modelo_Modelo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -123,11 +111,8 @@ public class CadastroFormulario extends AppCompatActivity {
 
         Long id_Formulario = dbAuxilar.inserirFormulario(formulario);
 
-        Log.d("modelo_Modelo_aIF", modelo_Modelo);
         if (radioGroup_modelo_Modelo.getCheckedRadioButtonId() == R.id.radio_DIC) {
-            Log.d("modelo_Modelo_dIF", modelo_Modelo);
             modelo_Modelo = getString(R.string.radio_dic);
-            Log.d("modelo_ModeloDsetIF", modelo_Modelo);
             Intent cadastroModeloFomulario = new Intent(CadastroFormulario.this, CadastroModeloFormulario.class);
             cadastroModeloFomulario.putExtra("id_Formulario", id_Formulario);
             cadastroModeloFomulario.putExtra("modelo_Modelo", modelo_Modelo);

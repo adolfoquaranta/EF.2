@@ -13,13 +13,11 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import me.adolfoquaranta.ef2.R;
 import me.adolfoquaranta.ef2.auxiliares.DBAuxilar;
 import me.adolfoquaranta.ef2.modelos.Coleta;
-import me.adolfoquaranta.ef2.modelos.Dado;
 import me.adolfoquaranta.ef2.modelos.Modelo;
 
 public class CadastroColeta extends AppCompatActivity {
@@ -99,8 +97,6 @@ public class CadastroColeta extends AppCompatActivity {
         coletarDados.putExtra("tratamentoAtual", 0);
         coletarDados.putExtra("replicacaoAtual", 0);
         coletarDados.putExtra("repeticaoAtual", 0);
-        ArrayList<Dado> dados = new ArrayList<>();
-        coletarDados.putParcelableArrayListExtra("dados", dados);
         startActivity(coletarDados);
     }
 

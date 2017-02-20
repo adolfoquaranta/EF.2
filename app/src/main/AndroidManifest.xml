@@ -15,6 +15,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="me.adolfoquaranta.ef2.atividades.Inicio" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -56,6 +57,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="me.adolfoquaranta.ef2.atividades.Inicio" />
         </activity>
+        <activity
+            android:name=".atividades.ListarColetas"
+            android:label="@string/title_activity_listar_coletas"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
