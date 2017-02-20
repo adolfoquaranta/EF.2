@@ -26,6 +26,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
 
     private static final String LOG = "DBAuxiliar";
     private static final String DATABASE_NOME = "ef2.db";
+    private static final Integer DATABASE_VERSAO = 1;
     private static final String FORMULARIO_TABELA = "Formulario";
     private static final String FORMULARIO_COL_ID = "id_Form";
     private static final String FORMULARIO_COL_TIPO = "tipo_Form";
@@ -66,7 +67,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
     private static final String COLETA_COL_DATA_ULTIMA_EDICAO = "dataUltimaEdicao_Coleta";
     private static final String COLETA_COL_STATUS = "status_Coleta";
     private static final String COLETA_COL_TIPO = "tipo_Coleta";
-    private static final String COLETA_COL_MODELO_FORM = "modeloForm_Coleta";
+    private static final String COLETA_COL_MODELO_MODELO = "modeloModelo_Coleta";
     private static final String COLETA_COL_ID_FORMULARIO = "idForm_Coleta";
     private static final String COLETA_CONSTRAINT_FK_COLETA_FORMULARIO = "FK_Coleta_Formulario";
     private static final String DADO_TABELA = "Dado";
@@ -132,7 +133,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + COLETA_COL_DATA_ULTIMA_EDICAO + " TEXT, "
             + COLETA_COL_STATUS + " TEXT, "
             + COLETA_COL_TIPO + " TEXT, "
-            + COLETA_COL_MODELO_FORM + " TEXT, "
+            + COLETA_COL_MODELO_MODELO + " TEXT, "
             + COLETA_COL_ID_FORMULARIO + " INTEGER, "
             + "CONSTRAINT '" + COLETA_CONSTRAINT_FK_COLETA_FORMULARIO + "' FOREIGN KEY ('" + COLETA_COL_ID_FORMULARIO + "') REFERENCES " + FORMULARIO_TABELA + " ('" + FORMULARIO_COL_ID + "') ON DELETE CASCADE"
             + ")";
@@ -155,7 +156,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + ")";
 
     public DBAuxilar(Context context) {
-        super(context, DATABASE_NOME, null, 6);
+        super(context, DATABASE_NOME, null, DATABASE_VERSAO);
+        //context.deleteDatabase(DATABASE_NOME);
     }
 
     @Override
@@ -254,13 +256,13 @@ public class DBAuxilar extends SQLiteOpenHelper {
         return formularios;
     }
 
-    public Long updateFormularioStatus(Formulario formulario){
+    public int updateFormularioStatus(Formulario formulario) {
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
         values.put(FORMULARIO_COL_STATUS, formulario.getStatus_Form());
 
-        return (long) db.update(FORMULARIO_TABELA, values, "id=" + formulario.getId_Form(), null);
+        return db.update(FORMULARIO_TABELA, values, "id=" + formulario.getId_Form(), null);
     }
 
     public int deleteFormulario(Long id_Form) {
@@ -546,5 +548,74 @@ public class DBAuxilar extends SQLiteOpenHelper {
         return db.insert(DADO_TABELA, null, values);
     }
 
+    public Dado lerDado(Long id_Dado) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + DADO_TABELA + " WHERE " + DADO_COL_ID + " = " + id_Dado;
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c != null) c.moveToFirst();
+        Dado dado = new Dado();
+        assert c != null;
+        dado.setId_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID)));
+        dado.setValor_Dado(c.getString(c.getColumnIndex(DADO_COL_VALOR)));
+        dado.setRepeticao_Dado(c.getInt(c.getColumnIndex(DADO_COL_REPETICAO)));
+        dado.setReplicacao_Dado(c.getInt(c.getColumnIndex(DADO_COL_REPLICACAO)));
+        dado.setBloco_Dado(c.getInt(c.getColumnIndex(DADO_COL_BLOCO)));
+        dado.setFator_Dado(c.getInt(c.getColumnIndex(DADO_COL_FATOR)));
+        dado.setDivisao_Dado(c.getInt(c.getColumnIndex(DADO_COL_DIVISAO)));
+        dado.setNivelFator_Dado(c.getInt(c.getColumnIndex(DADO_COL_NIVEL_FATOR)));
+        dado.setNivelDivisao_Dado(c.getInt(c.getColumnIndex(DADO_COL_NIVEL_DIVISAO)));
+        dado.setIdColeta_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID_COLETA)));
+        dado.setIdTratamento_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID_TRATAMENTO)));
+        dado.setIdVariavel_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID_VARIAVEL)));
+
+        c.close();
+
+        return dado;
+
+    }
+
+    public int updateDado(Dado dado) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(DADO_COL_VALOR, dado.getValor_Dado());
+
+        return db.update(DADO_TABELA, values, "id_Dado=" + dado.getId_Dado(), null);
+    }
+
+    public Long checarDado(Dado dado) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + DADO_TABELA + " WHERE " + DADO_COL_ID_COLETA + " = " + dado.getIdColeta_Dado()
+                + " AND " + DADO_COL_ID_TRATAMENTO + " = " + dado.getIdTratamento_Dado()
+                + " AND " + DADO_COL_ID_VARIAVEL + " = " + dado.getIdVariavel_Dado()
+                + " AND " + DADO_COL_REPETICAO + " = " + dado.getRepeticao_Dado()
+                + " AND " + DADO_COL_REPLICACAO + " = " + dado.getReplicacao_Dado();
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        Long id_Dado;
+        if (c.moveToFirst()) {
+            id_Dado = c.getLong(c.getColumnIndex(DADO_COL_ID));
+        } else {
+            id_Dado = 0L;
+        }
+
+        c.close();
+
+        return id_Dado;
+
+    }
+
+
+
 
 }
+
+
