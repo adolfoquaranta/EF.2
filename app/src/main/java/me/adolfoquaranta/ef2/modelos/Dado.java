@@ -6,17 +6,17 @@ package me.adolfoquaranta.ef2.modelos;
 
 public class Dado {
 
-    private Long id_Dado, idTratamento_Dado, idVariavel_Dado, idColeta_Dado;
+    private Long id_Dado, idColeta_Dado, idVariavel_Dado, idTratamento_Dado;
     private String valor_Dado;
-    private Integer repeticao_Dado, replicacao_Dado, bloco_Dado, fator_Dado, divisao_Dado, nivelFator_Dado, nivelDivisao_Dado;
+    private Integer repeticao_Dado, replicacao_Dado, tratamento_Dado, variavel_Dado, bloco_Dado, fator_Dado, divisao_Dado, nivelFator_Dado, nivelDivisao_Dado;
 
     public Dado() {
     }
 
-    public Dado(Long id_Dado, Long idTratamento_Dado, Long idVariavel_Dado, Long idColeta_Dado, String valor_Dado, Integer repeticao_Dado, Integer replicacao_Dado, Integer bloco_Dado, Integer fator_Dado, Integer divisao_Dado, Integer nivelFator_Dado, Integer nivelDivisao_Dado) {
+    public Dado(Long id_Dado, Integer tratamento_Dado, Integer variavel_Dado, Long idColeta_Dado, String valor_Dado, Integer repeticao_Dado, Integer replicacao_Dado, Integer bloco_Dado, Integer fator_Dado, Integer divisao_Dado, Integer nivelFator_Dado, Integer nivelDivisao_Dado, Long idVariavel_Dado, Long idTratamento_Dado) {
         this.id_Dado = id_Dado;
-        this.idTratamento_Dado = idTratamento_Dado;
-        this.idVariavel_Dado = idVariavel_Dado;
+        this.tratamento_Dado = tratamento_Dado;
+        this.variavel_Dado = variavel_Dado;
         this.idColeta_Dado = idColeta_Dado;
         this.valor_Dado = valor_Dado;
         this.repeticao_Dado = repeticao_Dado;
@@ -26,6 +26,8 @@ public class Dado {
         this.divisao_Dado = divisao_Dado;
         this.nivelFator_Dado = nivelFator_Dado;
         this.nivelDivisao_Dado = nivelDivisao_Dado;
+        this.idVariavel_Dado = idVariavel_Dado;
+        this.idTratamento_Dado = idTratamento_Dado;
     }
 
     public Long getId_Dado() {
@@ -36,12 +38,12 @@ public class Dado {
         this.id_Dado = id_Dado;
     }
 
-    public Long getIdTratamento_Dado() {
-        return idTratamento_Dado;
+    public Integer getTratamento_Dado() {
+        return tratamento_Dado;
     }
 
-    public void setIdTratamento_Dado(Long idTratamento_Dado) {
-        this.idTratamento_Dado = idTratamento_Dado;
+    public void setTratamento_Dado(Integer tratamento_Dado) {
+        this.tratamento_Dado = tratamento_Dado;
     }
 
     public Long getIdVariavel_Dado() {
@@ -50,6 +52,22 @@ public class Dado {
 
     public void setIdVariavel_Dado(Long idVariavel_Dado) {
         this.idVariavel_Dado = idVariavel_Dado;
+    }
+
+    public Long getIdTratamento_Dado() {
+        return idTratamento_Dado;
+    }
+
+    public void setIdTratamento_Dado(Long idTratamento_Dado) {
+        this.idTratamento_Dado = idTratamento_Dado;
+    }
+
+    public Integer getVariavel_Dado() {
+        return variavel_Dado;
+    }
+
+    public void setVariavel_Dado(Integer variavel_Dado) {
+        this.variavel_Dado = variavel_Dado;
     }
 
     public Long getIdColeta_Dado() {
@@ -128,12 +146,14 @@ public class Dado {
     public String toString() {
         return "Dado{" +
                 "id_Dado=" + id_Dado +
-                ", idTratamento_Dado=" + idTratamento_Dado +
-                ", idVariavel_Dado=" + idVariavel_Dado +
                 ", idColeta_Dado=" + idColeta_Dado +
+                ", idVariavel_Dado=" + idVariavel_Dado +
+                ", idTratamento_Dado=" + idTratamento_Dado +
                 ", valor_Dado='" + valor_Dado + '\'' +
                 ", repeticao_Dado=" + repeticao_Dado +
                 ", replicacao_Dado=" + replicacao_Dado +
+                ", tratamento_Dado=" + tratamento_Dado +
+                ", variavel_Dado=" + variavel_Dado +
                 ", bloco_Dado=" + bloco_Dado +
                 ", fator_Dado=" + fator_Dado +
                 ", divisao_Dado=" + divisao_Dado +

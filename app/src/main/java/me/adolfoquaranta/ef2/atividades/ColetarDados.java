@@ -166,10 +166,10 @@ public class ColetarDados extends AppCompatActivity {
                 if (replicacaoAtual + 1 == modelo.getQuantidadeReplicacoes_Modelo()) {
                     if (repeticaoAtual + 1 == modelo.getQuantidadeRepeticoes_Modelo()) {
                         if (tratamentoAtual + 1 == modelo.getQuantidadeTratamentos_Modelo()) {
-                            inserirDados(dados, repeticaoAtual, replicacaoAtual);
+                            inserirDados(dados);
                             startActivity(inicio);
                         } else if (tratamentoAtual + 1 < modelo.getQuantidadeTratamentos_Modelo()) {
-                            inserirDados(dados, repeticaoAtual, replicacaoAtual);
+                            inserirDados(dados);
                             tratamentoAtual++;
                             repeticaoAtual = 0;
                             replicacaoAtual = 0;
@@ -180,7 +180,7 @@ public class ColetarDados extends AppCompatActivity {
                             startActivity(recarregar);
                         }
                     } else if (repeticaoAtual + 1 < modelo.getQuantidadeRepeticoes_Modelo()) {
-                        inserirDados(dados, repeticaoAtual, replicacaoAtual);
+                        inserirDados(dados);
                         repeticaoAtual++;
                         replicacaoAtual = 0;
                         recarregar.putExtra("replicacaoAtual", replicacaoAtual);
@@ -190,7 +190,7 @@ public class ColetarDados extends AppCompatActivity {
                         startActivity(recarregar);
                     }
                 } else if (replicacaoAtual + 1 < modelo.getQuantidadeReplicacoes_Modelo()) {
-                    inserirDados(dados, repeticaoAtual, replicacaoAtual);
+                    inserirDados(dados);
                     replicacaoAtual++;
                     recarregar.putExtra("replicacaoAtual", replicacaoAtual);
                     recarregar.putExtra("repeticaoAtual", repeticaoAtual);
@@ -205,10 +205,12 @@ public class ColetarDados extends AppCompatActivity {
 
     }
 
-    public void inserirDados(ArrayList<Dado> dados, Integer repeticaoAtual, Integer replicacaoAtual) {
+    public void inserirDados(ArrayList<Dado> dados) {
         for (int i = 0; i < dados.size(); i++) {
             dados.get(i).setIdVariavel_Dado(variaveis.get(i).getId_Variavel());
             dados.get(i).setIdTratamento_Dado(tratamentos.get(tratamentoAtual).getId_Tratamento());
+            dados.get(i).setVariavel_Dado(i);
+            dados.get(i).setTratamento_Dado(tratamentoAtual);
             dados.get(i).setRepeticao_Dado(repeticaoAtual);
             dados.get(i).setReplicacao_Dado(replicacaoAtual);
             dados.get(i).setIdColeta_Dado(id_Coleta);

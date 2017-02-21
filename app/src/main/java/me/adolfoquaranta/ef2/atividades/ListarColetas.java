@@ -28,6 +28,7 @@ import me.adolfoquaranta.ef2.auxiliares.DBAuxilar;
 import me.adolfoquaranta.ef2.componentes_recycler.DividerItemDecoration;
 import me.adolfoquaranta.ef2.componentes_recycler.RecyclerItemClickListener;
 import me.adolfoquaranta.ef2.modelos.Coleta;
+import me.adolfoquaranta.ef2.modelos.Dado;
 
 public class ListarColetas extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -177,6 +178,7 @@ public class ListarColetas extends AppCompatActivity
         @Override
         public void onItemClick(View childView, int position) {
             // Do something when an item is clicked, or override something else.
+            ArrayList<Dado> dados = dbAuxilar.lerTodosDadoDe(coletaList.get(position).getId_Coleta());
 
         }
 

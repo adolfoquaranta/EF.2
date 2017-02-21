@@ -26,7 +26,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
 
     private static final String LOG = "DBAuxiliar";
     private static final String DATABASE_NOME = "ef2.db";
-    private static final Integer DATABASE_VERSAO = 1;
+    private static final Integer DATABASE_VERSAO = 5;
     private static final String FORMULARIO_TABELA = "Formulario";
     private static final String FORMULARIO_COL_ID = "id_Form";
     private static final String FORMULARIO_COL_TIPO = "tipo_Form";
@@ -82,6 +82,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
     private static final String DADO_COL_NIVEL_FATOR = "nivelFator_Dado";
     private static final String DADO_COL_NIVEL_DIVISAO = "nivelDivisao_Dado";
     private static final String DADO_COL_ID_COLETA = "idColeta_Dado";
+    private static final String DADO_COL_TRATAMENTO = "tratamento_Dado";
+    private static final String DADO_COL_VARIAVEL = "variavel_Dado";
     private static final String DADO_COL_ID_TRATAMENTO = "idTratamento_Dado";
     private static final String DADO_COL_ID_VARIAVEL = "idVariavel_Dado";
     private static final String DADO_CONSTRAINT_FK_DADO_COLETA = "FK_Dado_Coleta";
@@ -151,6 +153,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + DADO_COL_NIVEL_FATOR + " INTEGER, "
             + DADO_COL_NIVEL_DIVISAO + " INTEGER, "
             + DADO_COL_ID_COLETA + " INTEGER, "
+            + DADO_COL_TRATAMENTO + " INTEGER, "
+            + DADO_COL_VARIAVEL + " INTEGER, "
             + DADO_COL_ID_TRATAMENTO + " INTEGER, "
             + DADO_COL_ID_VARIAVEL + " INTEGER, "
             + "CONSTRAINT '" + DADO_CONSTRAINT_FK_DADO_COLETA +"' FOREIGN KEY ('"+ DADO_COL_ID_COLETA +"') REFERENCES "+ COLETA_TABELA + " ('"+ COLETA_COL_ID + "'), "
@@ -577,42 +581,74 @@ public class DBAuxilar extends SQLiteOpenHelper {
         values.put(DADO_COL_NIVEL_FATOR,dado.getNivelFator_Dado());
         values.put(DADO_COL_NIVEL_DIVISAO,dado.getNivelDivisao_Dado());
         values.put(DADO_COL_ID_COLETA,dado.getIdColeta_Dado());
+        values.put(DADO_COL_TRATAMENTO, dado.getTratamento_Dado());
+        values.put(DADO_COL_VARIAVEL, dado.getVariavel_Dado());
         values.put(DADO_COL_ID_TRATAMENTO,dado.getIdTratamento_Dado());
         values.put(DADO_COL_ID_VARIAVEL,dado.getIdVariavel_Dado());
 
         return db.insert(DADO_TABELA, null, values);
     }
 
-    public Dado lerDado(Long id_Dado) {
+    public ArrayList<Dado> lerTodosDadoDe(Long id_Coleta) {
+        ArrayList<Dado> dados = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
 
-        String selectQuery = "SELECT * FROM " + DADO_TABELA + " WHERE " + DADO_COL_ID + " = " + id_Dado;
+        String selectQuery = "SELECT  FROM " + DADO_TABELA + " WHERE " + DADO_COL_ID_COLETA + " = " + id_Coleta;
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()) {
+            do {
+                Dado dado = new Dado();
+                dado.setId_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID)));
+                dado.setValor_Dado(c.getString(c.getColumnIndex(DADO_COL_VALOR)));
+                dado.setRepeticao_Dado(c.getInt(c.getColumnIndex(DADO_COL_REPETICAO)));
+                dado.setReplicacao_Dado(c.getInt(c.getColumnIndex(DADO_COL_REPLICACAO)));
+                dado.setBloco_Dado(c.getInt(c.getColumnIndex(DADO_COL_BLOCO)));
+                dado.setFator_Dado(c.getInt(c.getColumnIndex(DADO_COL_FATOR)));
+                dado.setDivisao_Dado(c.getInt(c.getColumnIndex(DADO_COL_DIVISAO)));
+                dado.setNivelFator_Dado(c.getInt(c.getColumnIndex(DADO_COL_NIVEL_FATOR)));
+                dado.setNivelDivisao_Dado(c.getInt(c.getColumnIndex(DADO_COL_NIVEL_DIVISAO)));
+                dado.setIdColeta_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID_COLETA)));
+                dado.setTratamento_Dado(c.getInt(c.getColumnIndex(DADO_COL_TRATAMENTO)));
+                dado.setVariavel_Dado(c.getInt(c.getColumnIndex(DADO_COL_VARIAVEL)));
+                dado.setIdTratamento_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID_TRATAMENTO)));
+                dado.setIdVariavel_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID_VARIAVEL)));
+                dados.add(dado);
+            } while (c.moveToNext());
+        }
+        c.close();
+
+        return dados;
+
+    }
+
+
+    public Dado lerValorDado(Long id_Tratamento, Integer repeticao, Integer replicacao, Long id_Variavel) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String selectQuery = "SELECT " + DADO_COL_VALOR + " FROM " + DADO_TABELA + " WHERE " + DADO_COL_ID_TRATAMENTO + " = " + id_Tratamento
+                + " AND " + DADO_COL_REPETICAO + " = " + repeticao
+                + " AND " + DADO_COL_REPLICACAO + " = " + replicacao
+                + " AND " + DADO_COL_ID_VARIAVEL + " = " + id_Variavel;
 
         Log.e(LOG, selectQuery);
 
         Cursor c = db.rawQuery(selectQuery, null);
 
         if (c != null) c.moveToFirst();
+
         Dado dado = new Dado();
         assert c != null;
-        dado.setId_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID)));
         dado.setValor_Dado(c.getString(c.getColumnIndex(DADO_COL_VALOR)));
-        dado.setRepeticao_Dado(c.getInt(c.getColumnIndex(DADO_COL_REPETICAO)));
-        dado.setReplicacao_Dado(c.getInt(c.getColumnIndex(DADO_COL_REPLICACAO)));
-        dado.setBloco_Dado(c.getInt(c.getColumnIndex(DADO_COL_BLOCO)));
-        dado.setFator_Dado(c.getInt(c.getColumnIndex(DADO_COL_FATOR)));
-        dado.setDivisao_Dado(c.getInt(c.getColumnIndex(DADO_COL_DIVISAO)));
-        dado.setNivelFator_Dado(c.getInt(c.getColumnIndex(DADO_COL_NIVEL_FATOR)));
-        dado.setNivelDivisao_Dado(c.getInt(c.getColumnIndex(DADO_COL_NIVEL_DIVISAO)));
-        dado.setIdColeta_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID_COLETA)));
-        dado.setIdTratamento_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID_TRATAMENTO)));
-        dado.setIdVariavel_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID_VARIAVEL)));
-
         c.close();
 
         return dado;
 
     }
+
 
     public int updateDado(Dado dado) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -627,8 +663,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
         SQLiteDatabase db = getReadableDatabase();
 
         String selectQuery = "SELECT * FROM " + DADO_TABELA + " WHERE " + DADO_COL_ID_COLETA + " = " + dado.getIdColeta_Dado()
-                + " AND " + DADO_COL_ID_TRATAMENTO + " = " + dado.getIdTratamento_Dado()
-                + " AND " + DADO_COL_ID_VARIAVEL + " = " + dado.getIdVariavel_Dado()
+                + " AND " + DADO_COL_TRATAMENTO + " = " + dado.getTratamento_Dado()
+                + " AND " + DADO_COL_VARIAVEL + " = " + dado.getVariavel_Dado()
                 + " AND " + DADO_COL_REPETICAO + " = " + dado.getRepeticao_Dado()
                 + " AND " + DADO_COL_REPLICACAO + " = " + dado.getReplicacao_Dado();
         Log.e(LOG, selectQuery);
