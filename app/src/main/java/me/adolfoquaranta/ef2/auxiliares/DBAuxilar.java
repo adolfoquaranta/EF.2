@@ -26,7 +26,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
 
     private static final String LOG = "DBAuxiliar";
     private static final String DATABASE_NOME = "ef2.db";
-    private static final Integer DATABASE_VERSAO = 5;
+    private static final Integer DATABASE_VERSAO = 6;
     private static final String FORMULARIO_TABELA = "Formulario";
     private static final String FORMULARIO_COL_ID = "id_Form";
     private static final String FORMULARIO_COL_TIPO = "tipo_Form";
@@ -89,8 +89,6 @@ public class DBAuxilar extends SQLiteOpenHelper {
     private static final String DADO_CONSTRAINT_FK_DADO_COLETA = "FK_Dado_Coleta";
     private static final String DADO_CONSTRAINT_FK_DADO_TRATAMENTO = "FK_Dado_Tratamento";
     private static final String DADO_CONSTRAINT_FK_DADO_VARIAVEL = "FK_Dado_Variavel";
-
-
     private static final String CRIAR_TABELA_FORMULARIO = "CREATE TABLE "
             + FORMULARIO_TABELA + "(" + FORMULARIO_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             + FORMULARIO_COL_TIPO + " TEXT NOT NULL, "
@@ -100,7 +98,6 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + FORMULARIO_COL_DATA_CRIACAO + " TEXT, "
             + FORMULARIO_COL_STATUS + " TEXT "
             + ")";
-
     private static final String CRIAR_TABELA_MODELO = "CREATE TABLE "
             + MODELO_TABELA + "(" + MODELO_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             + MODELO_COL_MODELO + " TEXT, "
@@ -161,7 +158,6 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + "CONSTRAINT '" + DADO_CONSTRAINT_FK_DADO_TRATAMENTO +"' FOREIGN KEY ('"+ DADO_COL_ID_TRATAMENTO +"') REFERENCES "+ TRATAMENTO_TABELA + " ('"+ TRATAMENTO_COL_ID + "'), "
             + "CONSTRAINT '" + DADO_CONSTRAINT_FK_DADO_VARIAVEL +"' FOREIGN KEY ('"+ DADO_COL_ID_VARIAVEL +"') REFERENCES "+ VARIAVEL_TABELA + " ('"+ VARIAVEL_COL_ID + "') "
             + ")";
-
     public DBAuxilar(Context context) {
         super(context, DATABASE_NOME, null, DATABASE_VERSAO);
         //context.deleteDatabase(DATABASE_NOME);
@@ -370,6 +366,49 @@ public class DBAuxilar extends SQLiteOpenHelper {
     }
 
 
+    public Modelo lerModeloDaColeta(Long id_Formulario) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + MODELO_TABELA + " JOIN " + FORMULARIO_TABELA
+                + " ON " + FORMULARIO_COL_ID
+                + " = " + id_Formulario
+                + " WHERE " + MODELO_COL_ID_FORMULARIO
+                + " = " + id_Formulario;
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c != null) c.moveToFirst();
+
+        Modelo modelo = new Modelo();
+        assert c != null;
+        modelo.setId_Modelo(c.getLong(c.getColumnIndex(MODELO_COL_ID)));
+        modelo.setModelo_Modelo(c.getString(c.getColumnIndex(MODELO_COL_MODELO)));
+        modelo.setQuantidadeTratamentos_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_TRATAMENTOS)));
+        modelo.setQuantidadeRepeticoes_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_REPETICOES)));
+        modelo.setQuantidadeReplicacoes_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_REPLICACOES)));
+        modelo.setQuantidadeVariaveis_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_VARIAVEIS)));
+        modelo.setQuantidadeBlocos_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_BLOCOS)));
+        modelo.setQuantidadeFatores_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_FATORES)));
+        modelo.setQuantidadeDivisoes_Modelo(c.getInt(c.getColumnIndex(MODELO_COL_QUANTIDADE_DIVISOES)));
+        modelo.setIdFormulario_Modelo(c.getLong(c.getColumnIndex(MODELO_COL_ID_FORMULARIO)));
+        modelo.setId_Form(c.getLong(c.getColumnIndex(FORMULARIO_COL_ID)));
+        modelo.setTipo_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_TIPO)));
+        modelo.setNome_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_NOME)));
+        modelo.setDescricao_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_DESCRICAO)));
+        modelo.setCriador_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_CRIADOR)));
+        modelo.setDataCriacao_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_DATA_CRIACAO)));
+        modelo.setStatus_Form(c.getString(c.getColumnIndex(FORMULARIO_COL_STATUS)));
+
+        c.close();
+
+        return modelo;
+    }
+
+
+
+
     //ler todos os DICs
     public List<Modelo> lerTodosModelos(Long idFormulario) {
         List<Modelo> modelos = new ArrayList<>();
@@ -423,8 +462,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
     }
 
     //ler todos os Tratamentos
-    public List<Tratamento> lerTodosTratamentos(Long id_Formulario){
-        List<Tratamento> tratamentos = new ArrayList<>();
+    public ArrayList<Tratamento> lerTodosTratamentos(Long id_Formulario) {
+        ArrayList<Tratamento> tratamentos = new ArrayList<>();
 
         String selectQuery = "SELECT * FROM " + TRATAMENTO_TABELA + " WHERE " + TRATAMENTO_COL_ID_FORMULARIO + " = " + id_Formulario;
 
@@ -463,8 +502,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
     }
 
     //ler todas as Variaveis
-    public List<Variavel> lerTodasVariaveis(Long id_Formulario){
-        List<Variavel> variaveis = new ArrayList<>();
+    public ArrayList<Variavel> lerTodasVariaveis(Long id_Formulario) {
+        ArrayList<Variavel> variaveis = new ArrayList<>();
 
         String selectQuery = "SELECT * FROM " + VARIAVEL_TABELA + " WHERE " + VARIAVEL_COL_ID_FORMULARIO + " = " + id_Formulario;
 
@@ -593,7 +632,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
         ArrayList<Dado> dados = new ArrayList<>();
         SQLiteDatabase db = getReadableDatabase();
 
-        String selectQuery = "SELECT  FROM " + DADO_TABELA + " WHERE " + DADO_COL_ID_COLETA + " = " + id_Coleta;
+        String selectQuery = "SELECT * FROM " + DADO_TABELA + " WHERE " + DADO_COL_ID_COLETA + " = " + id_Coleta;
 
         Log.e(LOG, selectQuery);
 

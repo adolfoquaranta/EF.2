@@ -13,12 +13,20 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.opencsv.CSVWriter;
+
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +36,9 @@ import me.adolfoquaranta.ef2.auxiliares.DBAuxilar;
 import me.adolfoquaranta.ef2.componentes_recycler.DividerItemDecoration;
 import me.adolfoquaranta.ef2.componentes_recycler.RecyclerItemClickListener;
 import me.adolfoquaranta.ef2.modelos.Coleta;
-import me.adolfoquaranta.ef2.modelos.Dado;
+import me.adolfoquaranta.ef2.modelos.Modelo;
+import me.adolfoquaranta.ef2.modelos.Tratamento;
+import me.adolfoquaranta.ef2.modelos.Variavel;
 
 public class ListarColetas extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -178,7 +188,44 @@ public class ListarColetas extends AppCompatActivity
         @Override
         public void onItemClick(View childView, int position) {
             // Do something when an item is clicked, or override something else.
-            ArrayList<Dado> dados = dbAuxilar.lerTodosDadoDe(coletaList.get(position).getId_Coleta());
+            Modelo modelo = dbAuxilar.lerModeloDaColeta(coletaList.get(position).getIdForm_Coleta());
+            ArrayList<Variavel> variaveis = dbAuxilar.lerTodasVariaveis(coletaList.get(position).getIdForm_Coleta());
+            ArrayList<Tratamento> tratamentos = dbAuxilar.lerTodosTratamentos(coletaList.get(position).getIdForm_Coleta());
+
+            String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
+            String fileName = (coletaList.get(position).getNome_Coleta()) + ".csv";
+            String filePath = baseDir + File.separator + fileName;
+
+            CSVWriter writer = null;
+            try {
+                writer = new CSVWriter(new FileWriter(filePath), CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER);
+                List<String[]> linhas = new ArrayList<String[]>();
+                String[] cabecalhoPosicoes, cabecalhoNomeVariaveis = new String[modelo.getQuantidadeVariaveis_Modelo()];
+                cabecalhoPosicoes = new String[]{"TRATAMENTO", "REPETICAO", "REPLICACAO"};
+                for (int v = 0; v < modelo.getQuantidadeVariaveis_Modelo(); v++) {
+                    cabecalhoNomeVariaveis[v] = variaveis.get(v).getNome_Variavel();
+                }
+                linhas.add(ArrayUtils.addAll(cabecalhoPosicoes, cabecalhoNomeVariaveis));
+                for (int trat = 0; trat < modelo.getQuantidadeTratamentos_Modelo(); trat++) {
+                    for (int rep = 0; rep < modelo.getQuantidadeRepeticoes_Modelo(); rep++) {
+                        for (int repli = 0; repli < modelo.getQuantidadeReplicacoes_Modelo(); repli++) {
+                            String[] posicoes = new String[]{String.valueOf(trat + 1), String.valueOf(rep + 1), String.valueOf(repli + 1)};
+                            String[] valores = new String[modelo.getQuantidadeVariaveis_Modelo()];
+                            for (int var = 0; var < modelo.getQuantidadeVariaveis_Modelo(); var++) {
+                                valores[var] = dbAuxilar.lerValorDado(tratamentos.get(trat).getId_Tratamento(), rep, repli, variaveis.get(var).getId_Variavel()).getValor_Dado();
+                            }
+                            String[] colunas = ArrayUtils.addAll(posicoes, valores);
+                            linhas.add(colunas);
+                        }
+                    }
+                }
+                writer.writeAll(linhas);
+                writer.close();
+                Log.i("Witter", "ArquivoGerado");
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
         }
 
