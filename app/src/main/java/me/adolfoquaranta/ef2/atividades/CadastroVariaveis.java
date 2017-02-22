@@ -20,12 +20,14 @@ import java.util.ArrayList;
 import fr.ganfra.materialspinner.MaterialSpinner;
 import me.adolfoquaranta.ef2.R;
 import me.adolfoquaranta.ef2.auxiliares.DBAuxilar;
+import me.adolfoquaranta.ef2.modelos.Formulario;
 import me.adolfoquaranta.ef2.modelos.Modelo;
 import me.adolfoquaranta.ef2.modelos.Variavel;
 
 public class CadastroVariaveis extends AppCompatActivity {
 
     private Modelo modelo;
+    private Formulario formulario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,7 +44,11 @@ public class CadastroVariaveis extends AppCompatActivity {
 
         final DBAuxilar dbauxiliar = new DBAuxilar(getApplicationContext());
 
-        modelo = dbauxiliar.lerModeloDoFormulario(id_Modelo, idFormulario_Modelo);
+        modelo = dbauxiliar.lerModelo(id_Modelo);
+
+        formulario = dbauxiliar.lerFormulario(idFormulario_Modelo);
+
+        final ArrayList<Variavel> variaveisPreenchidas = dbauxiliar.lerTodasVariaveis(idFormulario_Modelo, id_Modelo);
 
         final RegexpValidator naoNulo = new RegexpValidator(getString(R.string.err_msg_nomeVariavel), "^(?!\\s*$).+");
 
@@ -85,6 +91,9 @@ public class CadastroVariaveis extends AppCompatActivity {
             etNomeVariavel.setHint(getString(R.string.hint_nomeVariavel) + " " + (i + 1));
             etNomeVariavel.setFloatingLabelText(getString(R.string.hint_nomeVariavel) + " " + (i + 1));
             etNomeVariavel.setFloatingLabelAnimating(true);
+            if (variaveisPreenchidas.size() != 0) {
+                etNomeVariavel.setText(variaveisPreenchidas.get(i).getNome_Variavel());
+            }
             layoutInterno.addView(etNomeVariavel);
 
             //tipo variavel
@@ -94,6 +103,9 @@ public class CadastroVariaveis extends AppCompatActivity {
             spTipoVariavel.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 2f)); // Pass two args; must be LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, or an integer pixel value.
             spTipoVariavel.setId((i + modelo.getQuantidadeVariaveis_Modelo()));
             spTipoVariavel.setOnFocusChangeListener(validar);
+            if (variaveisPreenchidas.size() != 0) {
+                spTipoVariavel.setSelection(variaveisPreenchidas.get(i).getTipo_Variavel());
+            }
             layoutInterno.addView(spTipoVariavel);
             assert myLayout != null;
             myLayout.addView(layoutInterno);
@@ -108,13 +120,13 @@ public class CadastroVariaveis extends AppCompatActivity {
         btnSalvar_Variaveis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Variavel> tratamentos = new ArrayList<>(modelo.getQuantidadeVariaveis_Modelo());
+                ArrayList<Variavel> variaveis = new ArrayList<>(modelo.getQuantidadeVariaveis_Modelo());
                 for (int i = 0; i < modelo.getQuantidadeVariaveis_Modelo(); i++) {
-                    Variavel tratamento = new Variavel();
+                    Variavel variavel = new Variavel();
                     MaterialEditText met = (MaterialEditText) findViewById(i);
                     assert met != null;
                     if (met.validateWith(naoNulo)) {
-                        tratamento.setNome_Variavel(met.getText().toString());
+                        variavel.setNome_Variavel(met.getText().toString());
                     } else {
                         met.requestFocus();
                         Snackbar.make(v, getString(R.string.err_msg_preenchaTodosCampos), Snackbar.LENGTH_LONG)
@@ -132,20 +144,31 @@ public class CadastroVariaveis extends AppCompatActivity {
                                 .setAction("Action", null).show();
                         return;
                     } else {
-                        tratamento.setTipo_Variavel(sp.getSelectedItemPosition());
+                        variavel.setTipo_Variavel(sp.getSelectedItemPosition());
                         sp.setError(null);
                     }
-                    tratamento.setIdForm_Variavel(idFormulario_Modelo);
-                    tratamentos.add(i, tratamento);
+                    variavel.setIdModelo_Variavel(id_Modelo);
+                    variaveis.add(i, variavel);
                 }
-                if (tratamentos.size() == modelo.getQuantidadeVariaveis_Modelo()) {
-                    for (Variavel var : tratamentos) {
-                        dbauxiliar.insertVariavel(var);
-                        Intent listarFormularios = new Intent(CadastroVariaveis.this, ListarFormularios.class);
-                        listarFormularios.putExtra("tipo_Formulario", modelo.getTipo_Form());
-                        listarFormularios.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        startActivity(listarFormularios);
+                if (variaveis.size() == modelo.getQuantidadeVariaveis_Modelo()) {
+                    Intent listarFormularios = new Intent(CadastroVariaveis.this, ListarFormularios.class);
+
+                    if (variaveisPreenchidas.size() == 0) {
+                        for (Variavel var : variaveis) {
+                            dbauxiliar.insertVariavel(var);
+                        }
+                    } else {
+                        int i = 0;
+                        for (Variavel var : variaveis) {
+                            var.setId_Variavel(variaveisPreenchidas.get(i).getId_Variavel());
+                            dbauxiliar.updateVariavel(var);
+                            i++;
+                        }
                     }
+
+                    listarFormularios.putExtra("tipo_Formulario", formulario.getTipo_Form());
+                    listarFormularios.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(listarFormularios);
                 }
             }
         });

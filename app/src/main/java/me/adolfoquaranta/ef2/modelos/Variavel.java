@@ -5,18 +5,18 @@ package me.adolfoquaranta.ef2.modelos;
  */
 
 public class Variavel {
-    private Long id_Variavel, idForm_Variavel;
+    private Long id_Variavel, idModelo_Variavel;
     private Integer tipo_Variavel;
     private String nome_Variavel;
 
-    public Variavel() {
-    }
-
-    public Variavel(Long id_Variavel, Long idForm_Variavel, Integer tipo_Variavel, String nome_Variavel) {
+    public Variavel(Long id_Variavel, Long idModelo_Variavel, Integer tipo_Variavel, String nome_Variavel) {
         this.id_Variavel = id_Variavel;
-        this.idForm_Variavel = idForm_Variavel;
+        this.idModelo_Variavel = idModelo_Variavel;
         this.tipo_Variavel = tipo_Variavel;
         this.nome_Variavel = nome_Variavel;
+    }
+
+    public Variavel() {
     }
 
     public Long getId_Variavel() {
@@ -27,12 +27,12 @@ public class Variavel {
         this.id_Variavel = id_Variavel;
     }
 
-    public Long getIdForm_Variavel() {
-        return idForm_Variavel;
+    public Long getIdModelo_Variavel() {
+        return idModelo_Variavel;
     }
 
-    public void setIdForm_Variavel(Long idForm_Variavel) {
-        this.idForm_Variavel = idForm_Variavel;
+    public void setIdModelo_Variavel(Long idModelo_Variavel) {
+        this.idModelo_Variavel = idModelo_Variavel;
     }
 
     public Integer getTipo_Variavel() {
@@ -55,7 +55,7 @@ public class Variavel {
     public String toString() {
         return "Variavel{" +
                 "id_Variavel=" + id_Variavel +
-                ", idForm_Variavel=" + idForm_Variavel +
+                ", idModelo_Variavel=" + idModelo_Variavel +
                 ", tipo_Variavel=" + tipo_Variavel +
                 ", nome_Variavel='" + nome_Variavel + '\'' +
                 '}';

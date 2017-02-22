@@ -5,16 +5,16 @@ package me.adolfoquaranta.ef2.modelos;
  */
 
 public class Tratamento {
-    private Long id_Tratamento, idForm_Tratamento;
+    private Long id_Tratamento, idModelo_Tratamento;
     private Integer tipo_Tratamento;
     private String nome_Tratamento;
 
     public Tratamento() {
     }
 
-    public Tratamento(Long id_Tratamento, Long idForm_Tratamento, Integer tipo_Tratamento, String nome_Tratamento) {
+    public Tratamento(Long id_Tratamento, Long idModelo_Tratamento, Integer tipo_Tratamento, String nome_Tratamento) {
         this.id_Tratamento = id_Tratamento;
-        this.idForm_Tratamento = idForm_Tratamento;
+        this.idModelo_Tratamento = idModelo_Tratamento;
         this.tipo_Tratamento = tipo_Tratamento;
         this.nome_Tratamento = nome_Tratamento;
     }
@@ -27,12 +27,12 @@ public class Tratamento {
         this.id_Tratamento = id_Tratamento;
     }
 
-    public Long getIdForm_Tratamento() {
-        return idForm_Tratamento;
+    public Long getIdModelo_Tratamento() {
+        return idModelo_Tratamento;
     }
 
-    public void setIdForm_Tratamento(Long idForm_Tratamento) {
-        this.idForm_Tratamento = idForm_Tratamento;
+    public void setIdModelo_Tratamento(Long idModelo_Tratamento) {
+        this.idModelo_Tratamento = idModelo_Tratamento;
     }
 
     public Integer getTipo_Tratamento() {
@@ -55,7 +55,7 @@ public class Tratamento {
     public String toString() {
         return "Tratamento{" +
                 "id_Tratamento=" + id_Tratamento +
-                ", idForm_Tratamento=" + idForm_Tratamento +
+                ", idModelo_Tratamento=" + idModelo_Tratamento +
                 ", tipo_Tratamento=" + tipo_Tratamento +
                 ", nome_Tratamento='" + nome_Tratamento + '\'' +
                 '}';

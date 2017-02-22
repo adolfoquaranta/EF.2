@@ -29,7 +29,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".atividades.CadastroModeloFormulario"
-            android:label="@string/title_activity_cadastro_formulario_dic"
+            android:label="@string/title_activity_cadastro_formulario_Modelo"
             android:parentActivityName=".atividades.CadastroFormulario"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data

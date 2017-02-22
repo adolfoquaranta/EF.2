@@ -6,14 +6,13 @@ package me.adolfoquaranta.ef2.modelos;
 
 public class Modelo extends Formulario {
     private Long id_Modelo, idFormulario_Modelo;
-    private String modelo_Modelo;
-    private Integer quantidadeTratamentos_Modelo, quantidadeRepeticoes_Modelo, quantidadeReplicacoes_Modelo, quantidadeVariaveis_Modelo, quantidadeBlocos_Modelo, quantidadeFatores_Modelo, quantidadeDivisoes_Modelo;
+    private Integer quantidadeTratamentos_Modelo, quantidadeRepeticoes_Modelo, quantidadeReplicacoes_Modelo, quantidadeVariaveis_Modelo, quantidadeBlocos_Modelo, quantidadeFatores_Modelo, quantidadeDivisoes_Modelo, modelo_Modelo;
 
     public Modelo() {
         super();
     }
 
-    public Modelo(Long id_Modelo, Long idFormulario_Modelo, String modelo_Modelo, Integer quantidadeTratamentos_Modelo, Integer quantidadeRepeticoes_Modelo, Integer quantidadeReplicacoes_Modelo, Integer quantidadeVariaveis_Modelo, Integer quantidadeBlocos_Modelo, Integer quantidadeFatores_Modelo, Integer quantidadeDivisoes_Modelo) {
+    public Modelo(Long id_Modelo, Long idFormulario_Modelo, Integer modelo_Modelo, Integer quantidadeTratamentos_Modelo, Integer quantidadeRepeticoes_Modelo, Integer quantidadeReplicacoes_Modelo, Integer quantidadeVariaveis_Modelo, Integer quantidadeBlocos_Modelo, Integer quantidadeFatores_Modelo, Integer quantidadeDivisoes_Modelo) {
         super();
         this.id_Modelo = id_Modelo;
         this.idFormulario_Modelo = idFormulario_Modelo;
@@ -44,11 +43,11 @@ public class Modelo extends Formulario {
         this.idFormulario_Modelo = idFormulario_Modelo;
     }
 
-    public String getModelo_Modelo() {
+    public Integer getModelo_Modelo() {
         return modelo_Modelo;
     }
 
-    public void setModelo_Modelo(String modelo_Modelo) {
+    public void setModelo_Modelo(Integer modelo_Modelo) {
         this.modelo_Modelo = modelo_Modelo;
     }
 
@@ -108,13 +107,11 @@ public class Modelo extends Formulario {
         this.quantidadeDivisoes_Modelo = quantidadeDivisoes_Modelo;
     }
 
-
     @Override
     public String toString() {
         return "Modelo{" +
                 "id_Modelo=" + id_Modelo +
                 ", idFormulario_Modelo=" + idFormulario_Modelo +
-                ", modelo_Modelo='" + modelo_Modelo + '\'' +
                 ", quantidadeTratamentos_Modelo=" + quantidadeTratamentos_Modelo +
                 ", quantidadeRepeticoes_Modelo=" + quantidadeRepeticoes_Modelo +
                 ", quantidadeReplicacoes_Modelo=" + quantidadeReplicacoes_Modelo +
@@ -122,6 +119,7 @@ public class Modelo extends Formulario {
                 ", quantidadeBlocos_Modelo=" + quantidadeBlocos_Modelo +
                 ", quantidadeFatores_Modelo=" + quantidadeFatores_Modelo +
                 ", quantidadeDivisoes_Modelo=" + quantidadeDivisoes_Modelo +
+                ", modelo_Modelo=" + modelo_Modelo +
                 '}';
     }
 }

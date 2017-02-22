@@ -75,7 +75,7 @@ public class CadastroColeta extends AppCompatActivity {
         Date date = new Date();
         DBAuxilar dbAuxilar = new DBAuxilar(getApplicationContext());
 
-        Modelo modelo = dbAuxilar.lerModelo(id_Formulario, "DIC");
+        Modelo modelo = dbAuxilar.lerModeloDoFormulario(id_Formulario, 0);
 
         Coleta coleta = new Coleta();
         coleta.setNome_Coleta(inputNome_Coleta.getText().toString());

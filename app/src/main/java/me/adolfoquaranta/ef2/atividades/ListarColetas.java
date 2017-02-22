@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -19,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.opencsv.CSVWriter;
 
@@ -61,19 +61,11 @@ public class ListarColetas extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutListarColetas);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        assert drawer != null;
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
@@ -83,8 +75,8 @@ public class ListarColetas extends AppCompatActivity
         mostrar_coletas_root = (RelativeLayout) findViewById(R.id.mostrar_coletas_root);
 
         listarColetas = getIntent();
-        Long idFormulario = listarColetas.getLongExtra("id_Formulario", 0);
-        String tipoFormulario = listarColetas.getStringExtra("tipo_Formulario");
+        final Long idFormulario = listarColetas.getLongExtra("id_Formulario", 0);
+        final String tipoFormulario = listarColetas.getStringExtra("tipo_Formulario");
 
         dbAuxilar = new DBAuxilar(getApplicationContext());
 
@@ -104,6 +96,7 @@ public class ListarColetas extends AppCompatActivity
             tv.setText(msg_naoExistemDados);
             this.mostrar_coletas_root.addView(tv);
         } else {
+
             recyclerView = (RecyclerView) findViewById(R.id.recycler_viewListarColetas);
             recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
             recyclerView = (RecyclerView) findViewById(R.id.recycler_viewListarColetas);
@@ -122,6 +115,17 @@ public class ListarColetas extends AppCompatActivity
             recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this,
                     new ListarColetas.OnItemClickListener()));
         }
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab_novaColeta);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent cadastroColeta = new Intent(ListarColetas.this, CadastroColeta.class);
+                cadastroColeta.putExtra("id_Formulario", idFormulario);
+                cadastroColeta.putExtra("tipo_Formulario", tipoFormulario);
+                startActivity(cadastroColeta);
+            }
+        });
 
 
     }
@@ -164,23 +168,23 @@ public class ListarColetas extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+        if (id == R.id.nav_coletaExportar) {
+            escolhaUsuario = id;
+        } else if (id == R.id.nav_coletaContinuar) {
+            escolhaUsuario = id;
+        } else if (id == R.id.nav_coletaRemedir) {
+            escolhaUsuario = id;
+        } else if (id == R.id.nav_coletaEditar) {
+            escolhaUsuario = id;
+        } else if (id == R.id.nav_coletaRemover) {
+            escolhaUsuario = id;
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutListarColetas);
+        assert drawer != null;
         drawer.closeDrawer(GravityCompat.START);
         return true;
+
     }
 
     private class OnItemClickListener extends RecyclerItemClickListener.SimpleOnItemClickListener {
@@ -188,43 +192,66 @@ public class ListarColetas extends AppCompatActivity
         @Override
         public void onItemClick(View childView, int position) {
             // Do something when an item is clicked, or override something else.
-            Modelo modelo = dbAuxilar.lerModeloDaColeta(coletaList.get(position).getIdForm_Coleta());
-            ArrayList<Variavel> variaveis = dbAuxilar.lerTodasVariaveis(coletaList.get(position).getIdForm_Coleta());
-            ArrayList<Tratamento> tratamentos = dbAuxilar.lerTodosTratamentos(coletaList.get(position).getIdForm_Coleta());
+            switch (escolhaUsuario) {
+                case 0:
+                    DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutListarColetas);
+                    assert drawer != null;
+                    drawer.openDrawer(GravityCompat.START);
+                    break;
+                case R.id.nav_coletaExportar:
 
-            String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
-            String fileName = (coletaList.get(position).getNome_Coleta()) + ".csv";
-            String filePath = baseDir + File.separator + fileName;
+                    Modelo modelo = dbAuxilar.lerModeloDaColeta(coletaList.get(position).getIdForm_Coleta());
 
-            CSVWriter writer = null;
-            try {
-                writer = new CSVWriter(new FileWriter(filePath), CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER);
-                List<String[]> linhas = new ArrayList<String[]>();
-                String[] cabecalhoPosicoes, cabecalhoNomeVariaveis = new String[modelo.getQuantidadeVariaveis_Modelo()];
-                cabecalhoPosicoes = new String[]{"TRATAMENTO", "REPETICAO", "REPLICACAO"};
-                for (int v = 0; v < modelo.getQuantidadeVariaveis_Modelo(); v++) {
-                    cabecalhoNomeVariaveis[v] = variaveis.get(v).getNome_Variavel();
-                }
-                linhas.add(ArrayUtils.addAll(cabecalhoPosicoes, cabecalhoNomeVariaveis));
-                for (int trat = 0; trat < modelo.getQuantidadeTratamentos_Modelo(); trat++) {
-                    for (int rep = 0; rep < modelo.getQuantidadeRepeticoes_Modelo(); rep++) {
-                        for (int repli = 0; repli < modelo.getQuantidadeReplicacoes_Modelo(); repli++) {
-                            String[] posicoes = new String[]{String.valueOf(trat + 1), String.valueOf(rep + 1), String.valueOf(repli + 1)};
-                            String[] valores = new String[modelo.getQuantidadeVariaveis_Modelo()];
-                            for (int var = 0; var < modelo.getQuantidadeVariaveis_Modelo(); var++) {
-                                valores[var] = dbAuxilar.lerValorDado(tratamentos.get(trat).getId_Tratamento(), rep, repli, variaveis.get(var).getId_Variavel()).getValor_Dado();
-                            }
-                            String[] colunas = ArrayUtils.addAll(posicoes, valores);
-                            linhas.add(colunas);
+
+                    Log.d("modelo", modelo.toString());
+
+
+                    ArrayList<Variavel> variaveis = dbAuxilar.lerTodasVariaveis(modelo.getIdFormulario_Modelo(), modelo.getId_Modelo());
+                    ArrayList<Tratamento> tratamentos = dbAuxilar.lerTodosTratamentos(modelo.getIdFormulario_Modelo(), modelo.getId_Modelo());
+
+                    Log.d("variaveis", variaveis.toString());
+
+                    Log.d("tratamentos", tratamentos.toString());
+
+                    String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
+                    String fileName = (coletaList.get(position).getNome_Coleta()) + ".csv";
+                    String filePath = baseDir + File.separator + fileName;
+
+                    CSVWriter writer = null;
+                    try {
+                        writer = new CSVWriter(new FileWriter(filePath), CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER);
+                        List<String[]> linhas = new ArrayList<String[]>();
+                        String[] cabecalhoPosicoes, cabecalhoNomeVariaveis = new String[modelo.getQuantidadeVariaveis_Modelo()];
+                        cabecalhoPosicoes = new String[]{"TRATAMENTO", "REPETICAO", "REPLICACAO"};
+                        for (int v = 0; v < modelo.getQuantidadeVariaveis_Modelo(); v++) {
+                            cabecalhoNomeVariaveis[v] = variaveis.get(v).getNome_Variavel();
                         }
-                    }
-                }
-                writer.writeAll(linhas);
-                writer.close();
-                Log.i("Witter", "ArquivoGerado");
+                        linhas.add(ArrayUtils.addAll(cabecalhoPosicoes, cabecalhoNomeVariaveis));
+                        for (int trat = 0; trat < modelo.getQuantidadeTratamentos_Modelo(); trat++) {
+                            for (int rep = 0; rep < modelo.getQuantidadeRepeticoes_Modelo(); rep++) {
+                                for (int repli = 0; repli < modelo.getQuantidadeReplicacoes_Modelo(); repli++) {
+                                    String[] posicoes = new String[]{String.valueOf(trat + 1), String.valueOf(rep + 1), String.valueOf(repli + 1)};
+                                    String[] valores = new String[modelo.getQuantidadeVariaveis_Modelo()];
+                                    for (int var = 0; var < modelo.getQuantidadeVariaveis_Modelo(); var++) {
+                                        valores[var] = dbAuxilar.lerValorDado(tratamentos.get(trat).getId_Tratamento(), rep, repli, variaveis.get(var).getId_Variavel()).getValor_Dado();
+                                    }
+                                    String[] colunas = ArrayUtils.addAll(posicoes, valores);
+                                    linhas.add(colunas);
+                                }
+                            }
+                        }
+                        writer.writeAll(linhas);
+                        writer.close();
+                        Log.i("Witter", "ArquivoGerado");
 
-            } catch (IOException e) {
-                e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    break;
+
+                default:
+                    Toast.makeText(ListarColetas.this, getString(R.string.info_EmBreve), Toast.LENGTH_SHORT).show();
+                    break;
             }
 
         }

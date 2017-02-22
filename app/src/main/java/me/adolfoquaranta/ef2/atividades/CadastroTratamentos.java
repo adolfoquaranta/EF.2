@@ -42,7 +42,12 @@ public class CadastroTratamentos extends AppCompatActivity {
         final RegexpValidator naoNulo = new RegexpValidator(getString(R.string.err_msg_nomeTratamento), "^(?!\\s*$).+");
 
         final DBAuxilar dbauxiliar = new DBAuxilar(getApplicationContext());
-        modelo = dbauxiliar.lerModeloDoFormulario(id_Modelo, idFormulario_Modelo);
+
+        modelo = dbauxiliar.lerModelo(id_Modelo);
+
+
+        final ArrayList<Tratamento> tratamentosPreenchidos = dbauxiliar.lerTodosTratamentos(idFormulario_Modelo, id_Modelo);
+
 
 
         final View.OnFocusChangeListener validar = new View.OnFocusChangeListener() {
@@ -85,6 +90,9 @@ public class CadastroTratamentos extends AppCompatActivity {
             etNomeTratamento.setHint(getString(R.string.hint_nomeTratamento)+" "+(i+1));
             etNomeTratamento.setFloatingLabelText(getString(R.string.hint_nomeTratamento) + " " + (i + 1));
             etNomeTratamento.setFloatingLabelAnimating(true);
+            if (tratamentosPreenchidos.size() != 0) {
+                etNomeTratamento.setText(tratamentosPreenchidos.get(i).getNome_Tratamento());
+            }
             layoutInterno.addView(etNomeTratamento);
 
             //tipo tratamento
@@ -94,6 +102,9 @@ public class CadastroTratamentos extends AppCompatActivity {
             spTipoTratamento.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 2f)); // Pass two args; must be LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, or an integer pixel value.
             spTipoTratamento.setId((i + modelo.getQuantidadeTratamentos_Modelo()));
             spTipoTratamento.setOnFocusChangeListener(validar);
+            if (tratamentosPreenchidos.size() != 0) {
+                spTipoTratamento.setSelection(tratamentosPreenchidos.get(i).getTipo_Tratamento());
+            }
             layoutInterno.addView(spTipoTratamento);
             myLayout.addView(layoutInterno);
 
@@ -132,17 +143,30 @@ public class CadastroTratamentos extends AppCompatActivity {
                         tratamento.setTipo_Tratamento(sp.getSelectedItemPosition());
                         sp.setError(null);
                 }
-                    tratamento.setIdForm_Tratamento(idFormulario_Modelo);
+                    tratamento.setIdModelo_Tratamento(id_Modelo);
                     tratamentos.add(i, tratamento);
             }
                 if (tratamentos.size() == modelo.getQuantidadeTratamentos_Modelo()) {
-                    for (Tratamento trat : tratamentos) {
-                        dbauxiliar.insertTratamento(trat);
-                    }
                     Intent cadastroVariaveis = new Intent(CadastroTratamentos.this, CadastroVariaveis.class);
-                    cadastroVariaveis.putExtra("id_Modelo", id_Modelo);
-                    cadastroVariaveis.putExtra("idFormulario_Modelo", idFormulario_Modelo);
-                    startActivity(cadastroVariaveis);
+
+                    if (tratamentosPreenchidos.size() == 0) {
+                        for (Tratamento trat : tratamentos) {
+                            dbauxiliar.insertTratamento(trat);
+                        }
+                        cadastroVariaveis.putExtra("id_Modelo", id_Modelo);
+                        cadastroVariaveis.putExtra("idFormulario_Modelo", idFormulario_Modelo);
+                        startActivity(cadastroVariaveis);
+                    } else {
+                        int i = 0;
+                        for (Tratamento trat : tratamentos) {
+                            trat.setId_Tratamento(tratamentosPreenchidos.get(i).getId_Tratamento());
+                            dbauxiliar.updateTratamento(trat);
+                            i++;
+                        }
+                        cadastroVariaveis.putExtra("id_Modelo", id_Modelo);
+                        cadastroVariaveis.putExtra("idFormulario_Modelo", idFormulario_Modelo);
+                        startActivity(cadastroVariaveis);
+                    }
                 }
             }
         });

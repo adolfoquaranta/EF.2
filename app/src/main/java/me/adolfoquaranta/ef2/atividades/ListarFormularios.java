@@ -1,5 +1,6 @@
 package me.adolfoquaranta.ef2.atividades;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -7,6 +8,7 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -50,11 +52,14 @@ public class ListarFormularios extends AppCompatActivity
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutListarFormularios);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         assert drawer != null;
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        drawer.openDrawer(GravityCompat.START);
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         assert navigationView != null;
@@ -148,19 +153,13 @@ public class ListarFormularios extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_coletaExportar) {
-            escolhaUsuario = id;
-        } else if (id == R.id.nav_coletaNova) {
-            escolhaUsuario = id;
-        } else if (id == R.id.nav_coletaContinuar) {
-            escolhaUsuario = id;
-        } else if (id == R.id.nav_coletaRemedir) {
-            escolhaUsuario = id;
-        } else if (id == R.id.nav_coletaEditar) {
-            escolhaUsuario = id;
-        } else if (id == R.id.nav_coletaRemover) {
+        if (id == R.id.nav_formularioListarColetas) {
             escolhaUsuario = id;
         } else if (id == R.id.nav_formularioEditar) {
+            escolhaUsuario = id;
+        } else if (id == R.id.nav_formularioAddModelo) {
+            escolhaUsuario = id;
+        } else if (id == R.id.nav_formularioNovaColeta) {
             escolhaUsuario = id;
         } else if (id == R.id.nav_formularioRemover) {
             escolhaUsuario = id;
@@ -175,37 +174,59 @@ public class ListarFormularios extends AppCompatActivity
     private class OnItemClickListener extends RecyclerItemClickListener.SimpleOnItemClickListener {
 
         @Override
-        public void onItemClick(View childView, int position) {
+        public void onItemClick(View childView, final int position) {
             // Do something when an item is clicked, or override something else.
             Intent cadastroColeta = new Intent(ListarFormularios.this, CadastroColeta.class);
             Intent listarColetas = new Intent(ListarFormularios.this, ListarColetas.class);
+            Intent cadastroFormulario = new Intent(ListarFormularios.this, CadastroFormulario.class);
             switch (escolhaUsuario) {
                 case 0:
                     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutListarFormularios);
                     assert drawer != null;
                     drawer.openDrawer(GravityCompat.START);
                     break;
-                case R.id.nav_coletaExportar:
+                case R.id.nav_formularioListarColetas:
                     listarColetas.putExtra("id_Formulario", formularioList.get(position).getId_Form());
-                    listarColetas.putExtra("tipo_Formulario", tipoFormulario);
+                    listarColetas.putExtra("tipo_Formulario", formularioList.get(position).getTipo_Form());
                     startActivity(listarColetas);
                     break;
-                case R.id.nav_coletaNova:
+                case R.id.nav_formularioEditar:
+                    cadastroFormulario.putExtra("tipo_Formulario", tipoFormulario);
+                    cadastroFormulario.putExtra("id_Formulario", formularioList.get(position).getId_Form());
+                    cadastroFormulario.putExtra("acao", "editar");
+                    startActivity(cadastroFormulario);
+                    break;
+                case R.id.nav_formularioAddModelo:
+                    cadastroFormulario.putExtra("tipo_Formulario", tipoFormulario);
+                    cadastroFormulario.putExtra("id_Formulario", formularioList.get(position).getId_Form());
+                    cadastroFormulario.putExtra("acao", "cadastro");
+                    startActivity(cadastroFormulario);
+                    break;
+                case R.id.nav_formularioNovaColeta:
                     cadastroColeta.putExtra("id_Formulario", formularioList.get(position).getId_Form());
                     cadastroColeta.putExtra("tipo_Formulario", tipoFormulario);
                     startActivity(cadastroColeta);
                     break;
-                case R.id.nav_coletaContinuar:
-                    listarColetas.putExtra("id_Formulario", formularioList.get(position).getId_Form());
-                    listarColetas.putExtra("tipo_Formulario", tipoFormulario);
-                    startActivity(listarColetas);
-                    break;
                 case R.id.nav_formularioRemover:
-                    dbAuxilar.deleteFormulario(formularioList.get(position).getId_Form());
-                    Intent recarregar = new Intent(ListarFormularios.this, ListarFormularios.class);
-                    recarregar.putExtra("tipo_Formulario", tipoFormulario);
-                    finish();
-                    startActivity(recarregar);
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ListarFormularios.this);
+                    builder.setTitle(R.string.dialog_removerFormulario)
+                            .setMessage(R.string.dialog_acaoPermanente)
+                            .setPositiveButton(R.string.dialog_remover, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dbAuxilar.deleteFormulario(formularioList.get(position).getId_Form());
+                                    Intent recarregar = new Intent(ListarFormularios.this, ListarFormularios.class);
+                                    recarregar.putExtra("tipo_Formulario", tipoFormulario);
+                                    finish();
+                                    startActivity(recarregar);
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_cancelar, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // User cancelled the dialog
+                                }
+                            }).create().show();
+                    // Create the AlertDialog object and return it
                     break;
                 default:
                     Toast.makeText(ListarFormularios.this, getString(R.string.info_EmBreve), Toast.LENGTH_SHORT).show();

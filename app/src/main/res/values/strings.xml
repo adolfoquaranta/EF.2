@@ -39,11 +39,11 @@
     <string name="radio_dbc">DBC</string>
     <string name="radio_fat">FAT</string>
     <string name="radio_sub">SUB</string>
-    <string name="title_activity_cadastro_formulario_dic">Novo DIC</string>
-    <string name="hint_quantidadeVariaveis_DIC">Quantidade de Variáveis</string>
-    <string name="hint_quantidadeReplicacoes_DIC">Quantidade de Replicações</string>
-    <string name="hint_quantidadeRepeticoes_DIC">Quantidade de Repetições</string>
-    <string name="hint_quantidadeTratatmentos_DIC">Quantidade de Tratamentos</string>
+    <string name="title_activity_cadastro_formulario_Modelo">Novo DIC</string>
+    <string name="hint_quantidadeVariaveis_Modelo">Quantidade de Variáveis</string>
+    <string name="hint_quantidadeReplicacoes_Modelo">Quantidade de Replicações</string>
+    <string name="hint_quantidadeRepeticoes_Modelo">Quantidade de Repetições</string>
+    <string name="hint_quantidadeTratatmentos_Modelo">Quantidade de Tratamentos</string>
     <string name="title_activity_cadastro_tratamentos">Cadastro de Tratamentos</string>
     <string name="hint_nomeTratamento">Nome do tratamento </string>
     <string name="string_Tratamento">Tratamento </string>
@@ -95,7 +95,7 @@
     <string name="title_activity_listar_formularios">Lista de</string>
 
     <string name="nav_titulo_coleta_de_dados">Coleta de Dados</string>
-    <string name="nav_titulo_coletaNova">Nova</string>
+    <string name="nav_titulo_coletaNova">Nova Coleta</string>
     <string name="nav_titulo_coletaContinuar">Continuar</string>
     <string name="nav_titulo_coletaRemedir">Remedir</string>
     <string name="nav_titulo_coletaEditar">Editar</string>
@@ -110,6 +110,12 @@
     <string name="actionOK">OK</string>
     <string name="title_activity_listar_coletas">Coletas de </string>
     <string name="nav_titulo_coletaExportar">Exportar</string>
+    <string name="nav_titulo_coletaListar">Listar Coletas</string>
+    <string name="dialog_removerFormulario">Tem certeza que deseja remover este item?</string>
+    <string name="dialog_remover">Remover</string>
+    <string name="dialog_cancelar">Cancelar</string>
+    <string name="dialog_acaoPermanente">Atenção! Esta ação não pode ser desfeita.</string>
+    <string name="nav_titulo_formularioAddModelo">Adicionar Modelo</string>
 
 
 </resources>

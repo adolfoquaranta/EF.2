@@ -1,45 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="@string/nav_titulo_coleta_de_dados">
-        <menu>
-            <group android:checkableBehavior="single">
-                <item
-                    android:id="@+id/nav_coletaExportar"
-                    android:icon="@drawable/ic_import_export_black_48dp"
-                    android:title="@string/nav_titulo_coletaExportar" />
-                <item
-                    android:id="@+id/nav_coletaNova"
-                    android:icon="@drawable/ic_note_add_black_48dp"
-                    android:title="@string/nav_titulo_coletaNova" />
-                <item
-                    android:id="@+id/nav_coletaContinuar"
-                    android:icon="@drawable/ic_av_timer_black_48dp"
-                    android:title="@string/nav_titulo_coletaContinuar" />
-                <item
-                    android:id="@+id/nav_coletaRemedir"
-                    android:icon="@drawable/ic_autorenew_black_48dp"
-                    android:title="@string/nav_titulo_coletaRemedir" />
-                <item
-                    android:id="@+id/nav_coletaEditar"
-                    android:icon="@drawable/ic_mode_edit_black_48dp"
-                    android:title="@string/nav_titulo_coletaEditar" />
-                <item
-                    android:id="@+id/nav_coletaRemover"
-                    android:icon="@drawable/ic_delete_black_48dp"
-                    android:title="@string/nav_titulo_coletaRemover" />
-            </group>
-        </menu>
-    </item>
-
     <item
         android:id="@+id/itemDrawer_tipoFormulario"
         android:title="@string/modelo_de_coleta">
         <menu>
             <group android:checkableBehavior="single">
                 <item
+                    android:id="@+id/nav_formularioListarColetas"
+                    android:icon="@drawable/ic_view_list_black_48dp"
+                    android:title="@string/nav_titulo_coletaListar" />
+                <item
+                    android:id="@+id/nav_formularioNovaColeta"
+                    android:icon="@drawable/ic_add_black_48dp"
+                    android:title="@string/nav_titulo_coletaNova" />
+                <item
+                    android:id="@+id/nav_formularioAddModelo"
+                    android:icon="@drawable/ic_note_add_black_48dp"
+                    android:title="@string/nav_titulo_formularioAddModelo" />
+                <item
                     android:id="@+id/nav_formularioEditar"
                     android:icon="@drawable/ic_build_black_48dp"
                     android:title="@string/nav_titulo_coletaEditar" />
+
                 <item
                     android:id="@+id/nav_formularioRemover"
                     android:icon="@drawable/ic_delete_black_48dp"

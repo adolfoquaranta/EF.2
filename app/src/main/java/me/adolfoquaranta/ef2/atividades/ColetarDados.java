@@ -23,6 +23,7 @@ import java.util.List;
 import fr.ganfra.materialspinner.MaterialSpinner;
 import me.adolfoquaranta.ef2.R;
 import me.adolfoquaranta.ef2.auxiliares.DBAuxilar;
+import me.adolfoquaranta.ef2.modelos.Coleta;
 import me.adolfoquaranta.ef2.modelos.Dado;
 import me.adolfoquaranta.ef2.modelos.Modelo;
 import me.adolfoquaranta.ef2.modelos.Tratamento;
@@ -57,9 +58,10 @@ public class ColetarDados extends AppCompatActivity {
         Log.d("repeticaoAtual", repeticaoAtual.toString());
         Log.d("replicacaoAtual", replicacaoAtual.toString());
 
-        modelo = dbAuxilar.lerModelo(id_Formulario, "DIC");
-        tratamentos = dbAuxilar.lerTodosTratamentos(id_Formulario);
-        variaveis = dbAuxilar.lerTodasVariaveis(id_Formulario);
+        modelo = dbAuxilar.lerModeloDaColeta(id_Formulario);
+        Coleta coleta = dbAuxilar.lerColeta(id_Coleta);
+        tratamentos = dbAuxilar.lerTodosTratamentos(id_Formulario, coleta.getIdModelo_Coleta());
+        variaveis = dbAuxilar.lerTodasVariaveis(id_Formulario, coleta.getIdModelo_Coleta());
 
 
         final RegexpValidator naoNulo = new RegexpValidator(getString(R.string.err_msg_valorVariavel), "^(?!\\s*$).+");

@@ -18,11 +18,11 @@ import me.adolfoquaranta.ef2.modelos.Modelo;
 
 public class CadastroModeloFormulario extends AppCompatActivity {
 
-    private TextInputEditText input_quantidadeTratamentos_DIC, input_quantidadeRepeticoes_DIC, input_quantidadeReplicacoes_DIC, input_quantidadeVariaveis_DIC;
-    private TextInputLayout inputLayoutQuantidadeTratamentos_DIC, inputLayoutQuantidadeRepeticoes_DIC, inputLayoutQuantidadeReplicacoes_DIC, inputLayoutQuantidadeVariaveis_DIC;
+    private TextInputEditText input_quantidadeTratamentos_Modelo, input_quantidadeRepeticoes_Modelo, input_quantidadeReplicacoes_Modelo, input_quantidadeVariaveis_Modelo;
+    private TextInputLayout inputLayoutQuantidadeTratamentos_Modelo, inputLayoutQuantidadeRepeticoes_Modelo, inputLayoutQuantidadeReplicacoes_Modelo, inputLayoutQuantidadeVariaveis_Modelo;
 
     private Long id_Formulario, id_Modelo;
-    private String modelo_Modelo;
+    private Integer modelo_Modelo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,27 +36,28 @@ public class CadastroModeloFormulario extends AppCompatActivity {
 
         Intent cadastroModeloFormulario = getIntent();
         id_Formulario = cadastroModeloFormulario.getLongExtra("id_Formulario", 0);
-        modelo_Modelo = cadastroModeloFormulario.getStringExtra("modelo_Modelo");
+        modelo_Modelo = cadastroModeloFormulario.getIntExtra("modelo_Modelo", -1);
 
-        input_quantidadeTratamentos_DIC = (TextInputEditText) findViewById(R.id.input_quantidadeTratatmentos_DIC);
-        input_quantidadeRepeticoes_DIC = (TextInputEditText) findViewById(R.id.input_quantidadeRepeticoes_DIC);
-        input_quantidadeReplicacoes_DIC = (TextInputEditText) findViewById(R.id.input_quantidadeReplicacoes_DIC);
-        input_quantidadeVariaveis_DIC = (TextInputEditText) findViewById(R.id.input_quantidadeVariaveis_DIC);
+        input_quantidadeTratamentos_Modelo = (TextInputEditText) findViewById(R.id.input_quantidadeTratatmentos_Modelo);
+        input_quantidadeRepeticoes_Modelo = (TextInputEditText) findViewById(R.id.input_quantidadeRepeticoes_Modelo);
+        input_quantidadeReplicacoes_Modelo = (TextInputEditText) findViewById(R.id.input_quantidadeReplicacoes_Modelo);
+        input_quantidadeVariaveis_Modelo = (TextInputEditText) findViewById(R.id.input_quantidadeVariaveis_Modelo);
 
-        inputLayoutQuantidadeTratamentos_DIC = (TextInputLayout) findViewById(R.id.input_layout_quantidadeTratatmentos_DIC);
-        inputLayoutQuantidadeRepeticoes_DIC = (TextInputLayout) findViewById(R.id.input_layout_quantidadeRepeticoes_DIC);
-        inputLayoutQuantidadeReplicacoes_DIC = (TextInputLayout) findViewById(R.id.input_layout_quantidadeReplicacoes_DIC);
-        inputLayoutQuantidadeVariaveis_DIC = (TextInputLayout) findViewById(R.id.input_layout_quantidadeVariaveis_DIC);
+        inputLayoutQuantidadeTratamentos_Modelo = (TextInputLayout) findViewById(R.id.input_layout_quantidadeTratatmentos_Modelo);
+        inputLayoutQuantidadeRepeticoes_Modelo = (TextInputLayout) findViewById(R.id.input_layout_quantidadeRepeticoes_Modelo);
+        inputLayoutQuantidadeReplicacoes_Modelo = (TextInputLayout) findViewById(R.id.input_layout_quantidadeReplicacoes_Modelo);
+        inputLayoutQuantidadeVariaveis_Modelo = (TextInputLayout) findViewById(R.id.input_layout_quantidadeVariaveis_Modelo);
 
-        input_quantidadeTratamentos_DIC.addTextChangedListener(new FormularioDICTextWatcher(input_quantidadeTratamentos_DIC));
-        input_quantidadeRepeticoes_DIC.addTextChangedListener(new FormularioDICTextWatcher(input_quantidadeRepeticoes_DIC));
-        input_quantidadeReplicacoes_DIC.addTextChangedListener(new FormularioDICTextWatcher(input_quantidadeReplicacoes_DIC));
-        input_quantidadeVariaveis_DIC.addTextChangedListener(new FormularioDICTextWatcher(input_quantidadeVariaveis_DIC));
+        input_quantidadeTratamentos_Modelo.addTextChangedListener(new FormularioDICTextWatcher(input_quantidadeTratamentos_Modelo));
+        input_quantidadeRepeticoes_Modelo.addTextChangedListener(new FormularioDICTextWatcher(input_quantidadeRepeticoes_Modelo));
+        input_quantidadeReplicacoes_Modelo.addTextChangedListener(new FormularioDICTextWatcher(input_quantidadeReplicacoes_Modelo));
+        input_quantidadeVariaveis_Modelo.addTextChangedListener(new FormularioDICTextWatcher(input_quantidadeVariaveis_Modelo));
 
-        Button btnSalvar_DIC = (Button) findViewById(R.id.btn_salvar_DIC);
+        Button btnSalvar_Modelo = (Button) findViewById(R.id.btn_salvar_Modelo);
 
-        assert btnSalvar_DIC != null;
-        btnSalvar_DIC.setOnClickListener(new View.OnClickListener() {
+
+        assert btnSalvar_Modelo != null;
+        btnSalvar_Modelo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 salvarDados();
@@ -66,18 +67,18 @@ public class CadastroModeloFormulario extends AppCompatActivity {
     }
 
     private void salvarDados(){
-        if (!validarQuantidadeTratamentos_DIC()) {
+        if (!validarQuantidadeTratamentos_Modelo()) {
             return;
         }
 
-        if (!validarQuantidadeRepeticoes_DIC()) {
+        if (!validarQuantidadeRepeticoes_Modelo()) {
             return;
         }
 
-        if (!validarQuantidadeReplicacoes_DIC()) {
+        if (!validarQuantidadeReplicacoes_Modelo()) {
             return;
         }
-        if (!validarQuantidadeVariaveis_DIC()){
+        if (!validarQuantidadeVariaveis_Modelo()) {
             return;
         }
 
@@ -88,65 +89,66 @@ public class CadastroModeloFormulario extends AppCompatActivity {
         Modelo modelo = new Modelo();
         modelo.setModelo_Modelo(modelo_Modelo);
         modelo.setIdFormulario_Modelo(id_Formulario);
-        modelo.setQuantidadeTratamentos_Modelo(Integer.parseInt(input_quantidadeTratamentos_DIC.getText().toString()));
-        modelo.setQuantidadeRepeticoes_Modelo(Integer.parseInt(input_quantidadeRepeticoes_DIC.getText().toString()));
-        modelo.setQuantidadeReplicacoes_Modelo(Integer.parseInt(input_quantidadeReplicacoes_DIC.getText().toString()));
-        modelo.setQuantidadeVariaveis_Modelo(Integer.parseInt(input_quantidadeVariaveis_DIC.getText().toString()));
+        modelo.setQuantidadeTratamentos_Modelo(Integer.parseInt(input_quantidadeTratamentos_Modelo.getText().toString()));
+        modelo.setQuantidadeRepeticoes_Modelo(Integer.parseInt(input_quantidadeRepeticoes_Modelo.getText().toString()));
+        modelo.setQuantidadeReplicacoes_Modelo(Integer.parseInt(input_quantidadeReplicacoes_Modelo.getText().toString()));
+        modelo.setQuantidadeVariaveis_Modelo(Integer.parseInt(input_quantidadeVariaveis_Modelo.getText().toString()));
 
         id_Modelo = dbAuxilar.inserirModelo(modelo);
 
         Intent cadastroTratamentos = new Intent(CadastroModeloFormulario.this, CadastroTratamentos.class);
         cadastroTratamentos.putExtra("id_Modelo", id_Modelo);
         cadastroTratamentos.putExtra("idFormulario_Modelo", id_Formulario);
+        cadastroTratamentos.putExtra("modelo_Modelo", modelo_Modelo);
         startActivity(cadastroTratamentos);
 
 
     }
 
-    private boolean validarQuantidadeTratamentos_DIC(){
-        if(input_quantidadeTratamentos_DIC.getText().toString().trim().isEmpty()){
-            inputLayoutQuantidadeTratamentos_DIC.setError(getString(R.string.err_msg_deveSerNumInteiro));
-            requestFocus(input_quantidadeTratamentos_DIC);
+    private boolean validarQuantidadeTratamentos_Modelo() {
+        if (input_quantidadeTratamentos_Modelo.getText().toString().trim().isEmpty()) {
+            inputLayoutQuantidadeTratamentos_Modelo.setError(getString(R.string.err_msg_deveSerNumInteiro));
+            requestFocus(input_quantidadeTratamentos_Modelo);
             return false;
         }
         else{
-            inputLayoutQuantidadeTratamentos_DIC.setErrorEnabled(false);
+            inputLayoutQuantidadeTratamentos_Modelo.setErrorEnabled(false);
         }
         return true;
     }
 
-    private boolean validarQuantidadeRepeticoes_DIC(){
-        if(input_quantidadeRepeticoes_DIC.getText().toString().trim().isEmpty()){
-            inputLayoutQuantidadeRepeticoes_DIC.setError(getString(R.string.err_msg_deveSerNumInteiro));
-            requestFocus(input_quantidadeRepeticoes_DIC);
+    private boolean validarQuantidadeRepeticoes_Modelo() {
+        if (input_quantidadeRepeticoes_Modelo.getText().toString().trim().isEmpty()) {
+            inputLayoutQuantidadeRepeticoes_Modelo.setError(getString(R.string.err_msg_deveSerNumInteiro));
+            requestFocus(input_quantidadeRepeticoes_Modelo);
             return false;
         }
         else{
-            inputLayoutQuantidadeRepeticoes_DIC.setErrorEnabled(false);
+            inputLayoutQuantidadeRepeticoes_Modelo.setErrorEnabled(false);
         }
         return true;
     }
 
-    private boolean validarQuantidadeReplicacoes_DIC(){
-        if(input_quantidadeReplicacoes_DIC.getText().toString().trim().isEmpty()){
-            inputLayoutQuantidadeReplicacoes_DIC.setError(getString(R.string.err_msg_deveSerNumInteiro));
-            requestFocus(input_quantidadeReplicacoes_DIC);
+    private boolean validarQuantidadeReplicacoes_Modelo() {
+        if (input_quantidadeReplicacoes_Modelo.getText().toString().trim().isEmpty()) {
+            inputLayoutQuantidadeReplicacoes_Modelo.setError(getString(R.string.err_msg_deveSerNumInteiro));
+            requestFocus(input_quantidadeReplicacoes_Modelo);
             return false;
         }
         else{
-            inputLayoutQuantidadeReplicacoes_DIC.setErrorEnabled(false);
+            inputLayoutQuantidadeReplicacoes_Modelo.setErrorEnabled(false);
         }
         return true;
     }
 
-    private boolean validarQuantidadeVariaveis_DIC(){
-        if(input_quantidadeVariaveis_DIC.getText().toString().trim().isEmpty()){
-            inputLayoutQuantidadeVariaveis_DIC.setError(getString(R.string.err_msg_deveSerNumInteiro));
-            requestFocus(input_quantidadeVariaveis_DIC);
+    private boolean validarQuantidadeVariaveis_Modelo() {
+        if (input_quantidadeVariaveis_Modelo.getText().toString().trim().isEmpty()) {
+            inputLayoutQuantidadeVariaveis_Modelo.setError(getString(R.string.err_msg_deveSerNumInteiro));
+            requestFocus(input_quantidadeVariaveis_Modelo);
             return false;
         }
         else{
-            inputLayoutQuantidadeVariaveis_DIC.setErrorEnabled(false);
+            inputLayoutQuantidadeVariaveis_Modelo.setErrorEnabled(false);
         }
         return true;
     }
@@ -178,17 +180,17 @@ public class CadastroModeloFormulario extends AppCompatActivity {
         @Override
         public void afterTextChanged(Editable s) {
             switch (view.getId()){
-                case R.id.input_quantidadeTratatmentos_DIC:
-                    validarQuantidadeTratamentos_DIC();
+                case R.id.input_quantidadeTratatmentos_Modelo:
+                    validarQuantidadeTratamentos_Modelo();
                     break;
-                case R.id.input_quantidadeRepeticoes_DIC:
-                    validarQuantidadeRepeticoes_DIC();
+                case R.id.input_quantidadeRepeticoes_Modelo:
+                    validarQuantidadeRepeticoes_Modelo();
                     break;
-                case R.id.input_quantidadeReplicacoes_DIC:
-                    validarQuantidadeReplicacoes_DIC();
+                case R.id.input_quantidadeReplicacoes_Modelo:
+                    validarQuantidadeReplicacoes_Modelo();
                     break;
-                case R.id.input_quantidadeVariaveis_DIC:
-                    validarQuantidadeVariaveis_DIC();
+                case R.id.input_quantidadeVariaveis_Modelo:
+                    validarQuantidadeVariaveis_Modelo();
                     break;
 
             }
