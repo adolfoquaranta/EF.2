@@ -6,6 +6,9 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.InputFilter;
+import android.text.InputType;
+import android.text.Spanned;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,13 +33,35 @@ import me.adolfoquaranta.ef2.modelos.Tratamento;
 import me.adolfoquaranta.ef2.modelos.Variavel;
 
 public class ColetarDados extends AppCompatActivity {
+    InputFilter filterDigito = new InputFilter() {
+        public CharSequence filter(CharSequence source, int start, int end,
+                                   Spanned dest, int dstart, int dend) {
+            for (int i = start; i < end; i++) {
+                if (!Character.isDigit(source.charAt(i))) {
+                    if (source.charAt(i) == ',' || source.charAt(i) == '.') return ".";
+                    return "";
+                }
+            }
+            return null;
+        }
+    };
+    InputFilter filterCaracter = new InputFilter() {
+        public CharSequence filter(CharSequence source, int start, int end,
+                                   Spanned dest, int dstart, int dend) {
+            for (int i = start; i < end; i++) {
+                if (!Character.isLetter(source.charAt(i))) {
+                    return "";
+                }
+            }
+            return null;
+        }
+    };
     private DBAuxilar dbAuxilar;
     private List<Tratamento> tratamentos;
     private List<Variavel> variaveis;
     private Modelo modelo;
     private Integer tratamentoAtual, repeticaoAtual, replicacaoAtual;
     private Long id_Coleta;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,6 +87,11 @@ public class ColetarDados extends AppCompatActivity {
         Coleta coleta = dbAuxilar.lerColeta(id_Coleta);
         tratamentos = dbAuxilar.lerTodosTratamentos(id_Formulario, coleta.getIdModelo_Coleta());
         variaveis = dbAuxilar.lerTodasVariaveis(id_Formulario, coleta.getIdModelo_Coleta());
+
+        Log.d("modelo", modelo.toString());
+        Log.d("coleta", coleta.toString());
+        Log.d("tratamentos", tratamentos.toString());
+        Log.d("variaveis", variaveis.toString());
 
 
         final RegexpValidator naoNulo = new RegexpValidator(getString(R.string.err_msg_valorVariavel), "^(?!\\s*$).+");
@@ -93,6 +123,7 @@ public class ColetarDados extends AppCompatActivity {
             final LinearLayout layoutInterno = new LinearLayout(this);
             layoutInterno.setOrientation(LinearLayout.HORIZONTAL);
             layoutInterno.setWeightSum(3);
+            layoutInterno.setFocusable(true);
 
             //nome tratamento
             final MaterialEditText etValorVariavel = new MaterialEditText(this); // Pass it an Activity or Context
@@ -103,6 +134,13 @@ public class ColetarDados extends AppCompatActivity {
             etValorVariavel.setHint(variaveis.get(i).getNome_Variavel());
             etValorVariavel.setFloatingLabelText(variaveis.get(i).getNome_Variavel());
             etValorVariavel.setFloatingLabelAnimating(true);
+            if (variaveis.get(i).getTipo_Variavel() == 1) {
+                etValorVariavel.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_CLASS_NUMBER);
+                etValorVariavel.setFilters(new InputFilter[]{filterDigito});
+            } else if (variaveis.get(i).getTipo_Variavel() == 2) {
+                etValorVariavel.setRawInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+                etValorVariavel.setFilters(new InputFilter[]{filterCaracter});
+            }
             layoutInterno.addView(etValorVariavel);
 
             final ToggleButton anularVariavel = new ToggleButton(getApplicationContext());
@@ -169,6 +207,7 @@ public class ColetarDados extends AppCompatActivity {
                     if (repeticaoAtual + 1 == modelo.getQuantidadeRepeticoes_Modelo()) {
                         if (tratamentoAtual + 1 == modelo.getQuantidadeTratamentos_Modelo()) {
                             inserirDados(dados);
+                            finish();
                             startActivity(inicio);
                         } else if (tratamentoAtual + 1 < modelo.getQuantidadeTratamentos_Modelo()) {
                             inserirDados(dados);
@@ -229,4 +268,6 @@ public class ColetarDados extends AppCompatActivity {
     public void onBackPressed() {
         Toast.makeText(this, getString(R.string.info_EmBreve), Toast.LENGTH_SHORT).show();
     }
+
+
 }

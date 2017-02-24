@@ -116,6 +116,8 @@
     <string name="dialog_cancelar">Cancelar</string>
     <string name="dialog_acaoPermanente">Atenção! Esta ação não pode ser desfeita.</string>
     <string name="nav_titulo_formularioAddModelo">Adicionar Modelo</string>
+    <string name="dialog_removerColeta">Tem certeza que deseja remover esta coleta?</string>
+    <string name="info_ArquivoGerado">O Arquivo CSV foi exportado com sucesso!</string>
 
 
 </resources>

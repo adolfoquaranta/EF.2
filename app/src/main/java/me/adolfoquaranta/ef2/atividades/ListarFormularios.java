@@ -78,7 +78,6 @@ public class ListarFormularios extends AppCompatActivity
 
         formularioList = dbAuxilar.lerTodosFormularios(tipoFormulario);
 
-
         if(formularioList.isEmpty()){
             RelativeLayout.LayoutParams lparams = new RelativeLayout.LayoutParams(
                     RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
@@ -226,7 +225,6 @@ public class ListarFormularios extends AppCompatActivity
                                     // User cancelled the dialog
                                 }
                             }).create().show();
-                    // Create the AlertDialog object and return it
                     break;
                 default:
                     Toast.makeText(ListarFormularios.this, getString(R.string.info_EmBreve), Toast.LENGTH_SHORT).show();

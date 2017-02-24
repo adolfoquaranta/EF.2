@@ -26,7 +26,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
 
     private static final String LOG = "DBAuxiliar";
     private static final String DATABASE_NOME = "ef2.db";
-    private static final Integer DATABASE_VERSAO = 6;
+    private static final Integer DATABASE_VERSAO = 1;
     private static final String FORMULARIO_TABELA = "Formulario";
     private static final String FORMULARIO_COL_ID = "id_Form";
     private static final String FORMULARIO_COL_TIPO = "tipo_Form";
@@ -309,10 +309,10 @@ public class DBAuxilar extends SQLiteOpenHelper {
         return db.insert(MODELO_TABELA, null, values);
     }
 
-    public Modelo lerModeloDoFormulario(Long idFormulario_Modelo, Integer modelo_Modelo) {
+    public Modelo lerModeloDoFormulario(Long id_Formulario, Integer modelo_Modelo) {
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectQuery = "SELECT * FROM " + MODELO_TABELA + " JOIN " + FORMULARIO_TABELA + " ON " + FORMULARIO_COL_ID + " = " + idFormulario_Modelo + " WHERE " + MODELO_COL_MODELO + " = " + modelo_Modelo;
+        String selectQuery = "SELECT * FROM " + MODELO_TABELA + " JOIN " + FORMULARIO_TABELA + " ON " + MODELO_COL_ID_FORMULARIO + " = " + id_Formulario + " WHERE " + FORMULARIO_COL_ID + " = " + id_Formulario + " AND " + MODELO_COL_MODELO + " = " + modelo_Modelo;
 
         Log.e(LOG, selectQuery);
 
@@ -419,7 +419,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
     public ArrayList<Modelo> lerTodosModelos(Long idFormulario) {
         ArrayList<Modelo> modelos = new ArrayList<>();
 
-        String selectQuery = "SELECT * FROM " + MODELO_TABELA + " JOIN " + FORMULARIO_TABELA + " ON " + FORMULARIO_COL_ID + " = " + idFormulario;
+        String selectQuery = "SELECT * FROM " + MODELO_TABELA + " JOIN " + FORMULARIO_TABELA + " ON " + MODELO_COL_ID_FORMULARIO + " = " + idFormulario;
 
         Log.e(LOG, selectQuery);
 
@@ -636,7 +636,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
         if (c.moveToFirst()) {
             do {
                 Coleta coleta = new Coleta();
-                coleta.setIdForm_Coleta(c.getLong(c.getColumnIndex(COLETA_COL_ID)));
+                coleta.setId_Coleta(c.getLong(c.getColumnIndex(COLETA_COL_ID)));
                 coleta.setNome_Coleta(c.getString(c.getColumnIndex(COLETA_COL_NOME)));
                 coleta.setDescricao_Coleta(c.getString(c.getColumnIndex(COLETA_COL_DESCRICAO)));
                 coleta.setDataCriacao_Coleta(c.getString(c.getColumnIndex(COLETA_COL_DATA_CRIACAO)));
@@ -650,6 +650,12 @@ public class DBAuxilar extends SQLiteOpenHelper {
 
         c.close();
         return coletas;
+    }
+
+
+    public int deleteColeta(Long id_Coleta) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        return db.delete(COLETA_TABELA, COLETA_COL_ID + " = " + id_Coleta, null);
     }
 
 

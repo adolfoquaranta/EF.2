@@ -1,12 +1,15 @@
 package me.adolfoquaranta.ef2.atividades;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -53,6 +56,8 @@ public class ListarColetas extends AppCompatActivity
     private RelativeLayout mostrar_coletas_root;
 
     private Integer escolhaUsuario = 0;
+    private Long idFormulario;
+    private String tipoFormulario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +80,8 @@ public class ListarColetas extends AppCompatActivity
         mostrar_coletas_root = (RelativeLayout) findViewById(R.id.mostrar_coletas_root);
 
         listarColetas = getIntent();
-        final Long idFormulario = listarColetas.getLongExtra("id_Formulario", 0);
-        final String tipoFormulario = listarColetas.getStringExtra("tipo_Formulario");
+        idFormulario = listarColetas.getLongExtra("id_Formulario", 0);
+        tipoFormulario = listarColetas.getStringExtra("tipo_Formulario");
 
         dbAuxilar = new DBAuxilar(getApplicationContext());
 
@@ -190,7 +195,7 @@ public class ListarColetas extends AppCompatActivity
     private class OnItemClickListener extends RecyclerItemClickListener.SimpleOnItemClickListener {
 
         @Override
-        public void onItemClick(View childView, int position) {
+        public void onItemClick(View childView, final int position) {
             // Do something when an item is clicked, or override something else.
             switch (escolhaUsuario) {
                 case 0:
@@ -217,10 +222,10 @@ public class ListarColetas extends AppCompatActivity
                     String fileName = (coletaList.get(position).getNome_Coleta()) + ".csv";
                     String filePath = baseDir + File.separator + fileName;
 
-                    CSVWriter writer = null;
+                    CSVWriter writer;
                     try {
                         writer = new CSVWriter(new FileWriter(filePath), CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER);
-                        List<String[]> linhas = new ArrayList<String[]>();
+                        List<String[]> linhas = new ArrayList<>();
                         String[] cabecalhoPosicoes, cabecalhoNomeVariaveis = new String[modelo.getQuantidadeVariaveis_Modelo()];
                         cabecalhoPosicoes = new String[]{"TRATAMENTO", "REPETICAO", "REPLICACAO"};
                         for (int v = 0; v < modelo.getQuantidadeVariaveis_Modelo(); v++) {
@@ -243,10 +248,33 @@ public class ListarColetas extends AppCompatActivity
                         writer.writeAll(linhas);
                         writer.close();
                         Log.i("Witter", "ArquivoGerado");
+                        Snackbar.make(childView, getString(R.string.info_ArquivoGerado), Snackbar.LENGTH_LONG).show();
 
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
+                    break;
+
+                case R.id.nav_coletaRemover:
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ListarColetas.this);
+                    builder.setTitle(R.string.dialog_removerColeta)
+                            .setMessage(R.string.dialog_acaoPermanente)
+                            .setPositiveButton(R.string.dialog_remover, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    Log.d("idColeta", coletaList.get(position).getId_Coleta().toString());
+                                    dbAuxilar.deleteColeta(coletaList.get(position).getId_Coleta());
+                                    Intent recarregar = new Intent(ListarColetas.this, ListarColetas.class);
+                                    recarregar.putExtra("tipo_Formulario", tipoFormulario);
+                                    recarregar.putExtra("id_Formulario", idFormulario);
+                                    finish();
+                                    startActivity(recarregar);
+                                }
+                            })
+                            .setNegativeButton(R.string.dialog_cancelar, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // User cancelled the dialog
+                                }
+                            }).create().show();
                     break;
 
                 default:
