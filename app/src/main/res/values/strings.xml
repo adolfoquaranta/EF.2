@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">(EF).2</string>
+    <string name="app_name">Coleta Digital</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -104,7 +104,7 @@
     <string name="nav_titulo_formularioEditar">Editar</string>
     <string name="nav_titulo_formularioRemover">Remover</string>
     <string name="modelo_de_coleta">Modelo de Coleta</string>
-    <string name="nav_header_titulo">(EF).2 - Experimento Fácil</string>
+    <string name="nav_header_titulo">Coleta Digital</string>
     <string name="nav_header_subtitulo">Engenharia Florestal</string>
     <string name="info_SelecioneUmaOpcao">Selecione o que deseja fazer</string>
     <string name="actionOK">OK</string>
