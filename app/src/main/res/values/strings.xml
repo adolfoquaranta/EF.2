@@ -9,12 +9,12 @@
     <string name="title_activity_cadastro_formulario">Novo</string>
 
 
-    <string name="hint_nome_Form">Nome do Modelo</string>
+    <string name="hint_nome_Form">Nome</string>
     <string name="hint_descricao_Form">Descrição</string>
     <string name="hint_criador_Form">Nome do Criador</string>
     <string name="btn_salvar">Salvar</string>
 
-    <string name="err_msg_nome_Form">Insira um nome para o modelo</string>
+    <string name="err_msg_nome_Form">Insira um nome</string>
     <string name="err_msg_descricao_Form">Insira um descrição</string>
     <string name="err_msg_criador_Form">Insira um criador</string>
 
@@ -34,12 +34,12 @@
     <string name="inicio_btnINS">INS</string>
 
     <string name="msg_naoExistemDados">Não existem dados para serem exibidos.</string>
-    <string name="cadastro_formulario_tipo_Form">Tipo</string>
+    <string name="cadastro_formulario_tipo_Form">Modelo</string>
     <string name="radio_dic">DIC</string>
     <string name="radio_dbc">DBC</string>
     <string name="radio_fat">FAT</string>
     <string name="radio_sub">SUB</string>
-    <string name="title_activity_cadastro_formulario_Modelo">Novo DIC</string>
+    <string name="title_activity_cadastro_formulario_Modelo">Novo</string>
     <string name="hint_quantidadeVariaveis_Modelo">Quantidade de Variáveis</string>
     <string name="hint_quantidadeReplicacoes_Modelo">Quantidade de Replicações</string>
     <string name="hint_quantidadeRepeticoes_Modelo">Quantidade de Repetições</string>
@@ -103,7 +103,7 @@
 
     <string name="nav_titulo_formularioEditar">Editar</string>
     <string name="nav_titulo_formularioRemover">Remover</string>
-    <string name="modelo_de_coleta">Modelo de Coleta</string>
+    <string name="nav_tipo_form"></string>
     <string name="nav_header_titulo">Coleta Digital</string>
     <string name="nav_header_subtitulo">Engenharia Florestal</string>
     <string name="info_SelecioneUmaOpcao">Selecione o que deseja fazer</string>
@@ -118,6 +118,14 @@
     <string name="nav_titulo_formularioAddModelo">Adicionar Modelo</string>
     <string name="dialog_removerColeta">Tem certeza que deseja remover esta coleta?</string>
     <string name="info_ArquivoGerado">O Arquivo CSV foi exportado com sucesso!</string>
+    <string name="dialog_modelo">Escolha o Modelo</string>
 
+
+    <string-array name="modelos_array">
+        <item>DIC</item>
+        <item>DBC</item>
+        <item>FAT</item>
+        <item>SUB</item>
+    </string-array>
 
 </resources>

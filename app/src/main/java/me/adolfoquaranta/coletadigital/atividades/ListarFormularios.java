@@ -16,6 +16,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ import me.adolfoquaranta.coletadigital.auxiliares.DBAuxilar;
 import me.adolfoquaranta.coletadigital.componentes_recycler.DividerItemDecoration;
 import me.adolfoquaranta.coletadigital.componentes_recycler.RecyclerItemClickListener;
 import me.adolfoquaranta.coletadigital.modelos.Formulario;
+import me.adolfoquaranta.coletadigital.modelos.Modelo;
 
 public class ListarFormularios extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,7 +44,7 @@ public class ListarFormularios extends AppCompatActivity
     private RelativeLayout mostrar_formularios_root;
 
     private String tipoFormulario;
-    private Integer escolhaUsuario = 0;
+    private Integer escolhaUsuario = 0, modelo_Modelo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,11 +55,13 @@ public class ListarFormularios extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutListarFormularios);
 
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         assert drawer != null;
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
 
         drawer.openDrawer(GravityCompat.START);
 
@@ -70,6 +74,9 @@ public class ListarFormularios extends AppCompatActivity
         listarFormularios = getIntent();
 
         tipoFormulario = listarFormularios.getStringExtra("tipo_Formulario");
+
+        (navigationView.getMenu()).findItem(R.id.itemDrawer_tipoFormulario).setTitle(tipoFormulario);
+
 
         //noinspection ConstantConditions
         getSupportActionBar().setTitle(getSupportActionBar().getTitle().toString() + " " + tipoFormulario);
@@ -175,9 +182,51 @@ public class ListarFormularios extends AppCompatActivity
         @Override
         public void onItemClick(View childView, final int position) {
             // Do something when an item is clicked, or override something else.
-            Intent cadastroColeta = new Intent(ListarFormularios.this, CadastroColeta.class);
-            Intent listarColetas = new Intent(ListarFormularios.this, ListarColetas.class);
-            Intent cadastroFormulario = new Intent(ListarFormularios.this, CadastroFormulario.class);
+
+            ArrayList<Modelo> modelos = dbAuxilar.lerTodosModelos(formularioList.get(position).getId_Form());
+            ArrayList<String> modelosExistentes = new ArrayList<>(4);
+
+            if (escolhaUsuario == R.id.nav_formularioAddModelo) {
+                modelosExistentes.add("DIC");
+                modelosExistentes.add("DBC");
+                modelosExistentes.add("FAT");
+                modelosExistentes.add("SUB");
+
+                for (Modelo m : modelos) {
+                    if (m.getModelo_Modelo() == 0) {
+                        modelosExistentes.remove(0);
+                    }
+                    if (m.getModelo_Modelo() == 1) {
+                        modelosExistentes.remove(1);
+                    }
+                    if (m.getModelo_Modelo() == 2) {
+                        modelosExistentes.remove(2);
+                    }
+                    if (m.getModelo_Modelo() == 3) {
+                        modelosExistentes.remove(3);
+                    }
+                }
+            } else {
+
+                for (Modelo m : modelos) {
+                    if (m.getModelo_Modelo() == 0) {
+                        modelosExistentes.add("DIC");
+                    }
+                    if (m.getModelo_Modelo() == 1) {
+                        modelosExistentes.add("DBC");
+                    }
+                    if (m.getModelo_Modelo() == 2) {
+                        modelosExistentes.add("FAT");
+                    }
+                    if (m.getModelo_Modelo() == 3) {
+                        modelosExistentes.add("SUB");
+                    }
+                }
+            }
+
+
+            final ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(getApplicationContext(), R.layout.dialog_modelos, modelosExistentes);
+
             switch (escolhaUsuario) {
                 case 0:
                     DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutListarFormularios);
@@ -185,31 +234,104 @@ public class ListarFormularios extends AppCompatActivity
                     drawer.openDrawer(GravityCompat.START);
                     break;
                 case R.id.nav_formularioListarColetas:
+                    Intent listarColetas = new Intent(ListarFormularios.this, ListarColetas.class);
                     listarColetas.putExtra("id_Formulario", formularioList.get(position).getId_Form());
                     listarColetas.putExtra("tipo_Formulario", formularioList.get(position).getTipo_Form());
+                    listarColetas.putExtra("modelo_Modelo", modelo_Modelo);
                     startActivity(listarColetas);
                     break;
                 case R.id.nav_formularioEditar:
-                    cadastroFormulario.putExtra("tipo_Formulario", tipoFormulario);
-                    cadastroFormulario.putExtra("id_Formulario", formularioList.get(position).getId_Form());
-                    cadastroFormulario.putExtra("acao", "editar");
-                    startActivity(cadastroFormulario);
+                    AlertDialog.Builder builderEditar = new AlertDialog.Builder(ListarFormularios.this);
+                    builderEditar.setTitle(R.string.dialog_modelo)
+                            .setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // The 'which' argument contains the index position
+                                    // of the selected item
+                                    modelo_Modelo = which;
+                                    String txtModelo = arrayAdapter.getItem(which);
+                                    if (txtModelo.equals("DIC")) {
+                                        modelo_Modelo = 0;
+                                    }
+                                    if (txtModelo.equals("DBC")) {
+                                        modelo_Modelo = 1;
+                                    }
+                                    if (txtModelo.equals("FAT")) {
+                                        modelo_Modelo = 2;
+                                    }
+                                    if (txtModelo.equals("SUB")) {
+                                        modelo_Modelo = 3;
+                                    }
+                                    Intent cadastroFormulario = new Intent(ListarFormularios.this, CadastroFormulario.class);
+                                    cadastroFormulario.putExtra("tipo_Formulario", tipoFormulario);
+                                    cadastroFormulario.putExtra("id_Formulario", formularioList.get(position).getId_Form());
+                                    cadastroFormulario.putExtra("modelo_Modelo", modelo_Modelo);
+                                    cadastroFormulario.putExtra("acao", "editar");
+                                    startActivity(cadastroFormulario);
+                                }
+                            }).create().show();
                     break;
                 case R.id.nav_formularioAddModelo:
-                    cadastroFormulario.putExtra("tipo_Formulario", tipoFormulario);
-                    cadastroFormulario.putExtra("id_Formulario", formularioList.get(position).getId_Form());
-                    cadastroFormulario.putExtra("acao", "cadastro");
-                    startActivity(cadastroFormulario);
+                    AlertDialog.Builder builderAddModelo = new AlertDialog.Builder(ListarFormularios.this);
+                    builderAddModelo.setTitle(R.string.dialog_modelo)
+                            .setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // The 'which' argument contains the index position
+                                    // of the selected item
+                                    modelo_Modelo = which;
+                                    String txtModelo = arrayAdapter.getItem(which);
+                                    if (txtModelo.equals("DIC")) {
+                                        modelo_Modelo = 0;
+                                    }
+                                    if (txtModelo.equals("DBC")) {
+                                        modelo_Modelo = 1;
+                                    }
+                                    if (txtModelo.equals("FAT")) {
+                                        modelo_Modelo = 2;
+                                    }
+                                    if (txtModelo.equals("SUB")) {
+                                        modelo_Modelo = 3;
+                                    }
+                                    Intent cadastroModelo = new Intent(ListarFormularios.this, CadastroModeloFormulario.class);
+                                    cadastroModelo.putExtra("tipo_Formulario", tipoFormulario);
+                                    cadastroModelo.putExtra("id_Formulario", formularioList.get(position).getId_Form());
+                                    cadastroModelo.putExtra("modelo_Modelo", modelo_Modelo);
+                                    startActivity(cadastroModelo);
+                                }
+                            }).create().show();
                     break;
                 case R.id.nav_formularioNovaColeta:
-                    cadastroColeta.putExtra("id_Formulario", formularioList.get(position).getId_Form());
-                    cadastroColeta.putExtra("tipo_Formulario", tipoFormulario);
-                    startActivity(cadastroColeta);
+                    AlertDialog.Builder builderNovaColeta = new AlertDialog.Builder(ListarFormularios.this);
+                    builderNovaColeta.setTitle(R.string.dialog_modelo)
+                            .setAdapter(arrayAdapter, new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // The 'which' argument contains the index position
+                                    // of the selected item
+                                    modelo_Modelo = which;
+                                    String txtModelo = arrayAdapter.getItem(which);
+                                    if (txtModelo.equals("DIC")) {
+                                        modelo_Modelo = 0;
+                                    }
+                                    if (txtModelo.equals("DBC")) {
+                                        modelo_Modelo = 1;
+                                    }
+                                    if (txtModelo.equals("FAT")) {
+                                        modelo_Modelo = 2;
+                                    }
+                                    if (txtModelo.equals("SUB")) {
+                                        modelo_Modelo = 3;
+                                    }
+                                    Intent cadastroColeta = new Intent(ListarFormularios.this, CadastroColeta.class);
+                                    cadastroColeta.putExtra("id_Formulario", formularioList.get(position).getId_Form());
+                                    cadastroColeta.putExtra("tipo_Formulario", tipoFormulario);
+                                    cadastroColeta.putExtra("modelo_Modelo", modelo_Modelo);
+                                    startActivity(cadastroColeta);
+                                }
+                            }).create().show();
+
                     break;
                 case R.id.nav_formularioRemover:
-
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ListarFormularios.this);
-                    builder.setTitle(R.string.dialog_removerFormulario)
+                    AlertDialog.Builder builderRemover = new AlertDialog.Builder(ListarFormularios.this);
+                    builderRemover.setTitle(R.string.dialog_removerFormulario)
                             .setMessage(R.string.dialog_acaoPermanente)
                             .setPositiveButton(R.string.dialog_remover, new DialogInterface.OnClickListener() {
                                 public void onClick(DialogInterface dialog, int id) {
@@ -230,7 +352,6 @@ public class ListarFormularios extends AppCompatActivity
                     Toast.makeText(ListarFormularios.this, getString(R.string.info_EmBreve), Toast.LENGTH_SHORT).show();
                     break;
             }
-
         }
 
     }

@@ -8,12 +8,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 
 import me.adolfoquaranta.coletadigital.R;
 import me.adolfoquaranta.coletadigital.auxiliares.DBAuxilar;
+import me.adolfoquaranta.coletadigital.modelos.Formulario;
 import me.adolfoquaranta.coletadigital.modelos.Modelo;
 
 public class CadastroModeloFormulario extends AppCompatActivity {
@@ -37,6 +39,29 @@ public class CadastroModeloFormulario extends AppCompatActivity {
         Intent cadastroModeloFormulario = getIntent();
         id_Formulario = cadastroModeloFormulario.getLongExtra("id_Formulario", 0);
         modelo_Modelo = cadastroModeloFormulario.getIntExtra("modelo_Modelo", -1);
+        Log.d("modelo_Modelo", modelo_Modelo.toString());
+
+        DBAuxilar dbAuxilar = new DBAuxilar(getApplicationContext());
+        Formulario formulario = dbAuxilar.lerFormulario(id_Formulario);
+
+        String modelo = "";
+        switch (modelo_Modelo) {
+            case 0:
+                modelo = "DIC";
+                break;
+            case 1:
+                modelo = "DBC";
+                break;
+            case 2:
+                modelo = "FAT";
+                break;
+            case 3:
+                modelo = "SUB";
+                break;
+        }
+
+
+        getSupportActionBar().setTitle(getSupportActionBar().getTitle().toString() + " " + modelo + " do " + formulario.getNome_Form());
 
         input_quantidadeTratamentos_Modelo = (TextInputEditText) findViewById(R.id.input_quantidadeTratatmentos_Modelo);
         input_quantidadeRepeticoes_Modelo = (TextInputEditText) findViewById(R.id.input_quantidadeRepeticoes_Modelo);

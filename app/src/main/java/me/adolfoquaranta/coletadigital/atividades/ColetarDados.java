@@ -33,34 +33,12 @@ import me.adolfoquaranta.coletadigital.modelos.Tratamento;
 import me.adolfoquaranta.coletadigital.modelos.Variavel;
 
 public class ColetarDados extends AppCompatActivity {
-    InputFilter filterDigito = new InputFilter() {
-        public CharSequence filter(CharSequence source, int start, int end,
-                                   Spanned dest, int dstart, int dend) {
-            for (int i = start; i < end; i++) {
-                if (!Character.isDigit(source.charAt(i))) {
-                    if (source.charAt(i) == ',' || source.charAt(i) == '.') return ".";
-                    return "";
-                }
-            }
-            return null;
-        }
-    };
-    InputFilter filterCaracter = new InputFilter() {
-        public CharSequence filter(CharSequence source, int start, int end,
-                                   Spanned dest, int dstart, int dend) {
-            for (int i = start; i < end; i++) {
-                if (!Character.isLetter(source.charAt(i))) {
-                    return "";
-                }
-            }
-            return null;
-        }
-    };
+
     private DBAuxilar dbAuxilar;
     private List<Tratamento> tratamentos;
     private List<Variavel> variaveis;
     private Modelo modelo;
-    private Integer tratamentoAtual, repeticaoAtual, replicacaoAtual;
+    private Integer tratamentoAtual, repeticaoAtual, replicacaoAtual, modelo_Modelo;
     private Long id_Coleta;
 
     @Override
@@ -78,12 +56,13 @@ public class ColetarDados extends AppCompatActivity {
         tratamentoAtual = coletarDadosIntent.getIntExtra("tratamentoAtual", 0);
         replicacaoAtual = coletarDadosIntent.getIntExtra("replicacaoAtual", 0);
         repeticaoAtual = coletarDadosIntent.getIntExtra("repeticaoAtual", 0);
+        modelo_Modelo = coletarDadosIntent.getIntExtra("modelo_Modelo", -1);
 
         Log.d("tratamentoAtual", tratamentoAtual.toString());
         Log.d("repeticaoAtual", repeticaoAtual.toString());
         Log.d("replicacaoAtual", replicacaoAtual.toString());
 
-        modelo = dbAuxilar.lerModeloDaColeta(id_Formulario);
+        modelo = dbAuxilar.lerModeloDoFormulario(id_Formulario, modelo_Modelo);
         Coleta coleta = dbAuxilar.lerColeta(id_Coleta);
         tratamentos = dbAuxilar.lerTodosTratamentos(id_Formulario, coleta.getIdModelo_Coleta());
         variaveis = dbAuxilar.lerTodasVariaveis(id_Formulario, coleta.getIdModelo_Coleta());
@@ -111,6 +90,30 @@ public class ColetarDados extends AppCompatActivity {
                         spinner.setError(null);
                     }
                 }
+            }
+        };
+
+        InputFilter filterDigito = new InputFilter() {
+            public CharSequence filter(CharSequence source, int start, int end,
+                                       Spanned dest, int dstart, int dend) {
+                for (int i = start; i < end; i++) {
+                    if (!Character.isDigit(source.charAt(i))) {
+                        if (source.charAt(i) == ',' || source.charAt(i) == '.') return ".";
+                        return "";
+                    }
+                }
+                return null;
+            }
+        };
+        InputFilter filterCaracter = new InputFilter() {
+            public CharSequence filter(CharSequence source, int start, int end,
+                                       Spanned dest, int dstart, int dend) {
+                for (int i = start; i < end; i++) {
+                    if (!Character.isLetter(source.charAt(i))) {
+                        return "";
+                    }
+                }
+                return null;
             }
         };
 
@@ -176,9 +179,9 @@ public class ColetarDados extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent recarregar = new Intent(ColetarDados.this, ColetarDados.class);
-                final Intent inicio = new Intent(ColetarDados.this, Inicio.class);
                 recarregar.putExtra("id_Formulario", id_Formulario);
                 recarregar.putExtra("id_Coleta", id_Coleta);
+                recarregar.putExtra("modelo_Modelo", modelo_Modelo);
 
 
                 ArrayList<Dado> dados = new ArrayList<>(variaveis.size());
@@ -206,9 +209,15 @@ public class ColetarDados extends AppCompatActivity {
                 if (replicacaoAtual + 1 == modelo.getQuantidadeReplicacoes_Modelo()) {
                     if (repeticaoAtual + 1 == modelo.getQuantidadeRepeticoes_Modelo()) {
                         if (tratamentoAtual + 1 == modelo.getQuantidadeTratamentos_Modelo()) {
+                            Intent listarColetas = new Intent(ColetarDados.this, ListarColetas.class);
+                            listarColetas.putExtra("id_Formulario", id_Formulario);
+                            listarColetas.putExtra("tipo_Formulario", dbAuxilar.lerFormulario(id_Formulario).getTipo_Form());
+                            listarColetas.getIntExtra("modelo_Modelo", modelo_Modelo);
+
                             inserirDados(dados);
                             finish();
-                            startActivity(inicio);
+
+                            startActivity(listarColetas);
                         } else if (tratamentoAtual + 1 < modelo.getQuantidadeTratamentos_Modelo()) {
                             inserirDados(dados);
                             tratamentoAtual++;

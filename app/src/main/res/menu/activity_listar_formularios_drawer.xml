@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/itemDrawer_tipoFormulario"
-        android:title="@string/modelo_de_coleta">
+        android:title="@string/nav_tipo_form">
         <menu>
             <group android:checkableBehavior="single">
                 <item

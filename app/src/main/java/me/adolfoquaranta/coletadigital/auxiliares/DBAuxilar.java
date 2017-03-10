@@ -627,7 +627,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
         ArrayList<Coleta> coletas = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
 
-        String selectQuery = "SELECT * FROM " + COLETA_TABELA + " WHERE " + COLETA_COL_ID_FORMULARIO + " = " + id_Formulario;
+        String selectQuery = "SELECT * FROM " + COLETA_TABELA + " WHERE " + COLETA_COL_ID_FORMULARIO + "=" + id_Formulario;
 
         Log.e(LOG, selectQuery);
 
@@ -722,13 +722,14 @@ public class DBAuxilar extends SQLiteOpenHelper {
     }
 
 
-    public Dado lerValorDado(Long id_Tratamento, Integer repeticao, Integer replicacao, Long id_Variavel) {
+    public Dado lerValorDado(Long id_Tratamento, Integer repeticao, Integer replicacao, Long id_Variavel, Long id_Coleta) {
         SQLiteDatabase db = getReadableDatabase();
 
         String selectQuery = "SELECT " + DADO_COL_VALOR + " FROM " + DADO_TABELA + " WHERE " + DADO_COL_ID_TRATAMENTO + " = " + id_Tratamento
                 + " AND " + DADO_COL_REPETICAO + " = " + repeticao
                 + " AND " + DADO_COL_REPLICACAO + " = " + replicacao
-                + " AND " + DADO_COL_ID_VARIAVEL + " = " + id_Variavel;
+                + " AND " + DADO_COL_ID_VARIAVEL + " = " + id_Variavel
+                + " AND " + DADO_COL_ID_COLETA + " = " + id_Coleta;
 
         Log.e(LOG, selectQuery);
 

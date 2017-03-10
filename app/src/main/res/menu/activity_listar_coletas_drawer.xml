@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <item android:title="@string/nav_titulo_coleta_de_dados">
+    <item
+        android:id="@+id/itemDrawer_nomeModelo_formulario"
+        android:title="@string/nav_titulo_coleta_de_dados">
         <menu>
             <group android:checkableBehavior="single">
                 <item
