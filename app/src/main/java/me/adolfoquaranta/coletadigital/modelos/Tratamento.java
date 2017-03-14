@@ -5,18 +5,11 @@ package me.adolfoquaranta.coletadigital.modelos;
  */
 
 public class Tratamento {
-    private Long id_Tratamento, idModelo_Tratamento;
+    private Long id_Tratamento, idFormulario_Tratamento;
     private Integer tipo_Tratamento;
     private String nome_Tratamento;
 
     public Tratamento() {
-    }
-
-    public Tratamento(Long id_Tratamento, Long idModelo_Tratamento, Integer tipo_Tratamento, String nome_Tratamento) {
-        this.id_Tratamento = id_Tratamento;
-        this.idModelo_Tratamento = idModelo_Tratamento;
-        this.tipo_Tratamento = tipo_Tratamento;
-        this.nome_Tratamento = nome_Tratamento;
     }
 
     public Long getId_Tratamento() {
@@ -25,14 +18,6 @@ public class Tratamento {
 
     public void setId_Tratamento(Long id_Tratamento) {
         this.id_Tratamento = id_Tratamento;
-    }
-
-    public Long getIdModelo_Tratamento() {
-        return idModelo_Tratamento;
-    }
-
-    public void setIdModelo_Tratamento(Long idModelo_Tratamento) {
-        this.idModelo_Tratamento = idModelo_Tratamento;
     }
 
     public Integer getTipo_Tratamento() {
@@ -51,11 +36,19 @@ public class Tratamento {
         this.nome_Tratamento = nome_Tratamento;
     }
 
+    public Long getIdFormulario_Tratamento() {
+        return idFormulario_Tratamento;
+    }
+
+    public void setIdFormulario_Tratamento(Long idFormulario_Tratamento) {
+        this.idFormulario_Tratamento = idFormulario_Tratamento;
+    }
+
     @Override
     public String toString() {
         return "Tratamento{" +
                 "id_Tratamento=" + id_Tratamento +
-                ", idModelo_Tratamento=" + idModelo_Tratamento +
+                ", idFormulario_Tratamento=" + idFormulario_Tratamento +
                 ", tipo_Tratamento=" + tipo_Tratamento +
                 ", nome_Tratamento='" + nome_Tratamento + '\'' +
                 '}';

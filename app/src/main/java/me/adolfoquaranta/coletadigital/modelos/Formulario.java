@@ -5,89 +5,151 @@ package me.adolfoquaranta.coletadigital.modelos;
  */
 
 public class Formulario {
-    private Long id_Form;
-    private String tipo_Form, nome_Form, descricao_Form, criador_Form, dataCriacao_Form, status_Form;
+    private Long id_Formulario;
+    private String tipo_Formulario, nome_Formulario, descricao_Formulario, criador_Formulario, dataCriacao_Formulario;
+    private Integer quantidadeTratamentos_Formulario, quantidadeRepeticoes_Formulario, quantidadeReplicacoes_Formulario, quantidadeVariaveis_Formulario, quantidadeBlocos_Formulario, quantidadeFatores_Formulario, quantidadeDivisoes_Formulario, modelo_Formulario, status_Formulario;
 
-    public Formulario(){
-
+    public Formulario() {
     }
 
-    public Formulario(Long id_Form, String tipo_Form, String nome_Form, String descricao_Form, String criador_Form, String dataCriacao_Form, String status_Form) {
-        this.id_Form = id_Form;
-        this.tipo_Form = tipo_Form;
-        this.nome_Form = nome_Form;
-        this.descricao_Form = descricao_Form;
-        this.criador_Form = criador_Form;
-        this.dataCriacao_Form = dataCriacao_Form;
-        this.status_Form = status_Form;
+    public Long getId_Formulario() {
+        return id_Formulario;
     }
 
-    public Long getId_Form() {
-        return id_Form;
+    public void setId_Formulario(Long id_Formulario) {
+        this.id_Formulario = id_Formulario;
     }
 
-    public void setId_Form(Long id_Form) {
-        this.id_Form = id_Form;
+    public String getTipo_Formulario() {
+        return tipo_Formulario;
     }
 
-    public String getTipo_Form() {
-        return tipo_Form;
+    public void setTipo_Formulario(String tipo_Formulario) {
+        this.tipo_Formulario = tipo_Formulario;
     }
 
-    public void setTipo_Form(String tipo_Form) {
-        this.tipo_Form = tipo_Form;
+    public String getNome_Formulario() {
+        return nome_Formulario;
     }
 
-    public String getNome_Form() {
-        return nome_Form;
+    public void setNome_Formulario(String nome_Formulario) {
+        this.nome_Formulario = nome_Formulario;
     }
 
-    public void setNome_Form(String nome_Form) {
-        this.nome_Form = nome_Form;
+    public String getDescricao_Formulario() {
+        return descricao_Formulario;
     }
 
-    public String getDescricao_Form() {
-        return descricao_Form;
+    public void setDescricao_Formulario(String descricao_Formulario) {
+        this.descricao_Formulario = descricao_Formulario;
     }
 
-    public void setDescricao_Form(String descricao_Form) {
-        this.descricao_Form = descricao_Form;
+    public String getCriador_Formulario() {
+        return criador_Formulario;
     }
 
-    public String getCriador_Form() {
-        return criador_Form;
+    public void setCriador_Formulario(String criador_Formulario) {
+        this.criador_Formulario = criador_Formulario;
     }
 
-    public void setCriador_Form(String criador_Form) {
-        this.criador_Form = criador_Form;
+    public String getDataCriacao_Formulario() {
+        return dataCriacao_Formulario;
     }
 
-    public String getDataCriacao_Form() {
-        return dataCriacao_Form;
+    public void setDataCriacao_Formulario(String dataCriacao_Formulario) {
+        this.dataCriacao_Formulario = dataCriacao_Formulario;
     }
 
-    public void setDataCriacao_Form(String dataCriacao_Form) {
-        this.dataCriacao_Form = dataCriacao_Form;
+    public Integer getStatus_Formulario() {
+        return status_Formulario;
     }
 
-    public String getStatus_Form() {
-        return status_Form;
+    public void setStatus_Formulario(Integer status_Formulario) {
+        this.status_Formulario = status_Formulario;
     }
 
-    public void setStatus_Form(String status_Form) {
-        this.status_Form = status_Form;
+    public Integer getQuantidadeTratamentos_Formulario() {
+        return quantidadeTratamentos_Formulario;
+    }
+
+    public void setQuantidadeTratamentos_Formulario(Integer quantidadeTratamentos_Formulario) {
+        this.quantidadeTratamentos_Formulario = quantidadeTratamentos_Formulario;
+    }
+
+    public Integer getQuantidadeRepeticoes_Formulario() {
+        return quantidadeRepeticoes_Formulario;
+    }
+
+    public void setQuantidadeRepeticoes_Formulario(Integer quantidadeRepeticoes_Formulario) {
+        this.quantidadeRepeticoes_Formulario = quantidadeRepeticoes_Formulario;
+    }
+
+    public Integer getQuantidadeReplicacoes_Formulario() {
+        return quantidadeReplicacoes_Formulario;
+    }
+
+    public void setQuantidadeReplicacoes_Formulario(Integer quantidadeReplicacoes_Formulario) {
+        this.quantidadeReplicacoes_Formulario = quantidadeReplicacoes_Formulario;
+    }
+
+    public Integer getQuantidadeVariaveis_Formulario() {
+        return quantidadeVariaveis_Formulario;
+    }
+
+    public void setQuantidadeVariaveis_Formulario(Integer quantidadeVariaveis_Formulario) {
+        this.quantidadeVariaveis_Formulario = quantidadeVariaveis_Formulario;
+    }
+
+    public Integer getQuantidadeBlocos_Formulario() {
+        return quantidadeBlocos_Formulario;
+    }
+
+    public void setQuantidadeBlocos_Formulario(Integer quantidadeBlocos_Formulario) {
+        this.quantidadeBlocos_Formulario = quantidadeBlocos_Formulario;
+    }
+
+    public Integer getQuantidadeFatores_Formulario() {
+        return quantidadeFatores_Formulario;
+    }
+
+    public void setQuantidadeFatores_Formulario(Integer quantidadeFatores_Formulario) {
+        this.quantidadeFatores_Formulario = quantidadeFatores_Formulario;
+    }
+
+    public Integer getQuantidadeDivisoes_Formulario() {
+        return quantidadeDivisoes_Formulario;
+    }
+
+    public void setQuantidadeDivisoes_Formulario(Integer quantidadeDivisoes_Formulario) {
+        this.quantidadeDivisoes_Formulario = quantidadeDivisoes_Formulario;
+    }
+
+    public Integer getModelo_Formulario() {
+        return modelo_Formulario;
+    }
+
+    public void setModelo_Formulario(Integer modelo_Formulario) {
+        this.modelo_Formulario = modelo_Formulario;
     }
 
     @Override
     public String toString() {
         return "Formulario{" +
-                "id_Form=" + id_Form +
-                ", tipo_Form='" + tipo_Form + '\'' +
-                ", nome_Form='" + nome_Form + '\'' +
-                ", descricao_Form='" + descricao_Form + '\'' +
-                ", criador_Form='" + criador_Form + '\'' +
-                ", dataCriacao_Form='" + dataCriacao_Form + '\'' +
-                ", status_Form='" + status_Form + '\'' +
+                "id_Formulario=" + id_Formulario +
+                ", tipo_Formulario='" + tipo_Formulario + '\'' +
+                ", nome_Formulario='" + nome_Formulario + '\'' +
+                ", descricao_Formulario='" + descricao_Formulario + '\'' +
+                ", criador_Formulario='" + criador_Formulario + '\'' +
+                ", dataCriacao_Formulario='" + dataCriacao_Formulario + '\'' +
+                ", status_Formulario=" + status_Formulario +
+                ", quantidadeTratamentos_Formulario=" + quantidadeTratamentos_Formulario +
+                ", quantidadeRepeticoes_Formulario=" + quantidadeRepeticoes_Formulario +
+                ", quantidadeReplicacoes_Formulario=" + quantidadeReplicacoes_Formulario +
+                ", quantidadeVariaveis_Formulario=" + quantidadeVariaveis_Formulario +
+                ", quantidadeBlocos_Formulario=" + quantidadeBlocos_Formulario +
+                ", quantidadeFatores_Formulario=" + quantidadeFatores_Formulario +
+                ", quantidadeDivisoes_Formulario=" + quantidadeDivisoes_Formulario +
+                ", modelo_Formulario=" + modelo_Formulario +
                 '}';
     }
 }

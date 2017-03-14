@@ -28,15 +28,6 @@
             android:label="@string/title_activity_cadastro_formulario"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name="me.adolfoquaranta.coletadigital.atividades.CadastroModeloFormulario"
-            android:label="@string/title_activity_cadastro_formulario_Modelo"
-            android:parentActivityName="me.adolfoquaranta.coletadigital.atividades.CadastroFormulario"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="me.adolfoquaranta.coletadigital.atividades.CadastroFormulario" />
-        </activity>
-        <activity
             android:name="me.adolfoquaranta.coletadigital.atividades.CadastroTratamentos"
             android:label="@string/title_activity_cadastro_tratamentos"
             android:theme="@style/AppTheme.NoActionBar" />

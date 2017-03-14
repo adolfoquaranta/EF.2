@@ -21,12 +21,10 @@ import fr.ganfra.materialspinner.MaterialSpinner;
 import me.adolfoquaranta.coletadigital.R;
 import me.adolfoquaranta.coletadigital.auxiliares.DBAuxilar;
 import me.adolfoquaranta.coletadigital.modelos.Formulario;
-import me.adolfoquaranta.coletadigital.modelos.Modelo;
 import me.adolfoquaranta.coletadigital.modelos.Variavel;
 
 public class CadastroVariaveis extends AppCompatActivity {
 
-    private Modelo modelo;
     private Formulario formulario;
 
     @Override
@@ -39,16 +37,13 @@ public class CadastroVariaveis extends AppCompatActivity {
 
         final Intent cadastroVariaveis = getIntent();
 
-        final Long id_Modelo = cadastroVariaveis.getLongExtra("id_Modelo", 0);
-        final Long idFormulario_Modelo = cadastroVariaveis.getLongExtra("idFormulario_Modelo", 0);
+        final Long id_Formulario = cadastroVariaveis.getLongExtra("id_Formulario", 0);
 
         final DBAuxilar dbauxiliar = new DBAuxilar(getApplicationContext());
 
-        modelo = dbauxiliar.lerModelo(id_Modelo);
+        formulario = dbauxiliar.lerFormulario(id_Formulario);
 
-        formulario = dbauxiliar.lerFormulario(idFormulario_Modelo);
-
-        final ArrayList<Variavel> variaveisPreenchidas = dbauxiliar.lerTodasVariaveis(idFormulario_Modelo, id_Modelo);
+        final ArrayList<Variavel> variaveisCadastradas = dbauxiliar.lerTodasVariaveis(id_Formulario);
 
         final RegexpValidator naoNulo = new RegexpValidator(getString(R.string.err_msg_nomeVariavel), "^(?!\\s*$).+");
 
@@ -76,7 +71,7 @@ public class CadastroVariaveis extends AppCompatActivity {
         String[] opcoesSpinnerTipoVariaveis = getResources().getStringArray(R.array.spinnerArray_tipoVariavel);
 
 
-        for (int i = 0; i < modelo.getQuantidadeVariaveis_Modelo(); i++) {
+        for (int i = 0; i < formulario.getQuantidadeVariaveis_Formulario(); i++) {
             LinearLayout layoutInterno = new LinearLayout(CadastroVariaveis.this);
             layoutInterno.setOrientation(LinearLayout.HORIZONTAL);
             layoutInterno.setWeightSum(3);
@@ -91,8 +86,8 @@ public class CadastroVariaveis extends AppCompatActivity {
             etNomeVariavel.setHint(getString(R.string.hint_nomeVariavel) + " " + (i + 1));
             etNomeVariavel.setFloatingLabelText(getString(R.string.hint_nomeVariavel) + " " + (i + 1));
             etNomeVariavel.setFloatingLabelAnimating(true);
-            if (variaveisPreenchidas.size() != 0) {
-                etNomeVariavel.setText(variaveisPreenchidas.get(i).getNome_Variavel());
+            if (variaveisCadastradas.size() != 0) {
+                etNomeVariavel.setText(variaveisCadastradas.get(i).getNome_Variavel());
             }
             layoutInterno.addView(etNomeVariavel);
 
@@ -101,10 +96,10 @@ public class CadastroVariaveis extends AppCompatActivity {
             ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, opcoesSpinnerTipoVariaveis);
             spTipoVariavel.setAdapter(spinnerArrayAdapter);
             spTipoVariavel.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 2f)); // Pass two args; must be LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, or an integer pixel value.
-            spTipoVariavel.setId((i + modelo.getQuantidadeVariaveis_Modelo()));
+            spTipoVariavel.setId((i + formulario.getQuantidadeVariaveis_Formulario()));
             spTipoVariavel.setOnFocusChangeListener(validar);
-            if (variaveisPreenchidas.size() != 0) {
-                spTipoVariavel.setSelection(variaveisPreenchidas.get(i).getTipo_Variavel());
+            if (variaveisCadastradas.size() != 0) {
+                spTipoVariavel.setSelection(variaveisCadastradas.get(i).getTipo_Variavel());
             }
             layoutInterno.addView(spTipoVariavel);
             assert myLayout != null;
@@ -120,8 +115,8 @@ public class CadastroVariaveis extends AppCompatActivity {
         btnSalvar_Variaveis.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Variavel> variaveis = new ArrayList<>(modelo.getQuantidadeVariaveis_Modelo());
-                for (int i = 0; i < modelo.getQuantidadeVariaveis_Modelo(); i++) {
+                ArrayList<Variavel> variaveis = new ArrayList<>(formulario.getQuantidadeVariaveis_Formulario());
+                for (int i = 0; i < formulario.getQuantidadeVariaveis_Formulario(); i++) {
                     Variavel variavel = new Variavel();
                     MaterialEditText met = (MaterialEditText) findViewById(i);
                     assert met != null;
@@ -134,7 +129,7 @@ public class CadastroVariaveis extends AppCompatActivity {
                                 .setAction("Action", null).show();
                         return;
                     }
-                    MaterialSpinner sp = (MaterialSpinner) findViewById((i + modelo.getQuantidadeVariaveis_Modelo()));
+                    MaterialSpinner sp = (MaterialSpinner) findViewById((i + formulario.getQuantidadeVariaveis_Formulario()));
                     assert sp != null;
                     if (sp.getSelectedItemPosition() == 0) {
                         sp.setError("Error");
@@ -147,26 +142,26 @@ public class CadastroVariaveis extends AppCompatActivity {
                         variavel.setTipo_Variavel(sp.getSelectedItemPosition());
                         sp.setError(null);
                     }
-                    variavel.setIdModelo_Variavel(id_Modelo);
+                    variavel.setIdFormulario_Variavel(id_Formulario);
                     variaveis.add(i, variavel);
                 }
-                if (variaveis.size() == modelo.getQuantidadeVariaveis_Modelo()) {
+                if (variaveis.size() == formulario.getQuantidadeVariaveis_Formulario()) {
                     Intent listarFormularios = new Intent(CadastroVariaveis.this, ListarFormularios.class);
 
-                    if (variaveisPreenchidas.size() == 0) {
+                    if (variaveisCadastradas.size() == 0) {
                         for (Variavel var : variaveis) {
                             dbauxiliar.insertVariavel(var);
                         }
                     } else {
                         int i = 0;
                         for (Variavel var : variaveis) {
-                            var.setId_Variavel(variaveisPreenchidas.get(i).getId_Variavel());
+                            var.setId_Variavel(variaveisCadastradas.get(i).getId_Variavel());
                             dbauxiliar.updateVariavel(var);
                             i++;
                         }
                     }
 
-                    listarFormularios.putExtra("tipo_Formulario", formulario.getTipo_Form());
+                    listarFormularios.putExtra("tipo_Formulario", formulario.getTipo_Formulario());
                     listarFormularios.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(listarFormularios);
                 }

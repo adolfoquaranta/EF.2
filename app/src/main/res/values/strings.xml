@@ -9,16 +9,19 @@
     <string name="title_activity_cadastro_formulario">Novo</string>
 
 
-    <string name="hint_nome_Form">Nome</string>
-    <string name="hint_descricao_Form">Descrição</string>
-    <string name="hint_criador_Form">Nome do Criador</string>
+    <string name="hint_nome_Formulario">Nome</string>
+    <string name="hint_descricao_Formulario">Descrição</string>
+    <string name="hint_criador_Formulario">Nome do Criador</string>
     <string name="btn_salvar">Salvar</string>
 
-    <string name="err_msg_nome_Form">Insira um nome</string>
-    <string name="err_msg_descricao_Form">Insira um descrição</string>
-    <string name="err_msg_criador_Form">Insira um criador</string>
+    <string name="err_msg_nome_Formulario">Insira um nome</string>
+    <string name="err_msg_descricao_Formulario">Insira um descrição</string>
+    <string name="err_msg_criador_Formulario">Insira um criador</string>
 
-    <string name="err_msg_deveSerNumInteiro">Insira um número Inteiro</string>
+    <string name="err_msg_deveSerNumInteiroNaoNulo">Insira um número inteiro maior que 0</string>
+
+    <string name="err_msg_deveSerNumInteiro">Insira um número inteiro</string>
+
 
     <string name="err_msg_selecioneUmRadio">Escolha uma das opções</string>
 
@@ -34,7 +37,7 @@
     <string name="inicio_btnINS">INS</string>
 
     <string name="msg_naoExistemDados">Não existem dados para serem exibidos.</string>
-    <string name="cadastro_formulario_tipo_Form">Modelo</string>
+    <string name="cadastro_formulario_tipo_Formulario">Delineamento</string>
     <string name="radio_dic">DIC</string>
     <string name="radio_dbc">DBC</string>
     <string name="radio_fat">FAT</string>
@@ -119,13 +122,19 @@
     <string name="dialog_removerColeta">Tem certeza que deseja remover esta coleta?</string>
     <string name="info_ArquivoGerado">O Arquivo CSV foi exportado com sucesso!</string>
     <string name="dialog_modelo">Escolha o Modelo</string>
+    <string name="dialog_mensagemListaFormularios">O que deseja fazer?</string>
+    <string name="dialog_mensagemListaColetas">O que deseja fazer?</string>
 
 
-    <string-array name="modelos_array">
-        <item>DIC</item>
-        <item>DBC</item>
-        <item>FAT</item>
-        <item>SUB</item>
+    <string-array name="array_opcoes_formularios">
+        <item>Listar Coletas</item>
+        <item>Nova Coleta</item>
+        <item>Remover</item>
+    </string-array>
+
+    <string-array name="array_opcoes_coletas">
+        <item>Exportar</item>
+        <item>Editar</item>
     </string-array>
 
 </resources>

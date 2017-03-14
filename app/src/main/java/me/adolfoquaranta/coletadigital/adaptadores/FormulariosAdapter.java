@@ -31,9 +31,9 @@ public class FormulariosAdapter extends RecyclerView.Adapter<FormulariosAdapter.
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
         Formulario formulario = formularioList.get(position);
-        holder.nome_Form.setText(formulario.getNome_Form());
-        holder.descricao_Form.setText(formulario.getDescricao_Form());
-        holder.dataCriacao_Form.setText(formulario.getDataCriacao_Form());
+        holder.nome_Form.setText(formulario.getNome_Formulario());
+        holder.descricao_Form.setText(formulario.getDescricao_Formulario());
+        holder.dataCriacao_Form.setText(formulario.getDataCriacao_Formulario());
     }
 
     @Override

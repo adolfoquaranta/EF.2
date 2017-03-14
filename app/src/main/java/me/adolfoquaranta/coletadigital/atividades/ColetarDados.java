@@ -28,7 +28,7 @@ import me.adolfoquaranta.coletadigital.R;
 import me.adolfoquaranta.coletadigital.auxiliares.DBAuxilar;
 import me.adolfoquaranta.coletadigital.modelos.Coleta;
 import me.adolfoquaranta.coletadigital.modelos.Dado;
-import me.adolfoquaranta.coletadigital.modelos.Modelo;
+import me.adolfoquaranta.coletadigital.modelos.Formulario;
 import me.adolfoquaranta.coletadigital.modelos.Tratamento;
 import me.adolfoquaranta.coletadigital.modelos.Variavel;
 
@@ -37,7 +37,6 @@ public class ColetarDados extends AppCompatActivity {
     private DBAuxilar dbAuxilar;
     private List<Tratamento> tratamentos;
     private List<Variavel> variaveis;
-    private Modelo modelo;
     private Integer tratamentoAtual, repeticaoAtual, replicacaoAtual, modelo_Modelo;
     private Long id_Coleta;
 
@@ -62,12 +61,11 @@ public class ColetarDados extends AppCompatActivity {
         Log.d("repeticaoAtual", repeticaoAtual.toString());
         Log.d("replicacaoAtual", replicacaoAtual.toString());
 
-        modelo = dbAuxilar.lerModeloDoFormulario(id_Formulario, modelo_Modelo);
+        final Formulario formulario = dbAuxilar.lerFormulario(id_Formulario);
         Coleta coleta = dbAuxilar.lerColeta(id_Coleta);
-        tratamentos = dbAuxilar.lerTodosTratamentos(id_Formulario, coleta.getIdModelo_Coleta());
-        variaveis = dbAuxilar.lerTodasVariaveis(id_Formulario, coleta.getIdModelo_Coleta());
+        tratamentos = dbAuxilar.lerTodosTratamentos(id_Formulario);
+        variaveis = dbAuxilar.lerTodasVariaveis(id_Formulario);
 
-        Log.d("modelo", modelo.toString());
         Log.d("coleta", coleta.toString());
         Log.d("tratamentos", tratamentos.toString());
         Log.d("variaveis", variaveis.toString());
@@ -206,19 +204,19 @@ public class ColetarDados extends AppCompatActivity {
                 Log.d("dados", dados.toString());
 
 
-                if (replicacaoAtual + 1 == modelo.getQuantidadeReplicacoes_Modelo()) {
-                    if (repeticaoAtual + 1 == modelo.getQuantidadeRepeticoes_Modelo()) {
-                        if (tratamentoAtual + 1 == modelo.getQuantidadeTratamentos_Modelo()) {
+                if (replicacaoAtual + 1 == formulario.getQuantidadeReplicacoes_Formulario()) {
+                    if (repeticaoAtual + 1 == formulario.getQuantidadeRepeticoes_Formulario()) {
+                        if (tratamentoAtual + 1 == formulario.getQuantidadeTratamentos_Formulario()) {
                             Intent listarColetas = new Intent(ColetarDados.this, ListarColetas.class);
                             listarColetas.putExtra("id_Formulario", id_Formulario);
-                            listarColetas.putExtra("tipo_Formulario", dbAuxilar.lerFormulario(id_Formulario).getTipo_Form());
+                            listarColetas.putExtra("tipo_Formulario", dbAuxilar.lerFormulario(id_Formulario).getTipo_Formulario());
                             listarColetas.getIntExtra("modelo_Modelo", modelo_Modelo);
 
                             inserirDados(dados);
                             finish();
 
                             startActivity(listarColetas);
-                        } else if (tratamentoAtual + 1 < modelo.getQuantidadeTratamentos_Modelo()) {
+                        } else if (tratamentoAtual + 1 < formulario.getQuantidadeTratamentos_Formulario()) {
                             inserirDados(dados);
                             tratamentoAtual++;
                             repeticaoAtual = 0;
@@ -229,7 +227,7 @@ public class ColetarDados extends AppCompatActivity {
                             finish();
                             startActivity(recarregar);
                         }
-                    } else if (repeticaoAtual + 1 < modelo.getQuantidadeRepeticoes_Modelo()) {
+                    } else if (repeticaoAtual + 1 < formulario.getQuantidadeRepeticoes_Formulario()) {
                         inserirDados(dados);
                         repeticaoAtual++;
                         replicacaoAtual = 0;
@@ -239,7 +237,7 @@ public class ColetarDados extends AppCompatActivity {
                         finish();
                         startActivity(recarregar);
                     }
-                } else if (replicacaoAtual + 1 < modelo.getQuantidadeReplicacoes_Modelo()) {
+                } else if (replicacaoAtual + 1 < formulario.getQuantidadeReplicacoes_Formulario()) {
                     inserirDados(dados);
                     replicacaoAtual++;
                     recarregar.putExtra("replicacaoAtual", replicacaoAtual);

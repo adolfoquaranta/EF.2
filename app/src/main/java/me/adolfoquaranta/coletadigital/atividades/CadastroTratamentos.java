@@ -20,14 +20,11 @@ import java.util.ArrayList;
 import fr.ganfra.materialspinner.MaterialSpinner;
 import me.adolfoquaranta.coletadigital.R;
 import me.adolfoquaranta.coletadigital.auxiliares.DBAuxilar;
-import me.adolfoquaranta.coletadigital.modelos.Modelo;
+import me.adolfoquaranta.coletadigital.modelos.Formulario;
 import me.adolfoquaranta.coletadigital.modelos.Tratamento;
 
 
 public class CadastroTratamentos extends AppCompatActivity {
-
-    private Modelo modelo;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,18 +34,12 @@ public class CadastroTratamentos extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         final Intent cadastroTratamentos = getIntent();
-        final Long id_Modelo = cadastroTratamentos.getLongExtra("id_Modelo", 0);
-        final Long idFormulario_Modelo = cadastroTratamentos.getLongExtra("idFormulario_Modelo", 0);
+        final Long id_Formulario = cadastroTratamentos.getLongExtra("id_Formulario", 0);
         final RegexpValidator naoNulo = new RegexpValidator(getString(R.string.err_msg_nomeTratamento), "^(?!\\s*$).+");
 
         final DBAuxilar dbauxiliar = new DBAuxilar(getApplicationContext());
-
-        modelo = dbauxiliar.lerModelo(id_Modelo);
-
-
-        final ArrayList<Tratamento> tratamentosPreenchidos = dbauxiliar.lerTodosTratamentos(idFormulario_Modelo, id_Modelo);
-
-
+        final Formulario formulario = dbauxiliar.lerFormulario(id_Formulario);
+        final ArrayList<Tratamento> tratamentosCadastrados = dbauxiliar.lerTodosTratamentos(id_Formulario);
 
         final View.OnFocusChangeListener validar = new View.OnFocusChangeListener() {
             @Override
@@ -75,7 +66,7 @@ public class CadastroTratamentos extends AppCompatActivity {
         String[] opcoesSpinnerTipoTratamento = getResources().getStringArray(R.array.spinnerArray_tipoTratamento);
 
 
-        for (int i = 0; i < modelo.getQuantidadeTratamentos_Modelo(); i++) {
+        for (int i = 0; i < formulario.getQuantidadeTratamentos_Formulario(); i++) {
             LinearLayout layoutInterno= new LinearLayout(CadastroTratamentos.this);
             layoutInterno.setOrientation(LinearLayout.HORIZONTAL);
             layoutInterno.setWeightSum(3);
@@ -90,8 +81,8 @@ public class CadastroTratamentos extends AppCompatActivity {
             etNomeTratamento.setHint(getString(R.string.hint_nomeTratamento)+" "+(i+1));
             etNomeTratamento.setFloatingLabelText(getString(R.string.hint_nomeTratamento) + " " + (i + 1));
             etNomeTratamento.setFloatingLabelAnimating(true);
-            if (tratamentosPreenchidos.size() != 0) {
-                etNomeTratamento.setText(tratamentosPreenchidos.get(i).getNome_Tratamento());
+            if (tratamentosCadastrados.size() != 0) {
+                etNomeTratamento.setText(tratamentosCadastrados.get(i).getNome_Tratamento());
             }
             layoutInterno.addView(etNomeTratamento);
 
@@ -100,10 +91,10 @@ public class CadastroTratamentos extends AppCompatActivity {
             ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, opcoesSpinnerTipoTratamento);
             spTipoTratamento.setAdapter(spinnerArrayAdapter);
             spTipoTratamento.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 2f)); // Pass two args; must be LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, or an integer pixel value.
-            spTipoTratamento.setId((i + modelo.getQuantidadeTratamentos_Modelo()));
+            spTipoTratamento.setId((i + formulario.getQuantidadeTratamentos_Formulario()));
             spTipoTratamento.setOnFocusChangeListener(validar);
-            if (tratamentosPreenchidos.size() != 0) {
-                spTipoTratamento.setSelection(tratamentosPreenchidos.get(i).getTipo_Tratamento());
+            if (tratamentosCadastrados.size() != 0) {
+                spTipoTratamento.setSelection(tratamentosCadastrados.get(i).getTipo_Tratamento());
             }
             layoutInterno.addView(spTipoTratamento);
             myLayout.addView(layoutInterno);
@@ -118,8 +109,8 @@ public class CadastroTratamentos extends AppCompatActivity {
         btnSalvar_Tratamentos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ArrayList<Tratamento> tratamentos = new ArrayList<>(modelo.getQuantidadeTratamentos_Modelo());
-                for (int i = 0; i < modelo.getQuantidadeTratamentos_Modelo(); i++) {
+                ArrayList<Tratamento> tratamentos = new ArrayList<>(formulario.getQuantidadeTratamentos_Formulario());
+                for (int i = 0; i < formulario.getQuantidadeTratamentos_Formulario(); i++) {
                     Tratamento tratamento = new Tratamento();
                     MaterialEditText met = (MaterialEditText) findViewById(i);
                     if (met.validateWith(naoNulo)) {
@@ -131,7 +122,7 @@ public class CadastroTratamentos extends AppCompatActivity {
                                 .setAction("Action", null).show();
                         return;
                 }
-                    MaterialSpinner sp = (MaterialSpinner) findViewById((i + modelo.getQuantidadeTratamentos_Modelo()));
+                    MaterialSpinner sp = (MaterialSpinner) findViewById((i + formulario.getQuantidadeTratamentos_Formulario()));
                     if (sp.getSelectedItemPosition() == 0) {
                         sp.setError("Error");
                         sp.requestFocus();
@@ -143,28 +134,26 @@ public class CadastroTratamentos extends AppCompatActivity {
                         tratamento.setTipo_Tratamento(sp.getSelectedItemPosition());
                         sp.setError(null);
                 }
-                    tratamento.setIdModelo_Tratamento(id_Modelo);
+                    tratamento.setIdFormulario_Tratamento(id_Formulario);
                     tratamentos.add(i, tratamento);
             }
-                if (tratamentos.size() == modelo.getQuantidadeTratamentos_Modelo()) {
+                if (tratamentos.size() == formulario.getQuantidadeTratamentos_Formulario()) {
                     Intent cadastroVariaveis = new Intent(CadastroTratamentos.this, CadastroVariaveis.class);
 
-                    if (tratamentosPreenchidos.size() == 0) {
+                    if (tratamentosCadastrados.size() == 0) {
                         for (Tratamento trat : tratamentos) {
                             dbauxiliar.insertTratamento(trat);
                         }
-                        cadastroVariaveis.putExtra("id_Modelo", id_Modelo);
-                        cadastroVariaveis.putExtra("idFormulario_Modelo", idFormulario_Modelo);
+                        cadastroVariaveis.putExtra("id_Formulario", id_Formulario);
                         startActivity(cadastroVariaveis);
                     } else {
                         int i = 0;
                         for (Tratamento trat : tratamentos) {
-                            trat.setId_Tratamento(tratamentosPreenchidos.get(i).getId_Tratamento());
+                            trat.setId_Tratamento(tratamentosCadastrados.get(i).getId_Tratamento());
                             dbauxiliar.updateTratamento(trat);
                             i++;
                         }
-                        cadastroVariaveis.putExtra("id_Modelo", id_Modelo);
-                        cadastroVariaveis.putExtra("idFormulario_Modelo", idFormulario_Modelo);
+                        cadastroVariaveis.putExtra("id_Formulario", id_Formulario);
                         startActivity(cadastroVariaveis);
                     }
                 }

@@ -15,28 +15,26 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.Date;
 
 import me.adolfoquaranta.coletadigital.R;
 import me.adolfoquaranta.coletadigital.auxiliares.DBAuxilar;
 import me.adolfoquaranta.coletadigital.modelos.Formulario;
-import me.adolfoquaranta.coletadigital.modelos.Modelo;
 
 public class CadastroFormulario extends AppCompatActivity {
 
-    private TextInputEditText inputNome_Form, inputDescricao_Form, inputCriador_Form;
-    private TextInputLayout inputLayoutNome_Form, inputLayoutDescricao_Form, inputLayoutCriador_Form;
+    private TextInputEditText inputNome_Formulario, inputDescricao_Formulario, inputCriador_Formulario, input_quantidadeTratamentos_Formulario, input_quantidadeRepeticoes_Formulario, input_quantidadeReplicacoes_Formulario, input_quantidadeVariaveis_Formulario;
+    private TextInputLayout inputLayoutNome_Formulario, inputLayoutDescricao_Formulario, inputLayoutCriador_Formulario, inputLayoutQuantidadeTratamentos_Formulario, inputLayoutQuantidadeRepeticoes_Formulario, inputLayoutQuantidadeReplicacoes_Formulario, inputLayoutQuantidadeVariaveis_Formulario;
 
-    private TextView tv_modelo_Modelo;
+    private TextView tv_modelo_Formulario;
 
-    private RadioGroup radioGroup_modelo_Modelo;
+    private RadioGroup radioGroup_modelo_Formulario;
 
     private RadioButton radioDIC, radioDBC, radioFAT, radioSUB;
 
     private String tipoFormulario;
 
-    private Integer modelo_Modelo;
+    private Integer modelo_Formulario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,101 +45,82 @@ public class CadastroFormulario extends AppCompatActivity {
 
         Intent cadastroFormulario = getIntent();
         tipoFormulario = cadastroFormulario.getSerializableExtra("tipo_Formulario").toString();
-        final Long idFormulario = cadastroFormulario.getLongExtra("id_Formulario", 0);
-        final String acao = cadastroFormulario.getStringExtra("acao");
+        final Long id_Formulario = cadastroFormulario.getLongExtra("id_Formulario", 0);
 
         getSupportActionBar().setTitle(getSupportActionBar().getTitle().toString() + " " + tipoFormulario);
 
-        radioGroup_modelo_Modelo = (RadioGroup) findViewById(R.id.input_modelo_Modelo);
+        radioGroup_modelo_Formulario = (RadioGroup) findViewById(R.id.input_modelo_Formulario);
         radioDIC = (RadioButton) findViewById(R.id.radio_DIC);
         radioDBC = (RadioButton) findViewById(R.id.radio_DBC);
         radioFAT = (RadioButton) findViewById(R.id.radio_FAT);
         radioSUB = (RadioButton) findViewById(R.id.radio_SUB);
 
-        tv_modelo_Modelo = (TextView) findViewById(R.id.tv_radio_modelo_Modelo);
+        tv_modelo_Formulario = (TextView) findViewById(R.id.tv_radio_modelo_Formulario);
 
-        inputNome_Form = (TextInputEditText) findViewById(R.id.input_nome_Form);
-        inputDescricao_Form = (TextInputEditText) findViewById(R.id.input_descricao_Form);
-        inputCriador_Form = (TextInputEditText) findViewById(R.id.input_criador_Form);
+        inputNome_Formulario = (TextInputEditText) findViewById(R.id.input_nome_Formulario);
+        inputDescricao_Formulario = (TextInputEditText) findViewById(R.id.input_descricao_Formulario);
+        inputCriador_Formulario = (TextInputEditText) findViewById(R.id.input_criador_Formulario);
+        input_quantidadeTratamentos_Formulario = (TextInputEditText) findViewById(R.id.input_quantidadeTratatmentos_Formulario);
+        input_quantidadeRepeticoes_Formulario = (TextInputEditText) findViewById(R.id.input_quantidadeRepeticoes_Formulario);
+        input_quantidadeReplicacoes_Formulario = (TextInputEditText) findViewById(R.id.input_quantidadeReplicacoes_Formulario);
+        input_quantidadeVariaveis_Formulario = (TextInputEditText) findViewById(R.id.input_quantidadeVariaveis_Formulario);
 
-        inputLayoutNome_Form = (TextInputLayout) findViewById(R.id.input_layout_nome_Form);
-        inputLayoutDescricao_Form = (TextInputLayout) findViewById(R.id.input_layout_descricao_Form);
-        inputLayoutCriador_Form = (TextInputLayout) findViewById(R.id.input_layout_criador_Form);
+        inputLayoutNome_Formulario = (TextInputLayout) findViewById(R.id.input_layout_nome_Formulario);
+        inputLayoutDescricao_Formulario = (TextInputLayout) findViewById(R.id.input_layout_descricao_Formulario);
+        inputLayoutCriador_Formulario = (TextInputLayout) findViewById(R.id.input_layout_criador_Formulario);
+        inputLayoutQuantidadeTratamentos_Formulario = (TextInputLayout) findViewById(R.id.input_layout_quantidadeTratatmentos_Formulario);
+        inputLayoutQuantidadeRepeticoes_Formulario = (TextInputLayout) findViewById(R.id.input_layout_quantidadeRepeticoes_Formulario);
+        inputLayoutQuantidadeReplicacoes_Formulario = (TextInputLayout) findViewById(R.id.input_layout_quantidadeReplicacoes_Formulario);
+        inputLayoutQuantidadeVariaveis_Formulario = (TextInputLayout) findViewById(R.id.input_layout_quantidadeVariaveis_Formulario);
 
-        inputNome_Form.addTextChangedListener(new FormularioTextWatcher(inputNome_Form));
-        inputDescricao_Form.addTextChangedListener(new FormularioTextWatcher(inputDescricao_Form));
-        inputCriador_Form.addTextChangedListener(new FormularioTextWatcher(inputCriador_Form));
+        inputNome_Formulario.addTextChangedListener(new FormularioTextWatcher(inputNome_Formulario));
+        inputDescricao_Formulario.addTextChangedListener(new FormularioTextWatcher(inputDescricao_Formulario));
+        inputCriador_Formulario.addTextChangedListener(new FormularioTextWatcher(inputCriador_Formulario));
+        input_quantidadeTratamentos_Formulario.addTextChangedListener(new FormularioTextWatcher(input_quantidadeTratamentos_Formulario));
+        input_quantidadeRepeticoes_Formulario.addTextChangedListener(new FormularioTextWatcher(input_quantidadeRepeticoes_Formulario));
+        input_quantidadeReplicacoes_Formulario.addTextChangedListener(new FormularioTextWatcher(input_quantidadeReplicacoes_Formulario));
+        input_quantidadeVariaveis_Formulario.addTextChangedListener(new FormularioTextWatcher(input_quantidadeVariaveis_Formulario));
 
         Button btnSalvar_Formulario = (Button) findViewById(R.id.btn_salvar_Formulario);
 
-        radioGroup_modelo_Modelo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        radioGroup_modelo_Formulario.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                tv_modelo_Modelo.setError(null);
-                tv_modelo_Modelo.setTextAppearance(getApplicationContext(), R.style.TextAppearence_App_TextInputLayout);
+                tv_modelo_Formulario.setError(null);
+                tv_modelo_Formulario.setTextAppearance(getApplicationContext(), R.style.TextAppearence_App_TextInputLayout);
             }
         });
 
         DBAuxilar dbAuxilar = new DBAuxilar(getApplicationContext());
 
 
-        if (idFormulario != 0) {
-            Formulario formulario = dbAuxilar.lerFormulario(idFormulario);
-            ArrayList<Modelo> modelos = dbAuxilar.lerTodosModelos(idFormulario);
-
-            if (acao.equals("editar")) {
-                radioDIC.setEnabled(false);
-                radioDBC.setEnabled(false);
-                radioFAT.setEnabled(false);
-                radioSUB.setEnabled(false);
-                ArrayList<Integer> radiosModelo = new ArrayList<>();
-                for (Modelo m : modelos) {
-                    radiosModelo.add(m.getModelo_Modelo());
-                }
-                for (int i = 0; i < radiosModelo.size(); i++) {
-                    radioGroup_modelo_Modelo.getChildAt(radiosModelo.get(i)).setEnabled(true);
-                }
-
-                inputNome_Form.setText(formulario.getNome_Form());
-                inputDescricao_Form.setText(formulario.getDescricao_Form());
-                inputCriador_Form.setText(formulario.getCriador_Form());
-            }
-            if (acao.equals("cadastro")) {
-                radioDIC.setEnabled(true);
-                radioDBC.setEnabled(true);
-                radioFAT.setEnabled(true);
-                radioSUB.setEnabled(true);
-                ArrayList<Integer> radiosModelo = new ArrayList<>();
-                for (Modelo m : modelos) {
-                    radiosModelo.add(m.getModelo_Modelo());
-                }
-                for (int i = 0; i < radiosModelo.size(); i++) {
-                    radioGroup_modelo_Modelo.getChildAt(radiosModelo.get(i)).setEnabled(false);
-                }
-            }
-
-
+        if (id_Formulario != 0) {
+            Formulario formulario = dbAuxilar.lerFormulario(id_Formulario);
+            radioGroup_modelo_Formulario.getChildAt(formulario.getModelo_Formulario()).setSelected(true);
+            inputNome_Formulario.setText(formulario.getNome_Formulario());
+            inputDescricao_Formulario.setText(formulario.getDescricao_Formulario());
+            inputCriador_Formulario.setText(formulario.getCriador_Formulario());
         }
 
 
         btnSalvar_Formulario.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                salvarDados(idFormulario, acao);
+                salvarDados();
             }
         });
 
-        radioGroup_modelo_Modelo.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+        radioGroup_modelo_Formulario.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 if (checkedId == R.id.radio_DIC) {
-                    modelo_Modelo = 0;
+                    modelo_Formulario = 0;
                 } else if (checkedId == R.id.radio_DBC) {
-                    modelo_Modelo = 1;
+                    modelo_Formulario = 1;
                 } else if (checkedId == R.id.radio_FAT) {
-                    modelo_Modelo = 2;
+                    modelo_Formulario = 2;
                 } else if (checkedId == R.id.radio_SUB) {
-                    modelo_Modelo = 3;
+                    modelo_Formulario = 3;
                 }
             }
         });
@@ -150,121 +129,161 @@ public class CadastroFormulario extends AppCompatActivity {
     }
 
 
-    private void salvarDados(Long id_Formulario, String acao) {
-
-        if(!validarTipo_Form()){
+    private void salvarDados() {
+        if (!validarTipo_Formulario() || !validarNome_Formulario() || !validarDescricao_Formulario() ||
+                !validarCriador_Formulario() || !validarQuantidadeTratamentos_Formulario() ||
+                !validarQuantidadeRepeticoes_Formulario() || !validarQuantidadeReplicacoes_Formulario() ||
+                !validarQuantidadeVariaveis_Formulario()) {
             return;
         }
 
-        if (!validarNome_Form()) {
-            return;
-        }
-
-        if (!validarDescricao_Form()) {
-            return;
-        }
-
-        if (!validarCriador_Form()) {
-            return;
-        }
-
-        Date date = new Date();
+        Intent cadastroTratamentos = new Intent(CadastroFormulario.this, CadastroTratamentos.class);
         Formulario formulario = new Formulario();
         DBAuxilar dbAuxilar = new DBAuxilar(getApplicationContext());
 
-        formulario.setTipo_Form(tipoFormulario);
-        formulario.setNome_Form(inputNome_Form.getText().toString());
-        formulario.setDescricao_Form(inputDescricao_Form.getText().toString());
-        formulario.setCriador_Form(inputCriador_Form.getText().toString());
-        formulario.setDataCriacao_Form(date.toString());
-        formulario.setStatus_Form("");
+        formulario.setTipo_Formulario(tipoFormulario);
+        formulario.setModelo_Formulario(modelo_Formulario);
+        formulario.setNome_Formulario(inputNome_Formulario.getText().toString());
+        formulario.setDescricao_Formulario(inputDescricao_Formulario.getText().toString());
+        formulario.setCriador_Formulario(inputCriador_Formulario.getText().toString());
+        formulario.setDataCriacao_Formulario(new Date().toString());
+        formulario.setQuantidadeTratamentos_Formulario(Integer.valueOf(input_quantidadeTratamentos_Formulario.getText().toString()));
+        formulario.setQuantidadeRepeticoes_Formulario(Integer.valueOf(input_quantidadeRepeticoes_Formulario.getText().toString()));
+        formulario.setQuantidadeReplicacoes_Formulario(Integer.valueOf(input_quantidadeReplicacoes_Formulario.getText().toString()));
+        formulario.setQuantidadeVariaveis_Formulario(Integer.valueOf(input_quantidadeVariaveis_Formulario.getText().toString()));
+        //formulario.setQuantidadeBlocos_Formulario(Integer.valueOf());
+        //formulario.setQuantidadeFatores_Formulario(Integer.valueOf());
+        //formulario.setQuantidadeDivisoes_Formulario(Integer.valueOf());
+        formulario.setStatus_Formulario(1);
 
-        Intent cadastroModeloFomulario = new Intent(CadastroFormulario.this, CadastroModeloFormulario.class);
-        if (id_Formulario == 0) {
-            id_Formulario = dbAuxilar.inserirFormulario(formulario);
-            cadastroModeloFomulario.putExtra("id_Formulario", id_Formulario);
-            cadastroModeloFomulario.putExtra("modelo_Modelo", modelo_Modelo);
-            startActivity(cadastroModeloFomulario);
-        } else {
-            if (acao.equals("editar")) {
-                Intent cadastroTratamentos = new Intent(CadastroFormulario.this, CadastroTratamentos.class);
-                Modelo modelo = dbAuxilar.lerModeloDoFormulario(id_Formulario, modelo_Modelo);
-                formulario.setId_Form(id_Formulario);
-                dbAuxilar.updateFormulario(formulario);
-                cadastroTratamentos.putExtra("idFormulario_Modelo", id_Formulario);
-                cadastroTratamentos.putExtra("modelo_Modelo", modelo_Modelo);
-                cadastroTratamentos.putExtra("id_Modelo", modelo.getId_Modelo());
-                startActivity(cadastroTratamentos);
-            } else if (acao.equals("cadastro")) {
-                cadastroModeloFomulario.putExtra("id_Formulario", id_Formulario);
-                cadastroModeloFomulario.putExtra("modelo_Modelo", modelo_Modelo);
-                startActivity(cadastroModeloFomulario);
-            }
-        }
+        Long id_Formulario = dbAuxilar.inserirFormulario(formulario);
 
+        cadastroTratamentos.putExtra("id_Formulario", id_Formulario);
+        startActivity(cadastroTratamentos);
 
     }
 
-    public boolean validarTipo_Form() {
-        int checked = radioGroup_modelo_Modelo.getCheckedRadioButtonId();
-        tv_modelo_Modelo.setError(null);
+    public boolean validarTipo_Formulario() {
+        int checked = radioGroup_modelo_Formulario.getCheckedRadioButtonId();
+        tv_modelo_Formulario.setError(null);
         switch (checked){
             case R.id.radio_DIC:
-                modelo_Modelo = 0;
+                modelo_Formulario = 0;
                 return true;
             case R.id.radio_DBC:
-                modelo_Modelo = 1;
+                modelo_Formulario = 1;
                 return true;
             case R.id.radio_FAT:
-                modelo_Modelo = 2;
+                modelo_Formulario = 2;
                 return true;
             case R.id.radio_SUB:
-                modelo_Modelo = 3;
+                modelo_Formulario = 3;
                 return true;
             default:
-                tv_modelo_Modelo.setError(getText(R.string.err_msg_selecioneUmRadio));
+                tv_modelo_Formulario.setError(getText(R.string.err_msg_selecioneUmRadio));
                 return false;
         }
     }
 
-    private boolean validarNome_Form() {
-        if (inputNome_Form.getText().toString().trim().isEmpty()) {
-            inputLayoutNome_Form.setError(getString(R.string.err_msg_nome_Form));
-            requestFocus(inputNome_Form);
+    private boolean validarNome_Formulario() {
+        if (inputNome_Formulario.getText().toString().trim().isEmpty()) {
+            inputLayoutNome_Formulario.setError(getString(R.string.err_msg_nome_Formulario));
+            requestFocus(inputNome_Formulario);
             return false;
         } else {
-            inputLayoutNome_Form.setErrorEnabled(false);
+            inputLayoutNome_Formulario.setErrorEnabled(false);
+        }
+        return true;
+    }
+
+    private boolean validarDescricao_Formulario() {
+
+        if (inputDescricao_Formulario.getText().toString().trim().isEmpty()) {
+            inputLayoutDescricao_Formulario.setError(getString(R.string.err_msg_descricao_Formulario));
+            requestFocus(inputDescricao_Formulario);
+            return false;
+        } else {
+            inputLayoutDescricao_Formulario.setErrorEnabled(false);
         }
 
         return true;
     }
 
-    private boolean validarDescricao_Form() {
-
-        if (inputDescricao_Form.getText().toString().trim().isEmpty()) {
-            inputLayoutDescricao_Form.setError(getString(R.string.err_msg_descricao_Form));
-            requestFocus(inputDescricao_Form);
+    private boolean validarCriador_Formulario() {
+        if (inputCriador_Formulario.getText().toString().trim().isEmpty()) {
+            inputLayoutCriador_Formulario.setError(getString(R.string.err_msg_criador_Formulario));
+            requestFocus(inputCriador_Formulario);
             return false;
         } else {
-            inputLayoutDescricao_Form.setErrorEnabled(false);
+            inputLayoutCriador_Formulario.setErrorEnabled(false);
         }
 
         return true;
     }
 
-    private boolean validarCriador_Form() {
-        if (inputCriador_Form.getText().toString().trim().isEmpty()) {
-            inputLayoutCriador_Form.setError(getString(R.string.err_msg_criador_Form));
-            requestFocus(inputCriador_Form);
+    private boolean validarQuantidadeTratamentos_Formulario() {
+        if (input_quantidadeTratamentos_Formulario.getText().toString().trim().isEmpty()) {
+            inputLayoutQuantidadeTratamentos_Formulario.setError(getString(R.string.err_msg_deveSerNumInteiro));
+            requestFocus(input_quantidadeTratamentos_Formulario);
+            return false;
+        } else if (Integer.valueOf(input_quantidadeTratamentos_Formulario.getText().toString()) < 1) {
+            inputLayoutQuantidadeTratamentos_Formulario.setError(getString(R.string.err_msg_deveSerNumInteiroNaoNulo));
+            requestFocus(input_quantidadeTratamentos_Formulario);
             return false;
         } else {
-            inputLayoutCriador_Form.setErrorEnabled(false);
+            inputLayoutQuantidadeTratamentos_Formulario.setErrorEnabled(false);
         }
-
         return true;
     }
 
+    private boolean validarQuantidadeRepeticoes_Formulario() {
+        if (input_quantidadeRepeticoes_Formulario.getText().toString().trim().isEmpty()) {
+            inputLayoutQuantidadeRepeticoes_Formulario.setError(getString(R.string.err_msg_deveSerNumInteiro));
+            requestFocus(input_quantidadeRepeticoes_Formulario);
+            return false;
+        } else if (Integer.valueOf(input_quantidadeRepeticoes_Formulario.getText().toString()) < 1) {
+            if (modelo_Formulario != 1) {
+                inputLayoutQuantidadeRepeticoes_Formulario.setError(getString(R.string.err_msg_deveSerNumInteiroNaoNulo));
+                requestFocus(input_quantidadeRepeticoes_Formulario);
+                return false;
+            }
+        } else {
+            inputLayoutQuantidadeRepeticoes_Formulario.setErrorEnabled(false);
+        }
+        return true;
+    }
 
+    private boolean validarQuantidadeReplicacoes_Formulario() {
+        if (Integer.valueOf(input_quantidadeReplicacoes_Formulario.getText().toString()) < 1) {
+            if (modelo_Formulario == 2 || modelo_Formulario == 3) {
+                inputLayoutQuantidadeReplicacoes_Formulario.setError(getString(R.string.err_msg_deveSerNumInteiroNaoNulo));
+                requestFocus(input_quantidadeReplicacoes_Formulario);
+                return false;
+            }
+        } else if (input_quantidadeReplicacoes_Formulario.getText().toString().trim().isEmpty()) {
+            inputLayoutQuantidadeReplicacoes_Formulario.setError(getString(R.string.err_msg_deveSerNumInteiro));
+            requestFocus(input_quantidadeReplicacoes_Formulario);
+            return false;
+        } else {
+            inputLayoutQuantidadeReplicacoes_Formulario.setErrorEnabled(false);
+        }
+        return true;
+    }
+
+    private boolean validarQuantidadeVariaveis_Formulario() {
+        if (Integer.valueOf(input_quantidadeVariaveis_Formulario.getText().toString()) < 1) {
+            inputLayoutQuantidadeVariaveis_Formulario.setError(getString(R.string.err_msg_deveSerNumInteiroNaoNulo));
+            requestFocus(input_quantidadeVariaveis_Formulario);
+            return false;
+        } else if (input_quantidadeVariaveis_Formulario.getText().toString().trim().isEmpty()) {
+            inputLayoutQuantidadeVariaveis_Formulario.setError(getString(R.string.err_msg_deveSerNumInteiro));
+            requestFocus(input_quantidadeVariaveis_Formulario);
+            return false;
+        } else {
+            inputLayoutQuantidadeVariaveis_Formulario.setErrorEnabled(false);
+        }
+        return true;
+    }
 
     private void requestFocus(View view) {
         if (view.requestFocus()) {
@@ -288,14 +307,26 @@ public class CadastroFormulario extends AppCompatActivity {
 
         public void afterTextChanged(Editable editable) {
             switch (view.getId()) {
-                case R.id.input_nome_Form:
-                    validarNome_Form();
+                case R.id.input_nome_Formulario:
+                    validarNome_Formulario();
                     break;
-                case R.id.input_descricao_Form:
-                    validarDescricao_Form();
+                case R.id.input_descricao_Formulario:
+                    validarDescricao_Formulario();
                     break;
-                case R.id.input_criador_Form:
-                    validarCriador_Form();
+                case R.id.input_criador_Formulario:
+                    validarCriador_Formulario();
+                    break;
+                case R.id.input_quantidadeTratatmentos_Formulario:
+                    validarQuantidadeTratamentos_Formulario();
+                    break;
+                case R.id.input_quantidadeRepeticoes_Formulario:
+                    validarQuantidadeRepeticoes_Formulario();
+                    break;
+                case R.id.input_quantidadeReplicacoes_Formulario:
+                    validarQuantidadeReplicacoes_Formulario();
+                    break;
+                case R.id.input_quantidadeVariaveis_Formulario:
+                    validarQuantidadeVariaveis_Formulario();
                     break;
             }
         }

@@ -18,7 +18,6 @@ import java.util.Date;
 import me.adolfoquaranta.coletadigital.R;
 import me.adolfoquaranta.coletadigital.auxiliares.DBAuxilar;
 import me.adolfoquaranta.coletadigital.modelos.Coleta;
-import me.adolfoquaranta.coletadigital.modelos.Modelo;
 
 public class CadastroColeta extends AppCompatActivity {
     private TextInputEditText inputNome_Coleta, inputDescricao_Coleta;
@@ -37,9 +36,6 @@ public class CadastroColeta extends AppCompatActivity {
 
         Intent cadastroColeta = getIntent();
         id_Formulario = cadastroColeta.getLongExtra("id_Formulario", 0);
-        tipo_Formulario = cadastroColeta.getStringExtra("tipo_Formulario");
-        modelo_Modelo = cadastroColeta.getIntExtra("modelo_Modelo", -1);
-
 
         inputNome_Coleta = (TextInputEditText) findViewById(R.id.input_nomeColeta);
         inputDescricao_Coleta = (TextInputEditText) findViewById(R.id.input_descricaoColeta);
@@ -78,17 +74,13 @@ public class CadastroColeta extends AppCompatActivity {
         Date date = new Date();
         DBAuxilar dbAuxilar = new DBAuxilar(getApplicationContext());
 
-        Modelo modelo = dbAuxilar.lerModeloDoFormulario(id_Formulario, modelo_Modelo);
-
         Coleta coleta = new Coleta();
         coleta.setNome_Coleta(inputNome_Coleta.getText().toString());
         coleta.setDescricao_Coleta(inputDescricao_Coleta.getText().toString());
         coleta.setDataCriacao_Coleta(date.toString());
         coleta.setDataUltimaEdicao_Coleta(date.toString());
-        coleta.setStatus_Coleta("");
         coleta.setTipo_Coleta(tipo_Formulario);
-        coleta.setIdForm_Coleta(id_Formulario);
-        coleta.setIdModelo_Coleta(modelo.getId_Modelo());
+        coleta.setIdFormulario_Coleta(id_Formulario);
 
 
         Long id_Coleta = dbAuxilar.insertColeta(coleta);
@@ -153,10 +145,10 @@ public class CadastroColeta extends AppCompatActivity {
 
         public void afterTextChanged(Editable editable) {
             switch (view.getId()) {
-                case R.id.input_nome_Form:
+                case R.id.input_nome_Formulario:
                     validarNome_Coleta();
                     break;
-                case R.id.input_descricao_Form:
+                case R.id.input_descricao_Formulario:
                     validarDescricao_Coleta();
                     break;
             }
