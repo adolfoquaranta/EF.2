@@ -44,8 +44,8 @@
     <string name="radio_sub">SUB</string>
     <string name="title_activity_cadastro_formulario_Modelo">Novo</string>
     <string name="hint_quantidadeVariaveis_Modelo">Quantidade de Variáveis</string>
-    <string name="hint_quantidadeReplicacoes_Modelo">Quantidade de Replicações</string>
-    <string name="hint_quantidadeRepeticoes_Modelo">Quantidade de Repetições</string>
+    <string name="hint_quantidadeReplicacoes_Modelo">Quantidade de Replica</string>
+    <string name="hint_quantidadeRepeticoes_Modelo">Quantidade de Repetição</string>
     <string name="hint_quantidadeTratatmentos_Modelo">Quantidade de Tratamentos</string>
     <string name="title_activity_cadastro_tratamentos">Cadastro de Tratamentos</string>
     <string name="hint_nomeTratamento">Nome do tratamento </string>
@@ -82,9 +82,7 @@
     </string-array>
 
     <string name="title_activity_coletar">Coletar</string>
-    <string name="nulo">Nulo</string>
     <string name="hint_valorDado">Valor da Variável</string>
-    <string name="anular">Anular</string>
     <string name="title_activity_coleta_dados">ColetaDados</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="title_activity_coletar_dados">"Coletar Dados "</string>
@@ -124,6 +122,10 @@
     <string name="dialog_modelo">Escolha o Modelo</string>
     <string name="dialog_mensagemListaFormularios">O que deseja fazer?</string>
     <string name="dialog_mensagemListaColetas">O que deseja fazer?</string>
+    <string name="btn_na">NA</string>
+    <string name="hint_quantidadeDivisoes_Modelo">Quantidade de Divisões</string>
+    <string name="hint_quantidadeFatores_Modelo">Quantidade de Fatores</string>
+    <string name="hint_quantidadeBlocos_Modelo">Quantidade de Blocos</string>
 
 
     <string-array name="array_opcoes_formularios">
@@ -134,7 +136,7 @@
 
     <string-array name="array_opcoes_coletas">
         <item>Exportar</item>
-        <item>Editar</item>
+        <item>Remover</item>
     </string-array>
 
 </resources>

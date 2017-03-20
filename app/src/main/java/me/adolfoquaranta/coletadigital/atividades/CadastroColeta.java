@@ -25,7 +25,6 @@ public class CadastroColeta extends AppCompatActivity {
 
     private Long id_Formulario;
     private String tipo_Formulario;
-    private Integer modelo_Modelo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +35,7 @@ public class CadastroColeta extends AppCompatActivity {
 
         Intent cadastroColeta = getIntent();
         id_Formulario = cadastroColeta.getLongExtra("id_Formulario", 0);
+        tipo_Formulario = cadastroColeta.getStringExtra("tipo_Formulario");
 
         inputNome_Coleta = (TextInputEditText) findViewById(R.id.input_nomeColeta);
         inputDescricao_Coleta = (TextInputEditText) findViewById(R.id.input_descricaoColeta);
@@ -92,7 +92,6 @@ public class CadastroColeta extends AppCompatActivity {
         coletarDados.putExtra("tratamentoAtual", 0);
         coletarDados.putExtra("replicacaoAtual", 0);
         coletarDados.putExtra("repeticaoAtual", 0);
-        coletarDados.putExtra("modelo_Modelo", modelo_Modelo);
         startActivity(coletarDados);
     }
 

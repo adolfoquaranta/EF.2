@@ -22,155 +22,208 @@
     </android.support.design.widget.AppBarLayout>
 
     <LinearLayout
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="?attr/actionBarSize"
         android:orientation="vertical"
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
-
-        <TextView
-            android:id="@+id/tv_radio_modelo_Formulario"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginTop="10dp"
-            android:text="@string/cadastro_formulario_tipo_Formulario"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
-
-        <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/input_modelo_Formulario"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <RadioButton android:id="@+id/radio_DIC"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:text="@string/radio_dic"
-                />
-            <RadioButton android:id="@+id/radio_DBC"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:text="@string/radio_dbc"
-                />
-            <RadioButton android:id="@+id/radio_FAT"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="10dp"
-                android:layout_marginRight="10dp"
-                android:text="@string/radio_fat"
-                />
-            <RadioButton android:id="@+id/radio_SUB"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/radio_sub"
-                />
-        </RadioGroup>
-
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_nome_Formulario"
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/input_nome_Formulario"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/hint_nome_Formulario"
-                android:inputType="text" />
-        </android.support.design.widget.TextInputLayout>
+                android:orientation="vertical">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_descricao_Formulario"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/tv_radio_modelo_Formulario"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/cadastro_formulario_tipo_Formulario"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/input_descricao_Formulario"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_descricao_Formulario"
-                android:inputType="textMultiLine" />
-        </android.support.design.widget.TextInputLayout>
+                <RadioGroup xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:id="@+id/input_modelo_Formulario"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_criador_Formulario"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                    <RadioButton
+                        android:id="@+id/radio_DIC"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="@string/radio_dic" />
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/input_criador_Formulario"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_criador_Formulario"
-                android:inputType="text" />
-        </android.support.design.widget.TextInputLayout>
+                    <RadioButton
+                        android:id="@+id/radio_DBC"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="@string/radio_dbc" />
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_quantidadeTratatmentos_Formulario"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                    <RadioButton
+                        android:id="@+id/radio_FAT"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="10dp"
+                        android:layout_marginRight="10dp"
+                        android:text="@string/radio_fat" />
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/input_quantidadeTratatmentos_Formulario"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_quantidadeTratatmentos_Modelo"
-                android:inputType="number" />
-        </android.support.design.widget.TextInputLayout>
+                    <RadioButton
+                        android:id="@+id/radio_SUB"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/radio_sub" />
+                </RadioGroup>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_quantidadeRepeticoes_Formulario"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_nome_Formulario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/input_quantidadeRepeticoes_Formulario"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_quantidadeRepeticoes_Modelo"
-                android:inputType="number" />
-        </android.support.design.widget.TextInputLayout>
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/input_nome_Formulario"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_nome_Formulario"
+                        android:inputType="text" />
+                </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_quantidadeReplicacoes_Formulario"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_descricao_Formulario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/input_quantidadeReplicacoes_Formulario"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_quantidadeReplicacoes_Modelo"
-                android:inputType="number" />
-        </android.support.design.widget.TextInputLayout>
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/input_descricao_Formulario"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_descricao_Formulario"
+                        android:inputType="textMultiLine" />
+                </android.support.design.widget.TextInputLayout>
 
-        <android.support.design.widget.TextInputLayout
-            android:id="@+id/input_layout_quantidadeVariaveis_Formulario"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_criador_Formulario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-            <android.support.design.widget.TextInputEditText
-                android:id="@+id/input_quantidadeVariaveis_Formulario"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="@string/hint_quantidadeVariaveis_Modelo"
-                android:inputType="number" />
-        </android.support.design.widget.TextInputLayout>
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/input_criador_Formulario"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_criador_Formulario"
+                        android:inputType="text" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_quantidadeDivisoes_Formulario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/input_quantidadeDivisoes_Formulario"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_quantidadeDivisoes_Modelo"
+                        android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_quantidadeFatores_Formulario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/input_quantidadeFatores_Formulario"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_quantidadeFatores_Modelo"
+                        android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_quantidadeBlocos_Formulario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/input_quantidadeBlocos_Formulario"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_quantidadeBlocos_Modelo"
+                        android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_quantidadeTratatmentos_Formulario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/input_quantidadeTratatmentos_Formulario"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_quantidadeTratatmentos_Modelo"
+                        android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_quantidadeRepeticoes_Formulario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/input_quantidadeRepeticoes_Formulario"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_quantidadeRepeticoes_Modelo"
+                        android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_quantidadeReplicacoes_Formulario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/input_quantidadeReplicacoes_Formulario"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_quantidadeReplicacoes_Modelo"
+                        android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/input_layout_quantidadeVariaveis_Formulario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <android.support.design.widget.TextInputEditText
+                        android:id="@+id/input_quantidadeVariaveis_Formulario"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/hint_quantidadeVariaveis_Modelo"
+                        android:inputType="number" />
+                </android.support.design.widget.TextInputLayout>
+            </LinearLayout>
+        </ScrollView>
 
         <Button android:id="@+id/btn_salvar_Formulario"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
             android:background="@color/colorPrimary"
+            android:paddingBottom="5dp"
             android:text="@string/btn_salvar"
             android:textColor="@android:color/white"/>
-
     </LinearLayout>
 
 </android.support.design.widget.CoordinatorLayout>

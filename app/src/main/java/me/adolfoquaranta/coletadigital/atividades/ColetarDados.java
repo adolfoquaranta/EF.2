@@ -37,7 +37,7 @@ public class ColetarDados extends AppCompatActivity {
     private DBAuxilar dbAuxilar;
     private List<Tratamento> tratamentos;
     private List<Variavel> variaveis;
-    private Integer tratamentoAtual, repeticaoAtual, replicacaoAtual, modelo_Modelo;
+    private Integer tratamentoAtual, repeticaoAtual, replicacaoAtual;
     private Long id_Coleta;
 
     @Override
@@ -55,7 +55,6 @@ public class ColetarDados extends AppCompatActivity {
         tratamentoAtual = coletarDadosIntent.getIntExtra("tratamentoAtual", 0);
         replicacaoAtual = coletarDadosIntent.getIntExtra("replicacaoAtual", 0);
         repeticaoAtual = coletarDadosIntent.getIntExtra("repeticaoAtual", 0);
-        modelo_Modelo = coletarDadosIntent.getIntExtra("modelo_Modelo", -1);
 
         Log.d("tratamentoAtual", tratamentoAtual.toString());
         Log.d("repeticaoAtual", repeticaoAtual.toString());
@@ -91,6 +90,19 @@ public class ColetarDados extends AppCompatActivity {
             }
         };
 
+        InputFilter filterLetraOuDigito = new InputFilter() {
+            public CharSequence filter(CharSequence source, int start, int end,
+                                       Spanned dest, int dstart, int dend) {
+                for (int i = start; i < end; i++) {
+                    if (source.charAt(i) == ',' || source.charAt(i) == '.') return ".";
+                    if (!Character.isLetterOrDigit(source.charAt(i))) {
+                        return "";
+                    }
+                }
+                return null;
+            }
+        };
+
         InputFilter filterDigito = new InputFilter() {
             public CharSequence filter(CharSequence source, int start, int end,
                                        Spanned dest, int dstart, int dend) {
@@ -118,7 +130,12 @@ public class ColetarDados extends AppCompatActivity {
         final LinearLayout myLayout = (LinearLayout) findViewById(R.id.ll_ColetarDados);
 
         final TextView infoColetaAtual = (TextView) findViewById(R.id.tv_infoColetaAtual);
-        infoColetaAtual.setText("TRAT " + (tratamentoAtual + 1) + " | REP " + (repeticaoAtual + 1) + " | REPLI " + (replicacaoAtual + 1));
+
+        if (formulario.getQuantidadeReplicacoes_Formulario() <= 1) {
+            infoColetaAtual.setText("TRAT " + (tratamentoAtual + 1) + " | REP " + (repeticaoAtual + 1));
+        } else {
+            infoColetaAtual.setText("TRAT " + (tratamentoAtual + 1) + " | REP " + (repeticaoAtual + 1) + " | REPLI " + (replicacaoAtual + 1));
+        }
 
         for (int i = 0; i < variaveis.size(); i++) {
             final LinearLayout layoutInterno = new LinearLayout(this);
@@ -136,21 +153,21 @@ public class ColetarDados extends AppCompatActivity {
             etValorVariavel.setFloatingLabelText(variaveis.get(i).getNome_Variavel());
             etValorVariavel.setFloatingLabelAnimating(true);
             if (variaveis.get(i).getTipo_Variavel() == 1) {
+                etValorVariavel.setInputType(InputType.TYPE_CLASS_TEXT);
+                etValorVariavel.setFilters(new InputFilter[]{filterLetraOuDigito});
+            } else if (variaveis.get(i).getTipo_Variavel() == 2) {
                 etValorVariavel.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_CLASS_NUMBER);
                 etValorVariavel.setFilters(new InputFilter[]{filterDigito});
-            } else if (variaveis.get(i).getTipo_Variavel() == 2) {
-                etValorVariavel.setRawInputType(InputType.TYPE_TEXT_FLAG_CAP_WORDS);
-                etValorVariavel.setFilters(new InputFilter[]{filterCaracter});
             }
             layoutInterno.addView(etValorVariavel);
 
             final ToggleButton anularVariavel = new ToggleButton(getApplicationContext());
-            anularVariavel.setText(R.string.anular);
+            anularVariavel.setText(R.string.btn_na);
             anularVariavel.setId(i + variaveis.size());
             anularVariavel.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT, 2f)); // Pass two args; must be LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT, or an integer pixel value.
             anularVariavel.setId(i + variaveis.size());
-            anularVariavel.setTextOn(getString(R.string.nulo));
-            anularVariavel.setTextOff(getString(R.string.anular));
+            anularVariavel.setTextOn(getString(R.string.btn_na));
+            anularVariavel.setTextOff(getString(R.string.btn_na));
             layoutInterno.addView(anularVariavel);
             myLayout.addView(layoutInterno);
 
@@ -161,7 +178,6 @@ public class ColetarDados extends AppCompatActivity {
                     MaterialEditText etAtual = (MaterialEditText) layoutInterno.findViewById(v.getId() - variaveis.size());
                     if (etAtual.isEnabled()) {
                         etAtual.setText(null);
-                        etAtual.setHint(R.string.nulo);
                         etAtual.setEnabled(false);
                     } else {
                         etAtual.setHint(variaveis.get(finalI).getNome_Variavel());
@@ -179,7 +195,6 @@ public class ColetarDados extends AppCompatActivity {
                 Intent recarregar = new Intent(ColetarDados.this, ColetarDados.class);
                 recarregar.putExtra("id_Formulario", id_Formulario);
                 recarregar.putExtra("id_Coleta", id_Coleta);
-                recarregar.putExtra("modelo_Modelo", modelo_Modelo);
 
 
                 ArrayList<Dado> dados = new ArrayList<>(variaveis.size());
@@ -210,8 +225,6 @@ public class ColetarDados extends AppCompatActivity {
                             Intent listarColetas = new Intent(ColetarDados.this, ListarColetas.class);
                             listarColetas.putExtra("id_Formulario", id_Formulario);
                             listarColetas.putExtra("tipo_Formulario", dbAuxilar.lerFormulario(id_Formulario).getTipo_Formulario());
-                            listarColetas.getIntExtra("modelo_Modelo", modelo_Modelo);
-
                             inserirDados(dados);
                             finish();
 

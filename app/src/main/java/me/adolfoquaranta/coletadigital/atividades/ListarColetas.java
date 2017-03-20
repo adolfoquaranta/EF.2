@@ -200,7 +200,6 @@ public class ListarColetas extends AppCompatActivity
             // Do something when an item is clicked, or override something else.
             AlertDialog.Builder builder = new AlertDialog.Builder(ListarColetas.this);
             builder.setTitle(coletasList.get(position).getNome_Coleta())
-                    .setMessage(R.string.dialog_mensagemListaColetas)
                     .setItems(R.array.array_opcoes_coletas, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             // The 'which' argument contains the index position
@@ -231,7 +230,13 @@ public class ListarColetas extends AppCompatActivity
                                             writer = new CSVWriter(new FileWriter(filePath), CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER);
                                             List<String[]> linhas = new ArrayList<>();
                                             String[] cabecalhoPosicoes, cabecalhoNomeVariaveis = new String[formulario.getQuantidadeVariaveis_Formulario()];
-                                            cabecalhoPosicoes = new String[]{"TRATAMENTO", "REPETICAO", "REPLICACAO"};
+
+                                            if (formulario.getQuantidadeReplicacoes_Formulario() == 1) {
+                                                cabecalhoPosicoes = new String[]{"TRATAMENTO", "REPETICAO"};
+                                            } else {
+                                                cabecalhoPosicoes = new String[]{"TRATAMENTO", "REPETICAO", "REPLICA"};
+                                            }
+
                                             for (int v = 0; v < formulario.getQuantidadeVariaveis_Formulario(); v++) {
                                                 cabecalhoNomeVariaveis[v] = variaveis.get(v).getNome_Variavel();
                                             }
@@ -239,7 +244,12 @@ public class ListarColetas extends AppCompatActivity
                                             for (int trat = 0; trat < formulario.getQuantidadeTratamentos_Formulario(); trat++) {
                                                 for (int rep = 0; rep < formulario.getQuantidadeRepeticoes_Formulario(); rep++) {
                                                     for (int repli = 0; repli < formulario.getQuantidadeReplicacoes_Formulario(); repli++) {
-                                                        String[] posicoes = new String[]{String.valueOf(trat + 1), String.valueOf(rep + 1), String.valueOf(repli + 1)};
+                                                        String[] posicoes;
+                                                        if (formulario.getQuantidadeReplicacoes_Formulario() == 1) {
+                                                            posicoes = new String[]{String.valueOf(trat + 1), String.valueOf(rep + 1)};
+                                                        } else {
+                                                            posicoes = new String[]{String.valueOf(trat + 1), String.valueOf(rep + 1), String.valueOf(repli + 1)};
+                                                        }
                                                         String[] valores = new String[formulario.getQuantidadeVariaveis_Formulario()];
                                                         for (int var = 0; var < formulario.getQuantidadeVariaveis_Formulario(); var++) {
                                                             valores[var] = dbAuxilar.lerValorDado(tratamentos.get(trat).getId_Tratamento(), rep, repli, variaveis.get(var).getId_Variavel(), coletasList.get(position).getId_Coleta()).getValor_Dado();
