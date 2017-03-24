@@ -91,6 +91,7 @@
     <string name="info_PreechaOuAnule">Preencha ou anule os campo com erro para prosseguir.</string>
     <string name="info_EmBreve">Em Breve!</string>
     <string name="tv_EscolhaTipo">Escolha o Tipo</string>
+    <string name="info_ImpossivelRetornar">Impossível retornar, você já está no início da coleta.</string>
 
     <string name="title_activity_teste">teste</string>
     <string name="title_activity_listar_formularios">Lista de</string>
@@ -136,6 +137,7 @@
 
     <string-array name="array_opcoes_coletas">
         <item>Exportar</item>
+        <item>Editar/Continuar</item>
         <item>Remover</item>
     </string-array>
 

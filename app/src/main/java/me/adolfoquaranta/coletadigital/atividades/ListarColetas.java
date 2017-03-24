@@ -270,6 +270,12 @@ public class ListarColetas extends AppCompatActivity
                                     }
                                     break;
                                 case 1:
+                                    Intent coletarDados = new Intent(ListarColetas.this, ColetarDados.class);
+                                    coletarDados.putExtra("id_Formulario", id_Formulario);
+                                    coletarDados.putExtra("id_Coleta", coletasList.get(position).getId_Coleta());
+                                    startActivity(coletarDados);
+                                    break;
+                                case 2:
                                     AlertDialog.Builder builder = new AlertDialog.Builder(ListarColetas.this);
                                     builder.setTitle(R.string.dialog_removerColeta)
                                             .setMessage(R.string.dialog_acaoPermanente)

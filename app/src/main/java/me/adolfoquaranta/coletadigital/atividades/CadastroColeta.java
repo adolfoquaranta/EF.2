@@ -92,6 +92,7 @@ public class CadastroColeta extends AppCompatActivity {
         coletarDados.putExtra("tratamentoAtual", 0);
         coletarDados.putExtra("replicacaoAtual", 0);
         coletarDados.putExtra("repeticaoAtual", 0);
+        finish();
         startActivity(coletarDados);
     }
 

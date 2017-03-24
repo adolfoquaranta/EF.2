@@ -38,7 +38,10 @@ public class ColetarDados extends AppCompatActivity {
     private List<Tratamento> tratamentos;
     private List<Variavel> variaveis;
     private Integer tratamentoAtual, repeticaoAtual, replicacaoAtual;
-    private Long id_Coleta;
+    private Long id_Coleta, id_Formulario;
+
+    private Formulario formulario;
+    private Coleta coleta;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,7 @@ public class ColetarDados extends AppCompatActivity {
         dbAuxilar = new DBAuxilar(getApplicationContext());
 
         final Intent coletarDadosIntent = getIntent();
-        final Long id_Formulario = coletarDadosIntent.getLongExtra("id_Formulario", 0);
+        id_Formulario = coletarDadosIntent.getLongExtra("id_Formulario", 0);
         id_Coleta = coletarDadosIntent.getLongExtra("id_Coleta", 0);
         tratamentoAtual = coletarDadosIntent.getIntExtra("tratamentoAtual", 0);
         replicacaoAtual = coletarDadosIntent.getIntExtra("replicacaoAtual", 0);
@@ -60,8 +63,8 @@ public class ColetarDados extends AppCompatActivity {
         Log.d("repeticaoAtual", repeticaoAtual.toString());
         Log.d("replicacaoAtual", replicacaoAtual.toString());
 
-        final Formulario formulario = dbAuxilar.lerFormulario(id_Formulario);
-        Coleta coleta = dbAuxilar.lerColeta(id_Coleta);
+        formulario = dbAuxilar.lerFormulario(id_Formulario);
+        coleta = dbAuxilar.lerColeta(id_Coleta);
         tratamentos = dbAuxilar.lerTodosTratamentos(id_Formulario);
         variaveis = dbAuxilar.lerTodasVariaveis(id_Formulario);
 
@@ -159,6 +162,13 @@ public class ColetarDados extends AppCompatActivity {
                 etValorVariavel.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL | InputType.TYPE_CLASS_NUMBER);
                 etValorVariavel.setFilters(new InputFilter[]{filterDigito});
             }
+
+            try {
+                etValorVariavel.setText(dbAuxilar.lerValorDado(tratamentos.get(tratamentoAtual).getId_Tratamento(), repeticaoAtual, replicacaoAtual, variaveis.get(i).getId_Variavel(), id_Coleta).getValor_Dado());
+            } catch (Exception e) {
+                Log.e(e.getLocalizedMessage(), e.getMessage());
+            }
+
             layoutInterno.addView(etValorVariavel);
 
             final ToggleButton anularVariavel = new ToggleButton(getApplicationContext());
@@ -169,6 +179,7 @@ public class ColetarDados extends AppCompatActivity {
             anularVariavel.setTextOn(getString(R.string.btn_na));
             anularVariavel.setTextOff(getString(R.string.btn_na));
             layoutInterno.addView(anularVariavel);
+
             myLayout.addView(layoutInterno);
 
             final int finalI = i;
@@ -185,6 +196,15 @@ public class ColetarDados extends AppCompatActivity {
                     }
                 }
             });
+
+            try {
+                if (dbAuxilar.lerValorDado(tratamentos.get(tratamentoAtual).getId_Tratamento(), repeticaoAtual, replicacaoAtual, variaveis.get(i).getId_Variavel(), id_Coleta).getValor_Dado().equals(" ")) {
+                    anularVariavel.toggle();
+                    etValorVariavel.setEnabled(false);
+                }
+            } catch (Exception e) {
+                Log.e(e.getLocalizedMessage(), e.getMessage());
+            }
 
         }
 
@@ -227,7 +247,6 @@ public class ColetarDados extends AppCompatActivity {
                             listarColetas.putExtra("tipo_Formulario", dbAuxilar.lerFormulario(id_Formulario).getTipo_Formulario());
                             inserirDados(dados);
                             finish();
-
                             startActivity(listarColetas);
                         } else if (tratamentoAtual + 1 < formulario.getQuantidadeTratamentos_Formulario()) {
                             inserirDados(dados);
@@ -286,7 +305,46 @@ public class ColetarDados extends AppCompatActivity {
     }
 
     public void onBackPressed() {
-        Toast.makeText(this, getString(R.string.info_EmBreve), Toast.LENGTH_SHORT).show();
+
+        Intent recarregar = new Intent(ColetarDados.this, ColetarDados.class);
+        recarregar.putExtra("id_Formulario", id_Formulario);
+        recarregar.putExtra("id_Coleta", id_Coleta);
+
+
+        if (replicacaoAtual == 0) {
+            if (repeticaoAtual == 0) {
+                if (tratamentoAtual == 0) {
+                    Toast.makeText(this, getString(R.string.info_ImpossivelRetornar), Toast.LENGTH_SHORT).show();
+                } else if (tratamentoAtual > 0) {
+                    tratamentoAtual--;
+                    repeticaoAtual = formulario.getQuantidadeRepeticoes_Formulario() - 1;
+                    replicacaoAtual = formulario.getQuantidadeReplicacoes_Formulario() - 1;
+                    recarregar.putExtra("replicacaoAtual", replicacaoAtual);
+                    recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                    recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+                    finish();
+                    startActivity(recarregar);
+                }
+            } else if (repeticaoAtual > 0) {
+                repeticaoAtual--;
+                replicacaoAtual = formulario.getQuantidadeReplicacoes_Formulario() - 1;
+                recarregar.putExtra("replicacaoAtual", replicacaoAtual);
+                recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+                finish();
+                startActivity(recarregar);
+            }
+        } else if (replicacaoAtual > 0) {
+            replicacaoAtual--;
+            recarregar.putExtra("replicacaoAtual", replicacaoAtual);
+            recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+            recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+            finish();
+            startActivity(recarregar);
+        }
+
+
+        //Toast.makeText(this, getString(R.string.info_EmBreve), Toast.LENGTH_SHORT).show();
     }
 
 
