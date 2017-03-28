@@ -42,8 +42,7 @@ public class ListarFormularios extends AppCompatActivity
     private RelativeLayout mostrar_formularios_root;
 
     private String tipoFormulario;
-    private Integer escolhaUsuario;
-
+    private NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,7 +60,7 @@ public class ListarFormularios extends AppCompatActivity
         toggle.syncState();
 
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         assert navigationView != null;
         navigationView.setNavigationItemSelectedListener(this);
 
@@ -70,9 +69,6 @@ public class ListarFormularios extends AppCompatActivity
         listarFormularios = getIntent();
 
         tipoFormulario = listarFormularios.getStringExtra("tipo_Formulario");
-
-        (navigationView.getMenu()).findItem(R.id.itemDrawer_tipoFormulario).setTitle(tipoFormulario);
-
 
         //noinspection ConstantConditions
         getSupportActionBar().setTitle(getSupportActionBar().getTitle().toString() + " " + tipoFormulario);
@@ -134,37 +130,24 @@ public class ListarFormularios extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_formularioListarColetas) {
-            escolhaUsuario = id;
-        } else if (id == R.id.nav_formularioEditar) {
-            escolhaUsuario = id;
-        } else if (id == R.id.nav_formularioAddModelo) {
-            escolhaUsuario = id;
-        } else if (id == R.id.nav_formularioNovaColeta) {
-            escolhaUsuario = id;
-        } else if (id == R.id.nav_formularioRemover) {
-            escolhaUsuario = id;
+        String escolhaUsuario = item.getTitle().toString();
+
+        if (dbAuxilar.lerTodosFormularios(escolhaUsuario).size() == 0) {
+            Intent cadastroFormulario = new Intent(ListarFormularios.this, CadastroFormulario.class);
+            cadastroFormulario.putExtra("tipo_Formulario", escolhaUsuario);
+            finish();
+            startActivity(cadastroFormulario);
+        } else {
+            Intent mostrarFormularios = new Intent(ListarFormularios.this, ListarFormularios.class);
+            mostrarFormularios.putExtra("tipo_Formulario", escolhaUsuario);
+            finish();
+            startActivity(mostrarFormularios);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutListarFormularios);

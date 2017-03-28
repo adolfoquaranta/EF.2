@@ -19,6 +19,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -53,9 +54,10 @@ public class ListarColetas extends AppCompatActivity
 
     private RelativeLayout mostrar_coletas_root;
 
-    private Integer escolhaUsuario = 0;
     private Long id_Formulario;
     private String tipo_Formulario;
+
+    private NavigationView navigationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +74,7 @@ public class ListarColetas extends AppCompatActivity
         toggle.syncState();
 
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
 
@@ -87,11 +89,8 @@ public class ListarColetas extends AppCompatActivity
         //noinspection ConstantConditions
         getSupportActionBar().setTitle(getSupportActionBar().getTitle().toString() + " " + dbAuxilar.lerFormulario(id_Formulario).getNome_Formulario());
 
-        (navigationView.getMenu()).findItem(R.id.itemDrawer_nomeModelo_formulario).setTitle(dbAuxilar.lerFormulario(id_Formulario).getTipo_Formulario() + " " + dbAuxilar.lerFormulario(id_Formulario).getNome_Formulario());
-
 
         coletasList = dbAuxilar.lerTodasColetas(id_Formulario);
-
 
         if (coletasList.isEmpty()) {
             RelativeLayout.LayoutParams lparams = new RelativeLayout.LayoutParams(
@@ -146,44 +145,23 @@ public class ListarColetas extends AppCompatActivity
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.listar_coletas, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
+        String escolhaUsuario = item.getTitle().toString();
 
-        if (id == R.id.nav_coletaExportar) {
-            escolhaUsuario = id;
-        } else if (id == R.id.nav_coletaContinuar) {
-            escolhaUsuario = id;
-        } else if (id == R.id.nav_coletaRemedir) {
-            escolhaUsuario = id;
-        } else if (id == R.id.nav_coletaEditar) {
-            escolhaUsuario = id;
-        } else if (id == R.id.nav_coletaRemover) {
-            escolhaUsuario = id;
+        if (dbAuxilar.lerTodosFormularios(escolhaUsuario).size() == 0) {
+            Intent cadastroFormulario = new Intent(ListarColetas.this, CadastroFormulario.class);
+            cadastroFormulario.putExtra("tipo_Formulario", escolhaUsuario);
+            finish();
+            startActivity(cadastroFormulario);
+        } else {
+            Intent mostrarFormularios = new Intent(ListarColetas.this, ListarFormularios.class);
+            mostrarFormularios.putExtra("tipo_Formulario", escolhaUsuario);
+            finish();
+            startActivity(mostrarFormularios);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layoutListarColetas);

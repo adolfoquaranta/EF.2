@@ -343,7 +343,6 @@ public class ColetarDados extends AppCompatActivity {
             startActivity(recarregar);
         }
 
-
         //Toast.makeText(this, getString(R.string.info_EmBreve), Toast.LENGTH_SHORT).show();
     }
 

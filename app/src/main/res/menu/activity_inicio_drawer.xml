@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/itemDrawer_inicio"
+        android:title="@string/nav_titulo_inicio">
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/nav_EXP"
+                    android:title="@string/inicio_btnEXE" />
+                <item
+                    android:id="@+id/nav_INV"
+                    android:title="@string/inicio_btnINV" />
+                <item
+                    android:id="@+id/nav_FITO"
+                    android:title="@string/inicio_btnFITO" />
+                <item
+                    android:id="@+id/nav_SOLOS"
+                    android:title="@string/inicio_btnSOLOS" />
+                <item
+                    android:id="@+id/nav_FOLHA"
+                    android:title="@string/inicio_btnFOLHA" />
+                <item
+                    android:id="@+id/nav_INS"
+                    android:title="@string/inicio_btnINS" />
+            </group>
+        </menu>
+    </item>
+
+
+</menu>
