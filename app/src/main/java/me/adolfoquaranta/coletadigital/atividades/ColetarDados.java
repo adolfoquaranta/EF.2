@@ -37,7 +37,7 @@ public class ColetarDados extends AppCompatActivity {
     private DBAuxilar dbAuxilar;
     private List<Tratamento> tratamentos;
     private List<Variavel> variaveis;
-    private Integer tratamentoAtual, repeticaoAtual, replicacaoAtual;
+    private Integer tratamentoAtual, repeticaoAtual, replicacaoAtual, blocoAtual;
     private Long id_Coleta, id_Formulario;
 
     private Formulario formulario;
@@ -58,6 +58,7 @@ public class ColetarDados extends AppCompatActivity {
         tratamentoAtual = coletarDadosIntent.getIntExtra("tratamentoAtual", 0);
         replicacaoAtual = coletarDadosIntent.getIntExtra("replicacaoAtual", 0);
         repeticaoAtual = coletarDadosIntent.getIntExtra("repeticaoAtual", 0);
+        blocoAtual = coletarDadosIntent.getIntExtra("blocoAtual", 0);
 
         Log.d("tratamentoAtual", tratamentoAtual.toString());
         Log.d("repeticaoAtual", repeticaoAtual.toString());
@@ -134,11 +135,33 @@ public class ColetarDados extends AppCompatActivity {
 
         final TextView infoColetaAtual = (TextView) findViewById(R.id.tv_infoColetaAtual);
 
-        if (formulario.getQuantidadeReplicacoes_Formulario() <= 1) {
-            infoColetaAtual.setText("TRAT " + (tratamentoAtual + 1) + " | REP " + (repeticaoAtual + 1));
-        } else {
-            infoColetaAtual.setText("TRAT " + (tratamentoAtual + 1) + " | REP " + (repeticaoAtual + 1) + " | REPLI " + (replicacaoAtual + 1));
+
+        String bloco = "BLOCO " + (blocoAtual + 1), tratamento = "TRATAMENTO " + (tratamentoAtual + 1), repeticao = "REPETIÇÃO " + (repeticaoAtual + 1), replicacao = "RÉPLICA " + (replicacaoAtual + 1), infoColeta = "";
+
+        if(formulario.getModelo_Formulario()==0) {
+            if (formulario.getQuantidadeReplicacoes_Formulario() <= 1) {
+                infoColeta = tratamento + " | " + repeticao;
+            } else {
+                infoColeta = tratamento + " | " + repeticao + " | " + replicacao;
+            }
         }
+        if(formulario.getModelo_Formulario()==1){
+            if (formulario.getQuantidadeReplicacoes_Formulario() <= 1 && formulario.getQuantidadeRepeticoes_Formulario() <= 1) {
+                infoColeta = bloco + " | " + tratamento;
+            }
+            else if(formulario.getQuantidadeReplicacoes_Formulario()<=1) {
+                infoColeta = bloco + " | " + tratamento + " | " + repeticao;
+            }
+            else if(formulario.getQuantidadeRepeticoes_Formulario()<=1) {
+                infoColeta = bloco + " | " + tratamento + " | " + replicacao;
+            }
+            else {
+                infoColeta = bloco + " | " + tratamento + " | " + repeticao + " | " + replicacao;
+            }
+        }
+        infoColetaAtual.setText(infoColeta);
+
+
 
         for (int i = 0; i < variaveis.size(); i++) {
             final LinearLayout layoutInterno = new LinearLayout(this);
@@ -164,7 +187,7 @@ public class ColetarDados extends AppCompatActivity {
             }
 
             try {
-                etValorVariavel.setText(dbAuxilar.lerValorDado(tratamentos.get(tratamentoAtual).getId_Tratamento(), repeticaoAtual, replicacaoAtual, variaveis.get(i).getId_Variavel(), id_Coleta).getValor_Dado());
+                etValorVariavel.setText(dbAuxilar.lerValorDado(tratamentos.get(tratamentoAtual).getId_Tratamento(), blocoAtual, repeticaoAtual, replicacaoAtual, variaveis.get(i).getId_Variavel(), id_Coleta).getValor_Dado());
             } catch (Exception e) {
                 Log.e(e.getLocalizedMessage(), e.getMessage());
             }
@@ -198,7 +221,7 @@ public class ColetarDados extends AppCompatActivity {
             });
 
             try {
-                if (dbAuxilar.lerValorDado(tratamentos.get(tratamentoAtual).getId_Tratamento(), repeticaoAtual, replicacaoAtual, variaveis.get(i).getId_Variavel(), id_Coleta).getValor_Dado().equals(" ")) {
+                if (dbAuxilar.lerValorDado(tratamentos.get(tratamentoAtual).getId_Tratamento(), blocoAtual, repeticaoAtual, replicacaoAtual, variaveis.get(i).getId_Variavel(), id_Coleta).getValor_Dado().equals(" ")) {
                     anularVariavel.toggle();
                     etValorVariavel.setEnabled(false);
                 }
@@ -238,21 +261,45 @@ public class ColetarDados extends AppCompatActivity {
                 Log.d("dadosSize", String.valueOf(dados.size()));
                 Log.d("dados", dados.toString());
 
-
                 if (replicacaoAtual + 1 == formulario.getQuantidadeReplicacoes_Formulario()) {
                     if (repeticaoAtual + 1 == formulario.getQuantidadeRepeticoes_Formulario()) {
                         if (tratamentoAtual + 1 == formulario.getQuantidadeTratamentos_Formulario()) {
-                            Intent listarColetas = new Intent(ColetarDados.this, ListarColetas.class);
-                            listarColetas.putExtra("id_Formulario", id_Formulario);
-                            listarColetas.putExtra("tipo_Formulario", dbAuxilar.lerFormulario(id_Formulario).getTipo_Formulario());
-                            inserirDados(dados);
-                            finish();
-                            startActivity(listarColetas);
+                            if(formulario.getQuantidadeBlocos_Formulario()==-1){
+                                inserirDados(dados);
+                                Intent listarColetas = new Intent(ColetarDados.this, ListarColetas.class);
+                                listarColetas.putExtra("id_Formulario", id_Formulario);
+                                listarColetas.putExtra("tipo_Formulario", dbAuxilar.lerFormulario(id_Formulario).getTipo_Formulario());
+                                finish();
+                                startActivity(listarColetas);
+                            }
+                            else {
+                                if (blocoAtual + 1 == formulario.getQuantidadeBlocos_Formulario()) {
+                                    inserirDados(dados);
+                                    Intent listarColetas = new Intent(ColetarDados.this, ListarColetas.class);
+                                    listarColetas.putExtra("id_Formulario", id_Formulario);
+                                    listarColetas.putExtra("tipo_Formulario", dbAuxilar.lerFormulario(id_Formulario).getTipo_Formulario());
+                                    finish();
+                                    startActivity(listarColetas);
+                                } else if (blocoAtual + 1 < formulario.getQuantidadeBlocos_Formulario()) {
+                                    inserirDados(dados);
+                                    blocoAtual++;
+                                    tratamentoAtual = 0;
+                                    repeticaoAtual = 0;
+                                    replicacaoAtual = 0;
+                                    recarregar.putExtra("blocoAtual", blocoAtual);
+                                    recarregar.putExtra("replicacaoAtual", replicacaoAtual);
+                                    recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                                    recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+                                    finish();
+                                    startActivity(recarregar);
+                                }
+                            }
                         } else if (tratamentoAtual + 1 < formulario.getQuantidadeTratamentos_Formulario()) {
                             inserirDados(dados);
                             tratamentoAtual++;
                             repeticaoAtual = 0;
                             replicacaoAtual = 0;
+                            recarregar.putExtra("blocoAtual", blocoAtual);
                             recarregar.putExtra("replicacaoAtual", replicacaoAtual);
                             recarregar.putExtra("repeticaoAtual", repeticaoAtual);
                             recarregar.putExtra("tratamentoAtual", tratamentoAtual);
@@ -263,6 +310,7 @@ public class ColetarDados extends AppCompatActivity {
                         inserirDados(dados);
                         repeticaoAtual++;
                         replicacaoAtual = 0;
+                        recarregar.putExtra("blocoAtual", blocoAtual);
                         recarregar.putExtra("replicacaoAtual", replicacaoAtual);
                         recarregar.putExtra("repeticaoAtual", repeticaoAtual);
                         recarregar.putExtra("tratamentoAtual", tratamentoAtual);
@@ -272,6 +320,7 @@ public class ColetarDados extends AppCompatActivity {
                 } else if (replicacaoAtual + 1 < formulario.getQuantidadeReplicacoes_Formulario()) {
                     inserirDados(dados);
                     replicacaoAtual++;
+                    recarregar.putExtra("blocoAtual", blocoAtual);
                     recarregar.putExtra("replicacaoAtual", replicacaoAtual);
                     recarregar.putExtra("repeticaoAtual", repeticaoAtual);
                     recarregar.putExtra("tratamentoAtual", tratamentoAtual);
@@ -291,6 +340,7 @@ public class ColetarDados extends AppCompatActivity {
             dados.get(i).setIdTratamento_Dado(tratamentos.get(tratamentoAtual).getId_Tratamento());
             dados.get(i).setVariavel_Dado(i);
             dados.get(i).setTratamento_Dado(tratamentoAtual);
+            dados.get(i).setBloco_Dado(blocoAtual);
             dados.get(i).setRepeticao_Dado(repeticaoAtual);
             dados.get(i).setReplicacao_Dado(replicacaoAtual);
             dados.get(i).setIdColeta_Dado(id_Coleta);
@@ -314,7 +364,21 @@ public class ColetarDados extends AppCompatActivity {
         if (replicacaoAtual == 0) {
             if (repeticaoAtual == 0) {
                 if (tratamentoAtual == 0) {
-                    Toast.makeText(this, getString(R.string.info_ImpossivelRetornar), Toast.LENGTH_SHORT).show();
+                    if(blocoAtual == 0){
+                        Toast.makeText(this, getString(R.string.info_ImpossivelRetornar), Toast.LENGTH_SHORT).show();
+                    }
+                    else if(blocoAtual > 0){
+                        blocoAtual--;
+                        tratamentoAtual = formulario.getQuantidadeTratamentos_Formulario() - 1;
+                        repeticaoAtual = formulario.getQuantidadeRepeticoes_Formulario() - 1;
+                        replicacaoAtual = formulario.getQuantidadeReplicacoes_Formulario() - 1;
+                        recarregar.putExtra("blocoAtual", blocoAtual);
+                        recarregar.putExtra("replicacaoAtual", replicacaoAtual);
+                        recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                        recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+                        finish();
+                        startActivity(recarregar);
+                    }
                 } else if (tratamentoAtual > 0) {
                     tratamentoAtual--;
                     repeticaoAtual = formulario.getQuantidadeRepeticoes_Formulario() - 1;
@@ -322,6 +386,7 @@ public class ColetarDados extends AppCompatActivity {
                     recarregar.putExtra("replicacaoAtual", replicacaoAtual);
                     recarregar.putExtra("repeticaoAtual", repeticaoAtual);
                     recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+                    recarregar.putExtra("blocoAtual", blocoAtual);
                     finish();
                     startActivity(recarregar);
                 }
@@ -331,6 +396,7 @@ public class ColetarDados extends AppCompatActivity {
                 recarregar.putExtra("replicacaoAtual", replicacaoAtual);
                 recarregar.putExtra("repeticaoAtual", repeticaoAtual);
                 recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+                recarregar.putExtra("blocoAtual", blocoAtual);
                 finish();
                 startActivity(recarregar);
             }
@@ -339,6 +405,7 @@ public class ColetarDados extends AppCompatActivity {
             recarregar.putExtra("replicacaoAtual", replicacaoAtual);
             recarregar.putExtra("repeticaoAtual", repeticaoAtual);
             recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+            recarregar.putExtra("blocoAtual", blocoAtual);
             finish();
             startActivity(recarregar);
         }

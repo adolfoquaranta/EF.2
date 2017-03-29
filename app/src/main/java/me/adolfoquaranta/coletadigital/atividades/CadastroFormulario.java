@@ -245,12 +245,15 @@ public class CadastroFormulario extends AppCompatActivity {
         if (modelo_Formulario == 1) {
             formulario.setQuantidadeBlocos_Formulario(Integer.valueOf(input_quantidadeBlocos_Formulario.getText().toString()));
         }
+        else formulario.setQuantidadeBlocos_Formulario(-1);
+
         if (modelo_Formulario == 2) {
             formulario.setQuantidadeFatores_Formulario(Integer.valueOf(input_quantidadeFatores_Formulario.getText().toString()));
-        }
+        } else formulario.setQuantidadeFatores_Formulario(-1);
+
         if (modelo_Formulario == 3) {
             formulario.setQuantidadeDivisoes_Formulario(Integer.valueOf(input_quantidadeDivisoes_Formulario.getText().toString()));
-        }
+        } else formulario.setQuantidadeDivisoes_Formulario(-1);
 
         formulario.setStatus_Formulario(1);
 

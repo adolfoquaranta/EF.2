@@ -558,10 +558,11 @@ public class DBAuxilar extends SQLiteOpenHelper {
     }
 
 
-    public Dado lerValorDado(Long id_Tratamento, Integer repeticao, Integer replicacao, Long id_Variavel, Long id_Coleta) {
+    public Dado lerValorDado(Long id_Tratamento, Integer bloco, Integer repeticao, Integer replicacao, Long id_Variavel, Long id_Coleta) {
         SQLiteDatabase db = getReadableDatabase();
 
         String selectQuery = "SELECT " + DADO_COL_VALOR + " FROM " + DADO_TABELA + " WHERE " + DADO_COL_ID_TRATAMENTO + " = " + id_Tratamento
+                + " AND " + DADO_COL_BLOCO + " = " + bloco
                 + " AND " + DADO_COL_REPETICAO + " = " + repeticao
                 + " AND " + DADO_COL_REPLICACAO + " = " + replicacao
                 + " AND " + DADO_COL_ID_VARIAVEL + " = " + id_Variavel
@@ -597,6 +598,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
 
         String selectQuery = "SELECT * FROM " + DADO_TABELA + " WHERE " + DADO_COL_ID_COLETA + " = " + dado.getIdColeta_Dado()
                 + " AND " + DADO_COL_TRATAMENTO + " = " + dado.getTratamento_Dado()
+                + " AND " + DADO_COL_BLOCO + " = " + dado.getBloco_Dado()
                 + " AND " + DADO_COL_VARIAVEL + " = " + dado.getVariavel_Dado()
                 + " AND " + DADO_COL_REPETICAO + " = " + dado.getRepeticao_Dado()
                 + " AND " + DADO_COL_REPLICACAO + " = " + dado.getReplicacao_Dado();

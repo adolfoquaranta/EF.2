@@ -2,7 +2,9 @@ package me.adolfoquaranta.coletadigital.atividades;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -31,8 +33,11 @@ import org.apache.commons.lang3.ArrayUtils;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import me.adolfoquaranta.coletadigital.R;
 import me.adolfoquaranta.coletadigital.adaptadores.ColetasAdapter;
@@ -192,9 +197,9 @@ public class ListarColetas extends AppCompatActivity
 
                                     Log.d("tratamentos", tratamentos.toString());
 
-                                    String baseDir = android.os.Environment.getExternalStorageDirectory().getAbsolutePath();
+                                    String baseDir = Environment.getExternalStorageDirectory().getAbsolutePath();
                                     String fileDir = "COLETA DIGITAL";
-                                    String fileName = (coletasList.get(position).getNome_Coleta()) + ".csv";
+                                    String fileName = (coletasList.get(position).getNome_Coleta()+"_"+ new SimpleDateFormat("dd-MM-yyyy_HHmmss", new Locale("pt", "BR")).format(new Date())) + ".csv";
                                     String filePath = baseDir + File.separator + fileDir + File.separator + fileName;
 
                                     File folder = new File(baseDir + File.separator + fileDir);
@@ -207,40 +212,102 @@ public class ListarColetas extends AppCompatActivity
                                         try {
                                             writer = new CSVWriter(new FileWriter(filePath), CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER);
                                             List<String[]> linhas = new ArrayList<>();
-                                            String[] cabecalhoPosicoes, cabecalhoNomeVariaveis = new String[formulario.getQuantidadeVariaveis_Formulario()];
+                                            String[] cabecalhoPosicoes = new String[]{}, cabecalhoNomeVariaveis = new String[formulario.getQuantidadeVariaveis_Formulario()];
 
-                                            if (formulario.getQuantidadeReplicacoes_Formulario() == 1) {
-                                                cabecalhoPosicoes = new String[]{"TRATAMENTO", "REPETICAO"};
-                                            } else {
-                                                cabecalhoPosicoes = new String[]{"TRATAMENTO", "REPETICAO", "REPLICA"};
+                                            String bloco = "BLOCO" , tratamento = "TRATAMENTO", repeticao = "REPETICAO" , replicacao = "REPLICA";
+
+                                            if(formulario.getModelo_Formulario()==0) {
+                                                if (formulario.getQuantidadeReplicacoes_Formulario() <= 1) {
+                                                    cabecalhoPosicoes = new String[]{tratamento, repeticao};
+                                                } else {
+                                                    cabecalhoPosicoes = new String[]{tratamento, repeticao, replicacao};
+                                                }
+                                            }
+                                            if(formulario.getModelo_Formulario()==1){
+                                                if (formulario.getQuantidadeReplicacoes_Formulario() <= 1 && formulario.getQuantidadeRepeticoes_Formulario() <= 1) {
+                                                    cabecalhoPosicoes = new String[]{bloco, tratamento};
+                                                }
+                                                else if(formulario.getQuantidadeReplicacoes_Formulario()<=1) {
+                                                    cabecalhoPosicoes = new String[]{bloco, tratamento, repeticao};
+                                                }
+                                                else if(formulario.getQuantidadeRepeticoes_Formulario()<=1) {
+                                                    cabecalhoPosicoes = new String[]{bloco, tratamento, replicacao};
+                                                }
+                                                else {
+                                                    cabecalhoPosicoes = new String[]{bloco, tratamento, repeticao, replicacao};
+                                                }
                                             }
 
                                             for (int v = 0; v < formulario.getQuantidadeVariaveis_Formulario(); v++) {
                                                 cabecalhoNomeVariaveis[v] = variaveis.get(v).getNome_Variavel();
                                             }
                                             linhas.add(ArrayUtils.addAll(cabecalhoPosicoes, cabecalhoNomeVariaveis));
-                                            for (int trat = 0; trat < formulario.getQuantidadeTratamentos_Formulario(); trat++) {
-                                                for (int rep = 0; rep < formulario.getQuantidadeRepeticoes_Formulario(); rep++) {
-                                                    for (int repli = 0; repli < formulario.getQuantidadeReplicacoes_Formulario(); repli++) {
-                                                        String[] posicoes;
-                                                        if (formulario.getQuantidadeReplicacoes_Formulario() == 1) {
-                                                            posicoes = new String[]{String.valueOf(trat + 1), String.valueOf(rep + 1)};
-                                                        } else {
-                                                            posicoes = new String[]{String.valueOf(trat + 1), String.valueOf(rep + 1), String.valueOf(repli + 1)};
+
+                                            if(formulario.getQuantidadeBlocos_Formulario()!=-1){
+                                                for(int bloc = 0; bloc < formulario.getQuantidadeBlocos_Formulario(); bloc++) {
+                                                     for (int trat = 0; trat < formulario.getQuantidadeTratamentos_Formulario(); trat++) {
+                                                         for (int rep = 0; rep < formulario.getQuantidadeRepeticoes_Formulario(); rep++) {
+                                                             for (int repli = 0; repli < formulario.getQuantidadeReplicacoes_Formulario(); repli++) {
+                                                                 String[] posicoes;
+
+                                                                 if (formulario.getQuantidadeReplicacoes_Formulario() <= 1 && formulario.getQuantidadeRepeticoes_Formulario() <= 1) {
+                                                                     posicoes = new String[]{String.valueOf(bloc + 1), tratamentos.get(trat).getNome_Tratamento()};
+                                                                 }
+                                                                 else if(formulario.getQuantidadeReplicacoes_Formulario()<=1) {
+                                                                     posicoes = new String[]{String.valueOf(bloc + 1), tratamentos.get(trat).getNome_Tratamento(), String.valueOf(rep + 1)};
+                                                                 }
+                                                                 else if(formulario.getQuantidadeRepeticoes_Formulario()<=1) {
+                                                                     posicoes = new String[]{String.valueOf(bloc + 1), tratamentos.get(trat).getNome_Tratamento(), String.valueOf(repli + 1)};
+                                                                 }
+                                                                 else {
+                                                                     posicoes = new String[]{String.valueOf(bloc + 1), tratamentos.get(trat).getNome_Tratamento(), String.valueOf(rep + 1), String.valueOf(repli + 1)};
+                                                                 }
+
+                                                                 String[] valores = new String[formulario.getQuantidadeVariaveis_Formulario()];
+                                                                 for (int var = 0; var < formulario.getQuantidadeVariaveis_Formulario(); var++) {
+                                                                     valores[var] = dbAuxilar.lerValorDado(tratamentos.get(trat).getId_Tratamento(), bloc, rep, repli, variaveis.get(var).getId_Variavel(), coletasList.get(position).getId_Coleta()).getValor_Dado();
+                                                                 }
+
+                                                                 String[] colunas = ArrayUtils.addAll(posicoes, valores);
+                                                                 linhas.add(colunas);
+                                                             }
+                                                         }
+                                                     }
+                                                }
+                                            }
+                                            else{
+                                                for (int trat = 0; trat < formulario.getQuantidadeTratamentos_Formulario(); trat++) {
+                                                    for (int rep = 0; rep < formulario.getQuantidadeRepeticoes_Formulario(); rep++) {
+                                                        for (int repli = 0; repli < formulario.getQuantidadeReplicacoes_Formulario(); repli++) {
+                                                            String[] posicoes;
+
+                                                            if (formulario.getQuantidadeReplicacoes_Formulario() <= 1) {
+                                                                posicoes = new String[]{tratamentos.get(trat).getNome_Tratamento(), String.valueOf(rep + 1)};
+                                                            } else {
+                                                                posicoes = new String[]{tratamentos.get(trat).getNome_Tratamento(), String.valueOf(rep + 1), String.valueOf(repli + 1)};
+                                                            }
+
+                                                            String[] valores = new String[formulario.getQuantidadeVariaveis_Formulario()];
+                                                            for (int var = 0; var < formulario.getQuantidadeVariaveis_Formulario(); var++) {
+                                                                valores[var] = dbAuxilar.lerValorDado(tratamentos.get(trat).getId_Tratamento(), 0, rep, repli, variaveis.get(var).getId_Variavel(), coletasList.get(position).getId_Coleta()).getValor_Dado();
+                                                            }
+
+                                                            String[] colunas = ArrayUtils.addAll(posicoes, valores);
+                                                            linhas.add(colunas);
                                                         }
-                                                        String[] valores = new String[formulario.getQuantidadeVariaveis_Formulario()];
-                                                        for (int var = 0; var < formulario.getQuantidadeVariaveis_Formulario(); var++) {
-                                                            valores[var] = dbAuxilar.lerValorDado(tratamentos.get(trat).getId_Tratamento(), rep, repli, variaveis.get(var).getId_Variavel(), coletasList.get(position).getId_Coleta()).getValor_Dado();
-                                                        }
-                                                        String[] colunas = ArrayUtils.addAll(posicoes, valores);
-                                                        linhas.add(colunas);
                                                     }
                                                 }
                                             }
                                             writer.writeAll(linhas);
                                             writer.close();
                                             Log.i("Witter", "ArquivoGerado");
-                                            Snackbar.make(childView, getString(R.string.info_ArquivoGerado), Snackbar.LENGTH_LONG).show();
+
+                                            //Snackbar.make(childView, getString(R.string.info_ArquivoGerado), Snackbar.LENGTH_LONG).show();
+
+                                            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                                            sharingIntent.setType("text/plain");
+                                            sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
+                                            startActivity(Intent.createChooser(sharingIntent, getString(R.string.info_CompartilharUsando)));
 
                                         } catch (IOException e) {
                                             e.printStackTrace();

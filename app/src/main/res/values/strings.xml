@@ -128,6 +128,7 @@
     <string name="hint_quantidadeFatores_Modelo">Quantidade de Fatores</string>
     <string name="hint_quantidadeBlocos_Modelo">Quantidade de Blocos</string>
     <string name="nav_titulo_inicio"></string>
+    <string name="info_CompartilharUsando">Compatilhar usando</string>
 
 
     <string-array name="array_opcoes_formularios">
