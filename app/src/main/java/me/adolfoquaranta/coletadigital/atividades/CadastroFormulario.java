@@ -23,8 +23,8 @@ import me.adolfoquaranta.coletadigital.modelos.Formulario;
 
 public class CadastroFormulario extends AppCompatActivity {
 
-    private TextInputEditText inputNome_Formulario, inputDescricao_Formulario, inputCriador_Formulario, input_quantidadeTratamentos_Formulario, input_quantidadeRepeticoes_Formulario, input_quantidadeReplicacoes_Formulario, input_quantidadeVariaveis_Formulario, input_quantidadeBlocos_Formulario, input_quantidadeFatores_Formulario, input_quantidadeDivisoes_Formulario;
-    private TextInputLayout inputLayoutNome_Formulario, inputLayoutDescricao_Formulario, inputLayoutCriador_Formulario, inputLayoutQuantidadeTratamentos_Formulario, inputLayoutQuantidadeRepeticoes_Formulario, inputLayoutQuantidadeReplicacoes_Formulario, inputLayoutQuantidadeVariaveis_Formulario, inputLayoutQuantidadeBlocos_Formulario, inputLayoutQuantidadeFatores_Formulario, inputLayoutQuantidadeDivisoes_Formulario;
+    private TextInputEditText inputNome_Formulario, inputDescricao_Formulario, inputCriador_Formulario, input_quantidadeTratamentos_Formulario, input_quantidadeRepeticoes_Formulario, input_quantidadeReplicacoes_Formulario, input_quantidadeVariaveis_Formulario, input_quantidadeBlocos_Formulario, input_quantidadeFatores_Formulario, input_quantidadeParcelas_Formulario;
+    private TextInputLayout inputLayoutNome_Formulario, inputLayoutDescricao_Formulario, inputLayoutCriador_Formulario, inputLayoutQuantidadeTratamentos_Formulario, inputLayoutQuantidadeRepeticoes_Formulario, inputLayoutQuantidadeReplicacoes_Formulario, inputLayoutQuantidadeVariaveis_Formulario, inputLayoutQuantidadeBlocos_Formulario, inputLayoutQuantidadeFatores_Formulario, inputLayoutQuantidadeParcelas_Formulario;
 
     private TextView tv_modelo_Formulario;
 
@@ -67,7 +67,7 @@ public class CadastroFormulario extends AppCompatActivity {
         inputLayoutQuantidadeVariaveis_Formulario = (TextInputLayout) findViewById(R.id.input_layout_quantidadeVariaveis_Formulario);
         inputLayoutQuantidadeBlocos_Formulario = (TextInputLayout) findViewById(R.id.input_layout_quantidadeBlocos_Formulario);
         inputLayoutQuantidadeFatores_Formulario = (TextInputLayout) findViewById(R.id.input_layout_quantidadeFatores_Formulario);
-        inputLayoutQuantidadeDivisoes_Formulario = (TextInputLayout) findViewById(R.id.input_layout_quantidadeDivisoes_Formulario);
+        inputLayoutQuantidadeParcelas_Formulario = (TextInputLayout) findViewById(R.id.input_layout_quantidadeParcelas_Formulario);
 
         inputNome_Formulario = (TextInputEditText) findViewById(R.id.input_nome_Formulario);
         inputDescricao_Formulario = (TextInputEditText) findViewById(R.id.input_descricao_Formulario);
@@ -78,7 +78,7 @@ public class CadastroFormulario extends AppCompatActivity {
         input_quantidadeVariaveis_Formulario = (TextInputEditText) findViewById(R.id.input_quantidadeVariaveis_Formulario);
         input_quantidadeBlocos_Formulario = (TextInputEditText) findViewById(R.id.input_quantidadeBlocos_Formulario);
         input_quantidadeFatores_Formulario = (TextInputEditText) findViewById(R.id.input_quantidadeFatores_Formulario);
-        input_quantidadeDivisoes_Formulario = (TextInputEditText) findViewById(R.id.input_quantidadeDivisoes_Formulario);
+        input_quantidadeParcelas_Formulario = (TextInputEditText) findViewById(R.id.input_quantidadeParcelas_Formulario);
 
 
         inputNome_Formulario.addTextChangedListener(new FormularioTextWatcher(inputNome_Formulario));
@@ -90,7 +90,7 @@ public class CadastroFormulario extends AppCompatActivity {
         input_quantidadeVariaveis_Formulario.addTextChangedListener(new FormularioTextWatcher(input_quantidadeVariaveis_Formulario));
         input_quantidadeBlocos_Formulario.addTextChangedListener(new FormularioTextWatcher(input_quantidadeBlocos_Formulario));
         input_quantidadeFatores_Formulario.addTextChangedListener(new FormularioTextWatcher(input_quantidadeFatores_Formulario));
-        input_quantidadeDivisoes_Formulario.addTextChangedListener(new FormularioTextWatcher(input_quantidadeDivisoes_Formulario));
+        input_quantidadeParcelas_Formulario.addTextChangedListener(new FormularioTextWatcher(input_quantidadeParcelas_Formulario));
 
 
         inputLayoutQuantidadeTratamentos_Formulario.setVisibility(View.GONE);
@@ -99,7 +99,7 @@ public class CadastroFormulario extends AppCompatActivity {
         inputLayoutQuantidadeVariaveis_Formulario.setVisibility(View.GONE);
         inputLayoutQuantidadeBlocos_Formulario.setVisibility(View.GONE);
         inputLayoutQuantidadeFatores_Formulario.setVisibility(View.GONE);
-        inputLayoutQuantidadeDivisoes_Formulario.setVisibility(View.GONE);
+        inputLayoutQuantidadeParcelas_Formulario.setVisibility(View.GONE);
 
         Button btnSalvar_Formulario = (Button) findViewById(R.id.btn_salvar_Formulario);
 
@@ -140,25 +140,25 @@ public class CadastroFormulario extends AppCompatActivity {
                     inputLayoutQuantidadeTratamentos_Formulario.setVisibility(View.VISIBLE);
                     inputLayoutQuantidadeBlocos_Formulario.setVisibility(View.GONE);
                     inputLayoutQuantidadeFatores_Formulario.setVisibility(View.GONE);
-                    inputLayoutQuantidadeDivisoes_Formulario.setVisibility(View.GONE);
+                    inputLayoutQuantidadeParcelas_Formulario.setVisibility(View.GONE);
                     modelo_Formulario = 0;
                 } else if (checkedId == R.id.radio_DBC) {
                     inputLayoutQuantidadeTratamentos_Formulario.setVisibility(View.VISIBLE);
                     inputLayoutQuantidadeBlocos_Formulario.setVisibility(View.VISIBLE);
                     inputLayoutQuantidadeFatores_Formulario.setVisibility(View.GONE);
-                    inputLayoutQuantidadeDivisoes_Formulario.setVisibility(View.GONE);
+                    inputLayoutQuantidadeParcelas_Formulario.setVisibility(View.GONE);
                     modelo_Formulario = 1;
                 } else if (checkedId == R.id.radio_FAT) {
                     inputLayoutQuantidadeTratamentos_Formulario.setVisibility(View.GONE);
                     inputLayoutQuantidadeBlocos_Formulario.setVisibility(View.VISIBLE);
                     inputLayoutQuantidadeFatores_Formulario.setVisibility(View.VISIBLE);
-                    inputLayoutQuantidadeDivisoes_Formulario.setVisibility(View.GONE);
+                    inputLayoutQuantidadeParcelas_Formulario.setVisibility(View.GONE);
                     modelo_Formulario = 2;
                 } else if (checkedId == R.id.radio_SUB) {
                     inputLayoutQuantidadeTratamentos_Formulario.setVisibility(View.GONE);
                     inputLayoutQuantidadeBlocos_Formulario.setVisibility(View.VISIBLE);
                     inputLayoutQuantidadeFatores_Formulario.setVisibility(View.GONE);
-                    inputLayoutQuantidadeDivisoes_Formulario.setVisibility(View.VISIBLE);
+                    inputLayoutQuantidadeParcelas_Formulario.setVisibility(View.VISIBLE);
                     modelo_Formulario = 3;
                 }
             }
@@ -178,7 +178,7 @@ public class CadastroFormulario extends AppCompatActivity {
             inputLayoutQuantidadeTratamentos_Formulario.setVisibility(View.VISIBLE);
             inputLayoutQuantidadeBlocos_Formulario.setVisibility(View.GONE);
             inputLayoutQuantidadeFatores_Formulario.setVisibility(View.GONE);
-            inputLayoutQuantidadeDivisoes_Formulario.setVisibility(View.GONE);
+            inputLayoutQuantidadeParcelas_Formulario.setVisibility(View.GONE);
         }
         if (modelo_Formulario == 1) {
             if (!validarQuantidadeBlocos_Formulario() || !validarQuantidadeTratamentos_Formulario()) {
@@ -187,7 +187,7 @@ public class CadastroFormulario extends AppCompatActivity {
             inputLayoutQuantidadeTratamentos_Formulario.setVisibility(View.VISIBLE);
             inputLayoutQuantidadeBlocos_Formulario.setVisibility(View.VISIBLE);
             inputLayoutQuantidadeFatores_Formulario.setVisibility(View.GONE);
-            inputLayoutQuantidadeDivisoes_Formulario.setVisibility(View.GONE);
+            inputLayoutQuantidadeParcelas_Formulario.setVisibility(View.GONE);
         }
         if (modelo_Formulario == 2) {
             if (!validarQuantidadeFatores_Formulario() || !validarQuantidadeBlocos_Formulario()) {
@@ -196,16 +196,16 @@ public class CadastroFormulario extends AppCompatActivity {
             inputLayoutQuantidadeTratamentos_Formulario.setVisibility(View.GONE);
             inputLayoutQuantidadeBlocos_Formulario.setVisibility(View.VISIBLE);
             inputLayoutQuantidadeFatores_Formulario.setVisibility(View.VISIBLE);
-            inputLayoutQuantidadeDivisoes_Formulario.setVisibility(View.GONE);
+            inputLayoutQuantidadeParcelas_Formulario.setVisibility(View.GONE);
         }
         if (modelo_Formulario == 3) {
-            if (!validarQuantidadeDivisoes_Formulario() || !validarQuantidadeBlocos_Formulario()) {
+            if (!validarQuantidadeParcelas_Formulario() || !validarQuantidadeBlocos_Formulario()) {
                 return;
             }
             inputLayoutQuantidadeTratamentos_Formulario.setVisibility(View.GONE);
             inputLayoutQuantidadeBlocos_Formulario.setVisibility(View.VISIBLE);
             inputLayoutQuantidadeFatores_Formulario.setVisibility(View.GONE);
-            inputLayoutQuantidadeDivisoes_Formulario.setVisibility(View.VISIBLE);
+            inputLayoutQuantidadeParcelas_Formulario.setVisibility(View.VISIBLE);
         }
         if (!validarQuantidadeRepeticoes_Formulario(modelo_Formulario) || !validarQuantidadeReplicacoes_Formulario(modelo_Formulario) || !validarQuantidadeVariaveis_Formulario()) {
             return;
@@ -252,8 +252,8 @@ public class CadastroFormulario extends AppCompatActivity {
         } else formulario.setQuantidadeFatores_Formulario(-1);
 
         if (modelo_Formulario == 3) {
-            formulario.setQuantidadeDivisoes_Formulario(Integer.valueOf(input_quantidadeDivisoes_Formulario.getText().toString()));
-        } else formulario.setQuantidadeDivisoes_Formulario(-1);
+            formulario.setQuantidadeParcelas_Formulario(Integer.valueOf(input_quantidadeParcelas_Formulario.getText().toString()));
+        } else formulario.setQuantidadeParcelas_Formulario(-1);
 
         formulario.setStatus_Formulario(1);
 
@@ -414,17 +414,17 @@ public class CadastroFormulario extends AppCompatActivity {
         return true;
     }
 
-    private boolean validarQuantidadeDivisoes_Formulario() {
-        if (input_quantidadeDivisoes_Formulario.getText().toString().trim().isEmpty()) {
-            inputLayoutQuantidadeDivisoes_Formulario.setError(getString(R.string.err_msg_deveSerNumInteiro));
-            requestFocus(input_quantidadeDivisoes_Formulario);
+    private boolean validarQuantidadeParcelas_Formulario() {
+        if (input_quantidadeParcelas_Formulario.getText().toString().trim().isEmpty()) {
+            inputLayoutQuantidadeParcelas_Formulario.setError(getString(R.string.err_msg_deveSerNumInteiro));
+            requestFocus(input_quantidadeParcelas_Formulario);
             return false;
-        } else if (input_quantidadeDivisoes_Formulario.getText().toString().trim().equals(String.valueOf(0))) {
-            inputLayoutQuantidadeDivisoes_Formulario.setError(getString(R.string.err_msg_deveSerNumInteiroNaoNulo));
-            requestFocus(input_quantidadeDivisoes_Formulario);
+        } else if (input_quantidadeParcelas_Formulario.getText().toString().trim().equals(String.valueOf(0))) {
+            inputLayoutQuantidadeParcelas_Formulario.setError(getString(R.string.err_msg_deveSerNumInteiroNaoNulo));
+            requestFocus(input_quantidadeParcelas_Formulario);
             return false;
         } else {
-            inputLayoutQuantidadeDivisoes_Formulario.setErrorEnabled(false);
+            inputLayoutQuantidadeParcelas_Formulario.setErrorEnabled(false);
         }
         return true;
     }
@@ -478,8 +478,8 @@ public class CadastroFormulario extends AppCompatActivity {
                 case R.id.input_quantidadeFatores_Formulario:
                     validarQuantidadeFatores_Formulario();
                     break;
-                case R.id.input_quantidadeDivisoes_Formulario:
-                    validarQuantidadeDivisoes_Formulario();
+                case R.id.input_quantidadeParcelas_Formulario:
+                    validarQuantidadeParcelas_Formulario();
                     break;
             }
         }

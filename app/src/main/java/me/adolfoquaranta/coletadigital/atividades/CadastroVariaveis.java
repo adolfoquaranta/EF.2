@@ -162,6 +162,7 @@ public class CadastroVariaveis extends AppCompatActivity {
                     }
 
                     listarFormularios.putExtra("tipo_Formulario", formulario.getTipo_Formulario());
+                    finish();
                     startActivity(listarFormularios);
                 }
             }

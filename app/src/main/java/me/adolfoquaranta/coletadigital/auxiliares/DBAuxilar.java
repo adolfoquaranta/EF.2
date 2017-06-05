@@ -42,7 +42,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
     private static final String FORMULARIO_COL_QUANTIDADE_VARIAVEIS = "quantidadeVariaveis_Formulario";
     private static final String FORMULARIO_COL_QUANTIDADE_BLOCOS = "quantidadeBlocos_Formulario";
     private static final String FORMULARIO_COL_QUANTIDADE_FATORES = "quantidadeFatores_Formulario";
-    private static final String FORMULARIO_COL_QUANTIDADE_DIVISOES = "quantidadeDivisoes_Formulario";
+    private static final String FORMULARIO_COL_QUANTIDADE_PARCELAS = "quantidadeParcelas_Formulario";
 
     private static final String TRATAMENTO_TABELA = "Tratamento";
     private static final String TRATAMENTO_COL_ID = "id_Tratamento";
@@ -76,9 +76,9 @@ public class DBAuxilar extends SQLiteOpenHelper {
     private static final String DADO_COL_REPLICACAO = "replicacao_Dado";
     private static final String DADO_COL_BLOCO = "bloco_Dado";
     private static final String DADO_COL_FATOR = "fator_Dado";
-    private static final String DADO_COL_DIVISAO = "divisao_Dado";
+    private static final String DADO_COL_PARCELA = "parcela_Dado";
     private static final String DADO_COL_NIVEL_FATOR = "nivelFator_Dado";
-    private static final String DADO_COL_NIVEL_DIVISAO = "nivelDivisao_Dado";
+    private static final String DADO_COL_NIVEL_PARCELA = "nivelParcela_Dado";
     private static final String DADO_COL_ID_COLETA = "idColeta_Dado";
     private static final String DADO_COL_TRATAMENTO = "tratamento_Dado";
     private static final String DADO_COL_VARIAVEL = "variavel_Dado";
@@ -104,7 +104,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + FORMULARIO_COL_QUANTIDADE_VARIAVEIS + " INTEGER, "
             + FORMULARIO_COL_QUANTIDADE_BLOCOS + " INTEGER, "
             + FORMULARIO_COL_QUANTIDADE_FATORES + " INTEGER, "
-            + FORMULARIO_COL_QUANTIDADE_DIVISOES + " INTEGER "
+            + FORMULARIO_COL_QUANTIDADE_PARCELAS + " INTEGER "
             + ")";
 
     private static final String CRIAR_TABELA_TRATAMENTO = "CREATE TABLE "
@@ -142,9 +142,9 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + DADO_COL_REPLICACAO + " INTEGER, "
             + DADO_COL_BLOCO + " INTEGER, "
             + DADO_COL_FATOR + " INTEGER, "
-            + DADO_COL_DIVISAO + " INTEGER, "
+            + DADO_COL_PARCELA + " INTEGER, "
             + DADO_COL_NIVEL_FATOR + " INTEGER, "
-            + DADO_COL_NIVEL_DIVISAO + " INTEGER, "
+            + DADO_COL_NIVEL_PARCELA + " INTEGER, "
             + DADO_COL_ID_COLETA + " INTEGER, "
             + DADO_COL_TRATAMENTO + " INTEGER, "
             + DADO_COL_VARIAVEL + " INTEGER, "
@@ -197,7 +197,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
         values.put(FORMULARIO_COL_QUANTIDADE_REPLICACOES, formulario.getQuantidadeReplicacoes_Formulario());
         values.put(FORMULARIO_COL_QUANTIDADE_VARIAVEIS, formulario.getQuantidadeVariaveis_Formulario());
         values.put(FORMULARIO_COL_QUANTIDADE_BLOCOS, formulario.getQuantidadeBlocos_Formulario());
-        values.put(FORMULARIO_COL_QUANTIDADE_DIVISOES, formulario.getQuantidadeDivisoes_Formulario());
+        values.put(FORMULARIO_COL_QUANTIDADE_PARCELAS, formulario.getQuantidadeParcelas_Formulario());
         values.put(FORMULARIO_COL_QUANTIDADE_FATORES, formulario.getQuantidadeFatores_Formulario());
 
         return db.insert(FORMULARIO_TABELA, null, values);
@@ -231,7 +231,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
         formulario.setQuantidadeVariaveis_Formulario(c.getInt(c.getColumnIndex(FORMULARIO_COL_QUANTIDADE_VARIAVEIS)));
         formulario.setQuantidadeBlocos_Formulario(c.getInt(c.getColumnIndex(FORMULARIO_COL_QUANTIDADE_BLOCOS)));
         formulario.setQuantidadeFatores_Formulario(c.getInt(c.getColumnIndex(FORMULARIO_COL_QUANTIDADE_FATORES)));
-        formulario.setQuantidadeDivisoes_Formulario(c.getInt(c.getColumnIndex(FORMULARIO_COL_QUANTIDADE_DIVISOES)));
+        formulario.setQuantidadeParcelas_Formulario(c.getInt(c.getColumnIndex(FORMULARIO_COL_QUANTIDADE_PARCELAS)));
         c.close();
 
         return formulario;
@@ -265,7 +265,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
                 formulario.setQuantidadeVariaveis_Formulario(c.getInt(c.getColumnIndex(FORMULARIO_COL_QUANTIDADE_VARIAVEIS)));
                 formulario.setQuantidadeBlocos_Formulario(c.getInt(c.getColumnIndex(FORMULARIO_COL_QUANTIDADE_BLOCOS)));
                 formulario.setQuantidadeFatores_Formulario(c.getInt(c.getColumnIndex(FORMULARIO_COL_QUANTIDADE_FATORES)));
-                formulario.setQuantidadeDivisoes_Formulario(c.getInt(c.getColumnIndex(FORMULARIO_COL_QUANTIDADE_DIVISOES)));
+                formulario.setQuantidadeParcelas_Formulario(c.getInt(c.getColumnIndex(FORMULARIO_COL_QUANTIDADE_PARCELAS)));
                 formularios.add(formulario);
 
             }while (c.moveToNext());
@@ -301,7 +301,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
         values.put(FORMULARIO_COL_QUANTIDADE_REPLICACOES, formulario.getQuantidadeReplicacoes_Formulario());
         values.put(FORMULARIO_COL_QUANTIDADE_VARIAVEIS, formulario.getQuantidadeVariaveis_Formulario());
         values.put(FORMULARIO_COL_QUANTIDADE_BLOCOS, formulario.getQuantidadeBlocos_Formulario());
-        values.put(FORMULARIO_COL_QUANTIDADE_DIVISOES, formulario.getQuantidadeDivisoes_Formulario());
+        values.put(FORMULARIO_COL_QUANTIDADE_PARCELAS, formulario.getQuantidadeParcelas_Formulario());
         values.put(FORMULARIO_COL_QUANTIDADE_FATORES, formulario.getQuantidadeFatores_Formulario());
 
         return db.update(FORMULARIO_TABELA, values, FORMULARIO_COL_ID + " = " + formulario.getId_Formulario(), null);
@@ -509,9 +509,9 @@ public class DBAuxilar extends SQLiteOpenHelper {
         values.put(DADO_COL_REPLICACAO,dado.getReplicacao_Dado());
         values.put(DADO_COL_BLOCO,dado.getBloco_Dado());
         values.put(DADO_COL_FATOR,dado.getFator_Dado());
-        values.put(DADO_COL_DIVISAO,dado.getDivisao_Dado());
+        values.put(DADO_COL_PARCELA, dado.getParcela_Dado());
         values.put(DADO_COL_NIVEL_FATOR,dado.getNivelFator_Dado());
-        values.put(DADO_COL_NIVEL_DIVISAO,dado.getNivelDivisao_Dado());
+        values.put(DADO_COL_NIVEL_PARCELA, dado.getNivelParcela_Dado());
         values.put(DADO_COL_ID_COLETA,dado.getIdColeta_Dado());
         values.put(DADO_COL_TRATAMENTO, dado.getTratamento_Dado());
         values.put(DADO_COL_VARIAVEL, dado.getVariavel_Dado());
@@ -540,9 +540,9 @@ public class DBAuxilar extends SQLiteOpenHelper {
                 dado.setReplicacao_Dado(c.getInt(c.getColumnIndex(DADO_COL_REPLICACAO)));
                 dado.setBloco_Dado(c.getInt(c.getColumnIndex(DADO_COL_BLOCO)));
                 dado.setFator_Dado(c.getInt(c.getColumnIndex(DADO_COL_FATOR)));
-                dado.setDivisao_Dado(c.getInt(c.getColumnIndex(DADO_COL_DIVISAO)));
+                dado.setParcela_Dado(c.getInt(c.getColumnIndex(DADO_COL_PARCELA)));
                 dado.setNivelFator_Dado(c.getInt(c.getColumnIndex(DADO_COL_NIVEL_FATOR)));
-                dado.setNivelDivisao_Dado(c.getInt(c.getColumnIndex(DADO_COL_NIVEL_DIVISAO)));
+                dado.setNivelParcela_Dado(c.getInt(c.getColumnIndex(DADO_COL_NIVEL_PARCELA)));
                 dado.setIdColeta_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID_COLETA)));
                 dado.setTratamento_Dado(c.getInt(c.getColumnIndex(DADO_COL_TRATAMENTO)));
                 dado.setVariavel_Dado(c.getInt(c.getColumnIndex(DADO_COL_VARIAVEL)));

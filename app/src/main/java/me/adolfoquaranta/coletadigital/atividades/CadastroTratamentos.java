@@ -145,6 +145,7 @@ public class CadastroTratamentos extends AppCompatActivity {
                             dbauxiliar.insertTratamento(trat);
                         }
                         cadastroVariaveis.putExtra("id_Formulario", id_Formulario);
+                        finish();
                         startActivity(cadastroVariaveis);
                     } else {
                         int i = 0;
@@ -154,6 +155,7 @@ public class CadastroTratamentos extends AppCompatActivity {
                             i++;
                         }
                         cadastroVariaveis.putExtra("id_Formulario", id_Formulario);
+                        finish();
                         startActivity(cadastroVariaveis);
                     }
                 }

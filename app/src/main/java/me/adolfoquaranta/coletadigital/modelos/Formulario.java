@@ -7,7 +7,7 @@ package me.adolfoquaranta.coletadigital.modelos;
 public class Formulario {
     private Long id_Formulario;
     private String tipo_Formulario, nome_Formulario, descricao_Formulario, criador_Formulario, dataCriacao_Formulario;
-    private Integer quantidadeTratamentos_Formulario, quantidadeRepeticoes_Formulario, quantidadeReplicacoes_Formulario, quantidadeVariaveis_Formulario, quantidadeBlocos_Formulario, quantidadeFatores_Formulario, quantidadeDivisoes_Formulario, modelo_Formulario, status_Formulario;
+    private Integer quantidadeTratamentos_Formulario, quantidadeRepeticoes_Formulario, quantidadeReplicacoes_Formulario, quantidadeVariaveis_Formulario, quantidadeBlocos_Formulario, quantidadeFatores_Formulario, quantidadeParcelas_Formulario, modelo_Formulario, status_Formulario;
 
     public Formulario() {
     }
@@ -116,12 +116,12 @@ public class Formulario {
         this.quantidadeFatores_Formulario = quantidadeFatores_Formulario;
     }
 
-    public Integer getQuantidadeDivisoes_Formulario() {
-        return quantidadeDivisoes_Formulario;
+    public Integer getQuantidadeParcelas_Formulario() {
+        return quantidadeParcelas_Formulario;
     }
 
-    public void setQuantidadeDivisoes_Formulario(Integer quantidadeDivisoes_Formulario) {
-        this.quantidadeDivisoes_Formulario = quantidadeDivisoes_Formulario;
+    public void setQuantidadeParcelas_Formulario(Integer quantidadeParcelas_Formulario) {
+        this.quantidadeParcelas_Formulario = quantidadeParcelas_Formulario;
     }
 
     public Integer getModelo_Formulario() {
@@ -148,7 +148,7 @@ public class Formulario {
                 ", quantidadeVariaveis_Formulario=" + quantidadeVariaveis_Formulario +
                 ", quantidadeBlocos_Formulario=" + quantidadeBlocos_Formulario +
                 ", quantidadeFatores_Formulario=" + quantidadeFatores_Formulario +
-                ", quantidadeDivisoes_Formulario=" + quantidadeDivisoes_Formulario +
+                ", quantidadeParcelas_Formulario=" + quantidadeParcelas_Formulario +
                 ", modelo_Formulario=" + modelo_Formulario +
                 '}';
     }

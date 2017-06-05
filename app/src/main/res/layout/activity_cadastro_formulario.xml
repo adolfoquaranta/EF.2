@@ -125,15 +125,15 @@
                 </android.support.design.widget.TextInputLayout>
 
                 <android.support.design.widget.TextInputLayout
-                    android:id="@+id/input_layout_quantidadeDivisoes_Formulario"
+                    android:id="@+id/input_layout_quantidadeParcelas_Formulario"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
                     <android.support.design.widget.TextInputEditText
-                        android:id="@+id/input_quantidadeDivisoes_Formulario"
+                        android:id="@+id/input_quantidadeParcelas_Formulario"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="@string/hint_quantidadeDivisoes_Modelo"
+                        android:hint="@string/hint_quantidadeParcelas_Modelo"
                         android:inputType="number" />
                 </android.support.design.widget.TextInputLayout>
 

@@ -42,6 +42,8 @@ public class ColetarDados extends AppCompatActivity {
 
     private Formulario formulario;
     private Coleta coleta;
+    private boolean doubleBackToExitPressedOnce = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -332,7 +334,66 @@ public class ColetarDados extends AppCompatActivity {
             }
         });
 
+        FloatingActionButton anteriorDado = (FloatingActionButton) findViewById(R.id.fab_anteriorDado);
+        anteriorDado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent recarregar = new Intent(ColetarDados.this, ColetarDados.class);
+                recarregar.putExtra("id_Formulario", id_Formulario);
+                recarregar.putExtra("id_Coleta", id_Coleta);
+
+
+                if (replicacaoAtual == 0) {
+                    if (repeticaoAtual == 0) {
+                        if (tratamentoAtual == 0) {
+                            if (blocoAtual == 0) {
+                                Toast.makeText(getApplicationContext(), getString(R.string.info_Retornar), Toast.LENGTH_SHORT).show();
+                            } else if (blocoAtual > 0) {
+                                blocoAtual--;
+                                tratamentoAtual = formulario.getQuantidadeTratamentos_Formulario() - 1;
+                                repeticaoAtual = formulario.getQuantidadeRepeticoes_Formulario() - 1;
+                                replicacaoAtual = formulario.getQuantidadeReplicacoes_Formulario() - 1;
+                                recarregar.putExtra("blocoAtual", blocoAtual);
+                                recarregar.putExtra("replicacaoAtual", replicacaoAtual);
+                                recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                                recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+                                finish();
+                                startActivity(recarregar);
+                            }
+                        } else if (tratamentoAtual > 0) {
+                            tratamentoAtual--;
+                            repeticaoAtual = formulario.getQuantidadeRepeticoes_Formulario() - 1;
+                            replicacaoAtual = formulario.getQuantidadeReplicacoes_Formulario() - 1;
+                            recarregar.putExtra("replicacaoAtual", replicacaoAtual);
+                            recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                            recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+                            recarregar.putExtra("blocoAtual", blocoAtual);
+                            finish();
+                            startActivity(recarregar);
+                        }
+                    } else if (repeticaoAtual > 0) {
+                        repeticaoAtual--;
+                        replicacaoAtual = formulario.getQuantidadeReplicacoes_Formulario() - 1;
+                        recarregar.putExtra("replicacaoAtual", replicacaoAtual);
+                        recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                        recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+                        recarregar.putExtra("blocoAtual", blocoAtual);
+                        finish();
+                        startActivity(recarregar);
+                    }
+                } else if (replicacaoAtual > 0) {
+                    replicacaoAtual--;
+                    recarregar.putExtra("replicacaoAtual", replicacaoAtual);
+                    recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                    recarregar.putExtra("tratamentoAtual", tratamentoAtual);
+                    recarregar.putExtra("blocoAtual", blocoAtual);
+                    finish();
+                    startActivity(recarregar);
+                }
+            }
+        });
     }
+
 
     public void inserirDados(ArrayList<Dado> dados) {
         for (int i = 0; i < dados.size(); i++) {
@@ -353,65 +414,5 @@ public class ColetarDados extends AppCompatActivity {
             }
         }
     }
-
-    public void onBackPressed() {
-
-        Intent recarregar = new Intent(ColetarDados.this, ColetarDados.class);
-        recarregar.putExtra("id_Formulario", id_Formulario);
-        recarregar.putExtra("id_Coleta", id_Coleta);
-
-
-        if (replicacaoAtual == 0) {
-            if (repeticaoAtual == 0) {
-                if (tratamentoAtual == 0) {
-                    if(blocoAtual == 0){
-                        Toast.makeText(this, getString(R.string.info_ImpossivelRetornar), Toast.LENGTH_SHORT).show();
-                    }
-                    else if(blocoAtual > 0){
-                        blocoAtual--;
-                        tratamentoAtual = formulario.getQuantidadeTratamentos_Formulario() - 1;
-                        repeticaoAtual = formulario.getQuantidadeRepeticoes_Formulario() - 1;
-                        replicacaoAtual = formulario.getQuantidadeReplicacoes_Formulario() - 1;
-                        recarregar.putExtra("blocoAtual", blocoAtual);
-                        recarregar.putExtra("replicacaoAtual", replicacaoAtual);
-                        recarregar.putExtra("repeticaoAtual", repeticaoAtual);
-                        recarregar.putExtra("tratamentoAtual", tratamentoAtual);
-                        finish();
-                        startActivity(recarregar);
-                    }
-                } else if (tratamentoAtual > 0) {
-                    tratamentoAtual--;
-                    repeticaoAtual = formulario.getQuantidadeRepeticoes_Formulario() - 1;
-                    replicacaoAtual = formulario.getQuantidadeReplicacoes_Formulario() - 1;
-                    recarregar.putExtra("replicacaoAtual", replicacaoAtual);
-                    recarregar.putExtra("repeticaoAtual", repeticaoAtual);
-                    recarregar.putExtra("tratamentoAtual", tratamentoAtual);
-                    recarregar.putExtra("blocoAtual", blocoAtual);
-                    finish();
-                    startActivity(recarregar);
-                }
-            } else if (repeticaoAtual > 0) {
-                repeticaoAtual--;
-                replicacaoAtual = formulario.getQuantidadeReplicacoes_Formulario() - 1;
-                recarregar.putExtra("replicacaoAtual", replicacaoAtual);
-                recarregar.putExtra("repeticaoAtual", repeticaoAtual);
-                recarregar.putExtra("tratamentoAtual", tratamentoAtual);
-                recarregar.putExtra("blocoAtual", blocoAtual);
-                finish();
-                startActivity(recarregar);
-            }
-        } else if (replicacaoAtual > 0) {
-            replicacaoAtual--;
-            recarregar.putExtra("replicacaoAtual", replicacaoAtual);
-            recarregar.putExtra("repeticaoAtual", repeticaoAtual);
-            recarregar.putExtra("tratamentoAtual", tratamentoAtual);
-            recarregar.putExtra("blocoAtual", blocoAtual);
-            finish();
-            startActivity(recarregar);
-        }
-
-        //Toast.makeText(this, getString(R.string.info_EmBreve), Toast.LENGTH_SHORT).show();
-    }
-
 
 }

@@ -118,11 +118,11 @@ public class Dado {
         this.fator_Dado = fator_Dado;
     }
 
-    public Integer getDivisao_Dado() {
+    public Integer getParcela_Dado() {
         return divisao_Dado;
     }
 
-    public void setDivisao_Dado(Integer divisao_Dado) {
+    public void setParcela_Dado(Integer divisao_Dado) {
         this.divisao_Dado = divisao_Dado;
     }
 
@@ -134,11 +134,11 @@ public class Dado {
         this.nivelFator_Dado = nivelFator_Dado;
     }
 
-    public Integer getNivelDivisao_Dado() {
+    public Integer getNivelParcela_Dado() {
         return nivelDivisao_Dado;
     }
 
-    public void setNivelDivisao_Dado(Integer nivelDivisao_Dado) {
+    public void setNivelParcela_Dado(Integer nivelDivisao_Dado) {
         this.nivelDivisao_Dado = nivelDivisao_Dado;
     }
 
