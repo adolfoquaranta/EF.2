@@ -33,7 +33,17 @@ public class ColetasAdapter extends RecyclerView.Adapter<ColetasAdapter.MyViewHo
         Coleta coleta = coletaList.get(position);
         holder.nome_Coleta.setText(coleta.getNome_Coleta());
         holder.descricao_Coleta.setText(coleta.getDescricao_Coleta());
-        holder.status_Coleta.setText(coleta.getStatus_Coleta());
+        switch (coleta.getStatus_Coleta()) {
+            case "":
+                holder.status_Coleta.setText("Não iniciada");
+                break;
+            case "ok":
+                holder.status_Coleta.setText("Completa");
+                break;
+            default:
+                holder.status_Coleta.setText("Em andamento");
+                break;
+        }
     }
 
     @Override

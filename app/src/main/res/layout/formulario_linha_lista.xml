@@ -2,37 +2,45 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="?android:attr/selectableItemBackground"
+    android:clickable="true"
     android:focusable="true"
+    android:orientation="vertical"
+    android:paddingBottom="10dp"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
-    android:clickable="true"
-    android:background="?android:attr/selectableItemBackground"
-    android:orientation="vertical">
+    android:paddingTop="10dp">
 
     <TextView
         android:id="@+id/nome_Form"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
         android:textColor="@color/title"
         android:textSize="16dp"
-        android:textStyle="bold"
-        android:layout_alignParentTop="true"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/modelo_Form"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/nome_Form"
+        android:textColor="@color/title"
+        android:textSize="12dp" />
 
     <TextView
         android:id="@+id/descricao_Form"
-        android:layout_below="@id/nome_Form"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_below="@id/modelo_Form" />
 
     <TextView
         android:id="@+id/dataCricao_Form"
-        android:textColor="@color/year"
         android:layout_width="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
         android:layout_height="wrap_content"
-        android:layout_below="@id/descricao_Form"/>
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/descricao_Form"
+        android:textColor="@color/year" />
 
 </RelativeLayout>

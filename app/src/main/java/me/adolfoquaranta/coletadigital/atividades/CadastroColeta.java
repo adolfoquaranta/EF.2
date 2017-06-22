@@ -80,6 +80,7 @@ public class CadastroColeta extends AppCompatActivity {
         coleta.setDataCriacao_Coleta(date.toString());
         coleta.setDataUltimaEdicao_Coleta(date.toString());
         coleta.setTipo_Coleta(tipo_Formulario);
+        coleta.setStatus_Coleta("");
         coleta.setIdFormulario_Coleta(id_Formulario);
 
 

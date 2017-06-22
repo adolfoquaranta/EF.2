@@ -488,6 +488,15 @@ public class DBAuxilar extends SQLiteOpenHelper {
         return coletas;
     }
 
+    public int updateStatusColeta(Coleta coleta) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(COLETA_COL_STATUS, coleta.getStatus_Coleta());
+
+        return db.update(COLETA_TABELA, values, COLETA_COL_ID + "=" + coleta.getId_Coleta(), null);
+    }
+
 
     public int deleteColeta(Long id_Coleta) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -590,7 +599,7 @@ public class DBAuxilar extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(DADO_COL_VALOR, dado.getValor_Dado());
 
-        return db.update(DADO_TABELA, values, "id_Dado=" + dado.getId_Dado(), null);
+        return db.update(DADO_TABELA, values, DADO_COL_ID + "=" + dado.getId_Dado(), null);
     }
 
     public Long checarDado(Dado dado) {

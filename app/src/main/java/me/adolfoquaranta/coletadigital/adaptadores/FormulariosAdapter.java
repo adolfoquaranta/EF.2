@@ -15,6 +15,7 @@ import me.adolfoquaranta.coletadigital.modelos.Formulario;
 public class FormulariosAdapter extends RecyclerView.Adapter<FormulariosAdapter.MyViewHolder> {
 
     private List<Formulario> formularioList = new ArrayList<>();
+    private String[] modelos = {"DIC", "DBC", "FAT", "SUB"};
 
     public FormulariosAdapter(List<Formulario> formularioList) {
         this.formularioList = formularioList;
@@ -34,6 +35,7 @@ public class FormulariosAdapter extends RecyclerView.Adapter<FormulariosAdapter.
         holder.nome_Form.setText(formulario.getNome_Formulario());
         holder.descricao_Form.setText(formulario.getDescricao_Formulario());
         holder.dataCriacao_Form.setText(formulario.getDataCriacao_Formulario());
+        holder.modelo_Form.setText(modelos[formulario.getModelo_Formulario()]);
     }
 
     @Override
@@ -42,13 +44,14 @@ public class FormulariosAdapter extends RecyclerView.Adapter<FormulariosAdapter.
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder {
-        TextView nome_Form, descricao_Form, dataCriacao_Form;
+        TextView nome_Form, descricao_Form, dataCriacao_Form, modelo_Form;
 
         MyViewHolder(View view) {
             super(view);
             nome_Form = (TextView) view.findViewById(R.id.nome_Form);
             descricao_Form = (TextView) view.findViewById(R.id.descricao_Form);
             dataCriacao_Form = (TextView) view.findViewById(R.id.dataCricao_Form);
+            modelo_Form = (TextView) view.findViewById(R.id.modelo_Form);
         }
     }
     

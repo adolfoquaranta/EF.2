@@ -144,7 +144,12 @@ public class ListarColetas extends AppCompatActivity {
 
                                     String baseDir = Environment.getExternalStorageDirectory().getAbsolutePath();
                                     String fileDir = "COLETA DIGITAL";
-                                    String fileName = (coletasList.get(position).getNome_Coleta()+"_"+ new SimpleDateFormat("dd-MM-yyyy_HHmmss", new Locale("pt", "BR")).format(new Date())) + ".csv";
+                                    String fileName = (formulario.getNome_Formulario()
+                                            + "_"
+                                            + coletasList.get(position).getNome_Coleta()
+                                            + "_"
+                                            + new SimpleDateFormat("dd-MM-yyyy_HHmmss", new Locale("pt", "BR")).format(new Date()))
+                                            + ".csv";
                                     String filePath = baseDir + File.separator + fileDir + File.separator + fileName;
 
                                     File folder = new File(baseDir + File.separator + fileDir);
@@ -263,6 +268,14 @@ public class ListarColetas extends AppCompatActivity {
                                     Intent coletarDados = new Intent(ListarColetas.this, ColetarDados.class);
                                     coletarDados.putExtra("id_Formulario", id_Formulario);
                                     coletarDados.putExtra("id_Coleta", coletasList.get(position).getId_Coleta());
+                                    if (!coletasList.get(position).getStatus_Coleta().equals("ok") &&
+                                            !coletasList.get(position).getStatus_Coleta().equals("")) {
+                                        String[] posicaoColeta = coletasList.get(position).getStatus_Coleta().split(",");
+                                        coletarDados.putExtra("tratamentoAtual", Integer.valueOf(posicaoColeta[0]));
+                                        coletarDados.putExtra("replicacaoAtual", Integer.valueOf(posicaoColeta[1]));
+                                        coletarDados.putExtra("repeticaoAtual", Integer.valueOf(posicaoColeta[2]));
+                                        coletarDados.putExtra("blocoAtual", Integer.valueOf(posicaoColeta[3]));
+                                    }
                                     startActivity(coletarDados);
                                     break;
                                 case 2:

@@ -42,8 +42,6 @@ public class ColetarDados extends AppCompatActivity {
 
     private Formulario formulario;
     private Coleta coleta;
-    private boolean doubleBackToExitPressedOnce = false;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +136,7 @@ public class ColetarDados extends AppCompatActivity {
         final TextView infoColetaAtual = (TextView) findViewById(R.id.tv_infoColetaAtual);
 
 
-        String bloco = "BLOCO " + (blocoAtual + 1), tratamento = "TRATAMENTO " + (tratamentoAtual + 1), repeticao = "REPETIÇÃO " + (repeticaoAtual + 1), replicacao = "RÉPLICA " + (replicacaoAtual + 1), infoColeta = "";
+        String bloco = "Bloco " + (blocoAtual + 1), tratamento = tratamentos.get(tratamentoAtual).getNome_Tratamento(), repeticao = "Repetição " + (repeticaoAtual + 1), replicacao = "Réplica " + (replicacaoAtual + 1), infoColeta = "";
 
         if(formulario.getModelo_Formulario()==0) {
             if (formulario.getQuantidadeReplicacoes_Formulario() <= 1) {
@@ -271,6 +269,8 @@ public class ColetarDados extends AppCompatActivity {
                                 Intent listarColetas = new Intent(ColetarDados.this, ListarColetas.class);
                                 listarColetas.putExtra("id_Formulario", id_Formulario);
                                 listarColetas.putExtra("tipo_Formulario", dbAuxilar.lerFormulario(id_Formulario).getTipo_Formulario());
+                                coleta.setStatus_Coleta("ok");
+                                dbAuxilar.updateStatusColeta(coleta);
                                 finish();
                                 startActivity(listarColetas);
                             }
@@ -280,6 +280,8 @@ public class ColetarDados extends AppCompatActivity {
                                     Intent listarColetas = new Intent(ColetarDados.this, ListarColetas.class);
                                     listarColetas.putExtra("id_Formulario", id_Formulario);
                                     listarColetas.putExtra("tipo_Formulario", dbAuxilar.lerFormulario(id_Formulario).getTipo_Formulario());
+                                    coleta.setStatus_Coleta("ok");
+                                    dbAuxilar.updateStatusColeta(coleta);
                                     finish();
                                     startActivity(listarColetas);
                                 } else if (blocoAtual + 1 < formulario.getQuantidadeBlocos_Formulario()) {
@@ -413,6 +415,10 @@ public class ColetarDados extends AppCompatActivity {
                 dbAuxilar.updateDado(dados.get(i));
             }
         }
+        coleta.setStatus_Coleta(String.valueOf(tratamentoAtual) + ","
+                + String.valueOf(replicacaoAtual) + "," + String.valueOf(repeticaoAtual) + ","
+                + String.valueOf(blocoAtual));
+        dbAuxilar.updateStatusColeta(coleta);
     }
 
 }
