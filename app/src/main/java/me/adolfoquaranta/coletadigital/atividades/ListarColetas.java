@@ -276,6 +276,7 @@ public class ListarColetas extends AppCompatActivity {
                                         coletarDados.putExtra("repeticaoAtual", Integer.valueOf(posicaoColeta[2]));
                                         coletarDados.putExtra("blocoAtual", Integer.valueOf(posicaoColeta[3]));
                                     }
+                                    finish();
                                     startActivity(coletarDados);
                                     break;
                                 case 2:

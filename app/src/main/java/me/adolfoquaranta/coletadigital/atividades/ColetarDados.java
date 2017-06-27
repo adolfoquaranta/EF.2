@@ -421,4 +421,13 @@ public class ColetarDados extends AppCompatActivity {
         dbAuxilar.updateStatusColeta(coleta);
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        Intent listarColetas = new Intent(ColetarDados.this, ListarColetas.class);
+        listarColetas.putExtra("id_Formulario", id_Formulario);
+        listarColetas.putExtra("tipo_Formulario", dbAuxilar.lerFormulario(id_Formulario).getTipo_Formulario());
+        finish();
+        startActivity(listarColetas);
+    }
 }
