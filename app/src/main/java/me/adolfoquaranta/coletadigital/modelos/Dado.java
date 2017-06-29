@@ -6,28 +6,28 @@ package me.adolfoquaranta.coletadigital.modelos;
 
 public class Dado {
 
-    private Long id_Dado, idColeta_Dado, idVariavel_Dado, idTratamento_Dado;
+    private Long id_Dado, idColeta_Dado, idVariavel_Dado, idTratamento_Dado, idFator_Dado, idNivelFator_Dado, idParcela_Dado, nivelParcela_Dado;
     private String valor_Dado;
-    private Integer repeticao_Dado, replicacao_Dado, tratamento_Dado, variavel_Dado, bloco_Dado, fator_Dado, divisao_Dado, nivelFator_Dado, nivelDivisao_Dado;
+    private Integer repeticao_Dado, replicacao_Dado, tratamento_Dado, variavel_Dado, bloco_Dado;
 
     public Dado() {
     }
 
-    public Dado(Long id_Dado, Integer tratamento_Dado, Integer variavel_Dado, Long idColeta_Dado, String valor_Dado, Integer repeticao_Dado, Integer replicacao_Dado, Integer bloco_Dado, Integer fator_Dado, Integer divisao_Dado, Integer nivelFator_Dado, Integer nivelDivisao_Dado, Long idVariavel_Dado, Long idTratamento_Dado) {
+    public Dado(Long id_Dado, Long idColeta_Dado, Long idVariavel_Dado, Long idTratamento_Dado, Long idFator_Dado, Long idNivelFator_Dado, Long idParcela_Dado, Long nivelParcela_Dado, String valor_Dado, Integer repeticao_Dado, Integer replicacao_Dado, Integer tratamento_Dado, Integer variavel_Dado, Integer bloco_Dado) {
         this.id_Dado = id_Dado;
-        this.tratamento_Dado = tratamento_Dado;
-        this.variavel_Dado = variavel_Dado;
         this.idColeta_Dado = idColeta_Dado;
+        this.idVariavel_Dado = idVariavel_Dado;
+        this.idTratamento_Dado = idTratamento_Dado;
+        this.idFator_Dado = idFator_Dado;
+        this.idNivelFator_Dado = idNivelFator_Dado;
+        this.idParcela_Dado = idParcela_Dado;
+        this.nivelParcela_Dado = nivelParcela_Dado;
         this.valor_Dado = valor_Dado;
         this.repeticao_Dado = repeticao_Dado;
         this.replicacao_Dado = replicacao_Dado;
+        this.tratamento_Dado = tratamento_Dado;
+        this.variavel_Dado = variavel_Dado;
         this.bloco_Dado = bloco_Dado;
-        this.fator_Dado = fator_Dado;
-        this.divisao_Dado = divisao_Dado;
-        this.nivelFator_Dado = nivelFator_Dado;
-        this.nivelDivisao_Dado = nivelDivisao_Dado;
-        this.idVariavel_Dado = idVariavel_Dado;
-        this.idTratamento_Dado = idTratamento_Dado;
     }
 
     public Long getId_Dado() {
@@ -38,12 +38,12 @@ public class Dado {
         this.id_Dado = id_Dado;
     }
 
-    public Integer getTratamento_Dado() {
-        return tratamento_Dado;
+    public Long getIdColeta_Dado() {
+        return idColeta_Dado;
     }
 
-    public void setTratamento_Dado(Integer tratamento_Dado) {
-        this.tratamento_Dado = tratamento_Dado;
+    public void setIdColeta_Dado(Long idColeta_Dado) {
+        this.idColeta_Dado = idColeta_Dado;
     }
 
     public Long getIdVariavel_Dado() {
@@ -62,20 +62,36 @@ public class Dado {
         this.idTratamento_Dado = idTratamento_Dado;
     }
 
-    public Integer getVariavel_Dado() {
-        return variavel_Dado;
+    public Long getIdFator_Dado() {
+        return idFator_Dado;
     }
 
-    public void setVariavel_Dado(Integer variavel_Dado) {
-        this.variavel_Dado = variavel_Dado;
+    public void setIdFator_Dado(Long idFator_Dado) {
+        this.idFator_Dado = idFator_Dado;
     }
 
-    public Long getIdColeta_Dado() {
-        return idColeta_Dado;
+    public Long getIdNivelFator_Dado() {
+        return idNivelFator_Dado;
     }
 
-    public void setIdColeta_Dado(Long idColeta_Dado) {
-        this.idColeta_Dado = idColeta_Dado;
+    public void setIdNivelFator_Dado(Long idNivelFator_Dado) {
+        this.idNivelFator_Dado = idNivelFator_Dado;
+    }
+
+    public Long getIdParcela_Dado() {
+        return idParcela_Dado;
+    }
+
+    public void setIdParcela_Dado(Long idParcela_Dado) {
+        this.idParcela_Dado = idParcela_Dado;
+    }
+
+    public Long getNivelParcela_Dado() {
+        return nivelParcela_Dado;
+    }
+
+    public void setNivelParcela_Dado(Long nivelParcela_Dado) {
+        this.nivelParcela_Dado = nivelParcela_Dado;
     }
 
     public String getValor_Dado() {
@@ -102,44 +118,28 @@ public class Dado {
         this.replicacao_Dado = replicacao_Dado;
     }
 
+    public Integer getTratamento_Dado() {
+        return tratamento_Dado;
+    }
+
+    public void setTratamento_Dado(Integer tratamento_Dado) {
+        this.tratamento_Dado = tratamento_Dado;
+    }
+
+    public Integer getVariavel_Dado() {
+        return variavel_Dado;
+    }
+
+    public void setVariavel_Dado(Integer variavel_Dado) {
+        this.variavel_Dado = variavel_Dado;
+    }
+
     public Integer getBloco_Dado() {
         return bloco_Dado;
     }
 
     public void setBloco_Dado(Integer bloco_Dado) {
         this.bloco_Dado = bloco_Dado;
-    }
-
-    public Integer getFator_Dado() {
-        return fator_Dado;
-    }
-
-    public void setFator_Dado(Integer fator_Dado) {
-        this.fator_Dado = fator_Dado;
-    }
-
-    public Integer getParcela_Dado() {
-        return divisao_Dado;
-    }
-
-    public void setParcela_Dado(Integer divisao_Dado) {
-        this.divisao_Dado = divisao_Dado;
-    }
-
-    public Integer getNivelFator_Dado() {
-        return nivelFator_Dado;
-    }
-
-    public void setNivelFator_Dado(Integer nivelFator_Dado) {
-        this.nivelFator_Dado = nivelFator_Dado;
-    }
-
-    public Integer getNivelParcela_Dado() {
-        return nivelDivisao_Dado;
-    }
-
-    public void setNivelParcela_Dado(Integer nivelDivisao_Dado) {
-        this.nivelDivisao_Dado = nivelDivisao_Dado;
     }
 
     @Override
@@ -149,16 +149,16 @@ public class Dado {
                 ", idColeta_Dado=" + idColeta_Dado +
                 ", idVariavel_Dado=" + idVariavel_Dado +
                 ", idTratamento_Dado=" + idTratamento_Dado +
+                ", idFator_Dado=" + idFator_Dado +
+                ", idNivelFator_Dado=" + idNivelFator_Dado +
+                ", idParcela_Dado=" + idParcela_Dado +
+                ", nivelParcela_Dado=" + nivelParcela_Dado +
                 ", valor_Dado='" + valor_Dado + '\'' +
                 ", repeticao_Dado=" + repeticao_Dado +
                 ", replicacao_Dado=" + replicacao_Dado +
                 ", tratamento_Dado=" + tratamento_Dado +
                 ", variavel_Dado=" + variavel_Dado +
                 ", bloco_Dado=" + bloco_Dado +
-                ", fator_Dado=" + fator_Dado +
-                ", divisao_Dado=" + divisao_Dado +
-                ", nivelFator_Dado=" + nivelFator_Dado +
-                ", nivelDivisao_Dado=" + nivelDivisao_Dado +
                 '}';
     }
 }

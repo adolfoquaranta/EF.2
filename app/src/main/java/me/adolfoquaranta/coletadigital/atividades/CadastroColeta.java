@@ -18,6 +18,7 @@ import java.util.Date;
 import me.adolfoquaranta.coletadigital.R;
 import me.adolfoquaranta.coletadigital.auxiliares.DBAuxilar;
 import me.adolfoquaranta.coletadigital.modelos.Coleta;
+import me.adolfoquaranta.coletadigital.modelos.Formulario;
 
 public class CadastroColeta extends AppCompatActivity {
     private TextInputEditText inputNome_Coleta, inputDescricao_Coleta;
@@ -87,15 +88,29 @@ public class CadastroColeta extends AppCompatActivity {
         Long id_Coleta = dbAuxilar.insertColeta(coleta);
         Log.d("id_Coleta", id_Coleta.toString());
 
-        Intent coletarDados = new Intent(CadastroColeta.this, ColetarDados.class);
-        coletarDados.putExtra("id_Formulario", id_Formulario);
-        coletarDados.putExtra("id_Coleta", id_Coleta);
-        coletarDados.putExtra("tratamentoAtual", 0);
-        coletarDados.putExtra("replicacaoAtual", 0);
-        coletarDados.putExtra("repeticaoAtual", 0);
-        coletarDados.putExtra("blocoAtual", 0);
-        finish();
-        startActivity(coletarDados);
+        Formulario formulario = dbAuxilar.lerFormulario(id_Formulario);
+        if (formulario.getModelo_Formulario().equals(2)) {
+            Intent coletarDadosFatorial = new Intent(CadastroColeta.this, ColetarDadosFatorial.class);
+            coletarDadosFatorial.putExtra("id_Formulario", id_Formulario);
+            coletarDadosFatorial.putExtra("id_Coleta", id_Coleta);
+            coletarDadosFatorial.putExtra("fatorAtual", 0);
+            coletarDadosFatorial.putExtra("nivelFatorAtual", 0);
+            coletarDadosFatorial.putExtra("replicacaoAtual", 0);
+            coletarDadosFatorial.putExtra("repeticaoAtual", 0);
+            coletarDadosFatorial.putExtra("blocoAtual", 0);
+            finish();
+            startActivity(coletarDadosFatorial);
+        } else {
+            Intent coletarDados = new Intent(CadastroColeta.this, ColetarDados.class);
+            coletarDados.putExtra("id_Formulario", id_Formulario);
+            coletarDados.putExtra("id_Coleta", id_Coleta);
+            coletarDados.putExtra("tratamentoAtual", 0);
+            coletarDados.putExtra("replicacaoAtual", 0);
+            coletarDados.putExtra("repeticaoAtual", 0);
+            coletarDados.putExtra("blocoAtual", 0);
+            finish();
+            startActivity(coletarDados);
+        }
     }
 
 

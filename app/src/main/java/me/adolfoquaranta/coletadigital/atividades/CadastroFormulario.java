@@ -212,6 +212,8 @@ public class CadastroFormulario extends AppCompatActivity {
         }
 
         Intent cadastroTratamentos = new Intent(CadastroFormulario.this, CadastroTratamentos.class);
+        Intent cadastroFatores = new Intent(CadastroFormulario.this, CadastroFatores.class);
+
         Formulario formulario = new Formulario();
         DBAuxilar dbAuxilar = new DBAuxilar(getApplicationContext());
 
@@ -260,8 +262,12 @@ public class CadastroFormulario extends AppCompatActivity {
         Long id_Formulario = dbAuxilar.inserirFormulario(formulario);
 
         cadastroTratamentos.putExtra("id_Formulario", id_Formulario);
+        cadastroFatores.putExtra("id_Formulario", id_Formulario);
+
         finish();
-        startActivity(cadastroTratamentos);
+
+        if (modelo_Formulario > 1) startActivity(cadastroFatores);
+        else startActivity(cadastroTratamentos);
 
     }
 
@@ -401,11 +407,12 @@ public class CadastroFormulario extends AppCompatActivity {
 
     private boolean validarQuantidadeFatores_Formulario() {
         if (input_quantidadeFatores_Formulario.getText().toString().trim().isEmpty()) {
-            inputLayoutQuantidadeFatores_Formulario.setError(getString(R.string.err_msg_deveSerNumInteiro));
+            inputLayoutQuantidadeFatores_Formulario.setError(getString(R.string.err_msg_NumFatoresInvalido));
             requestFocus(input_quantidadeFatores_Formulario);
             return false;
-        } else if (input_quantidadeFatores_Formulario.getText().toString().trim().equals(String.valueOf(0))) {
-            inputLayoutQuantidadeFatores_Formulario.setError(getString(R.string.err_msg_deveSerNumInteiroNaoNulo));
+        } else if (Integer.valueOf(input_quantidadeFatores_Formulario.getText().toString().trim()) < 2
+                || Integer.valueOf(input_quantidadeFatores_Formulario.getText().toString().trim()) > 3) {
+            inputLayoutQuantidadeFatores_Formulario.setError(getString(R.string.err_msg_NumFatoresInvalido));
             requestFocus(input_quantidadeFatores_Formulario);
             return false;
         } else {

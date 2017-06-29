@@ -26,6 +26,14 @@
             android:label="@string/title_activity_cadastro_tratamentos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".atividades.CadastroFatores"
+            android:label="@string/title_activity_cadastro_fatores"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".atividades.CadastroNivelFatores"
+            android:label="@string/title_activity_cadastro_nivelfatores"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".atividades.CadastroVariaveis"
             android:label="@string/title_activity_cadastro_variaveis"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -35,6 +43,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".atividades.ColetarDados"
+            android:label="@string/title_activity_coletar_dados"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".atividades.ColetarDadosFatorial"
             android:label="@string/title_activity_coletar_dados"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

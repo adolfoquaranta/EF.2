@@ -265,19 +265,35 @@ public class ListarColetas extends AppCompatActivity {
                                     }
                                     break;
                                 case 1:
-                                    Intent coletarDados = new Intent(ListarColetas.this, ColetarDados.class);
-                                    coletarDados.putExtra("id_Formulario", id_Formulario);
-                                    coletarDados.putExtra("id_Coleta", coletasList.get(position).getId_Coleta());
-                                    if (!coletasList.get(position).getStatus_Coleta().equals("ok") &&
-                                            !coletasList.get(position).getStatus_Coleta().equals("")) {
-                                        String[] posicaoColeta = coletasList.get(position).getStatus_Coleta().split(",");
-                                        coletarDados.putExtra("tratamentoAtual", Integer.valueOf(posicaoColeta[0]));
-                                        coletarDados.putExtra("replicacaoAtual", Integer.valueOf(posicaoColeta[1]));
-                                        coletarDados.putExtra("repeticaoAtual", Integer.valueOf(posicaoColeta[2]));
-                                        coletarDados.putExtra("blocoAtual", Integer.valueOf(posicaoColeta[3]));
+                                    if (dbAuxilar.lerFormulario(coletasList.get(position).getIdFormulario_Coleta()).getModelo_Formulario() == 2) {
+                                        Intent coletarDadosFatorial = new Intent(ListarColetas.this, ColetarDadosFatorial.class);
+                                        coletarDadosFatorial.putExtra("id_Formulario", id_Formulario);
+                                        coletarDadosFatorial.putExtra("id_Coleta", coletasList.get(position).getId_Coleta());
+                                        if (!coletasList.get(position).getStatus_Coleta().equals("ok") &&
+                                                !coletasList.get(position).getStatus_Coleta().equals("")) {
+                                            String[] posicaoColeta = coletasList.get(position).getStatus_Coleta().split(",");
+                                            coletarDadosFatorial.putExtra("fatorAtual", Integer.valueOf(posicaoColeta[0]));
+                                            coletarDadosFatorial.putExtra("replicacaoAtual", Integer.valueOf(posicaoColeta[1]));
+                                            coletarDadosFatorial.putExtra("repeticaoAtual", Integer.valueOf(posicaoColeta[2]));
+                                            coletarDadosFatorial.putExtra("blocoAtual", Integer.valueOf(posicaoColeta[3]));
+                                        }
+                                        finish();
+                                        startActivity(coletarDadosFatorial);
+                                    } else {
+                                        Intent coletarDados = new Intent(ListarColetas.this, ColetarDados.class);
+                                        coletarDados.putExtra("id_Formulario", id_Formulario);
+                                        coletarDados.putExtra("id_Coleta", coletasList.get(position).getId_Coleta());
+                                        if (!coletasList.get(position).getStatus_Coleta().equals("ok") &&
+                                                !coletasList.get(position).getStatus_Coleta().equals("")) {
+                                            String[] posicaoColeta = coletasList.get(position).getStatus_Coleta().split(",");
+                                            coletarDados.putExtra("tratamentoAtual", Integer.valueOf(posicaoColeta[0]));
+                                            coletarDados.putExtra("replicacaoAtual", Integer.valueOf(posicaoColeta[1]));
+                                            coletarDados.putExtra("repeticaoAtual", Integer.valueOf(posicaoColeta[2]));
+                                            coletarDados.putExtra("blocoAtual", Integer.valueOf(posicaoColeta[3]));
+                                        }
+                                        finish();
+                                        startActivity(coletarDados);
                                     }
-                                    finish();
-                                    startActivity(coletarDados);
                                     break;
                                 case 2:
                                     AlertDialog.Builder builder = new AlertDialog.Builder(ListarColetas.this);
