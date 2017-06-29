@@ -8,12 +8,12 @@ public class Dado {
 
     private Long id_Dado, idColeta_Dado, idVariavel_Dado, idTratamento_Dado;
     private String valor_Dado;
-    private Integer repeticao_Dado, replicacao_Dado, tratamento_Dado, variavel_Dado, bloco_Dado, fator_Dado, divisao_Dado, nivelFator_Dado, nivelDivisao_Dado;
+    private Integer repeticao_Dado, replicacao_Dado, tratamento_Dado, variavel_Dado, bloco_Dado, fator_Dado, divisao_Dado, idNivelFator_Dado, nivelDivisao_Dado;
 
     public Dado() {
     }
 
-    public Dado(Long id_Dado, Integer tratamento_Dado, Integer variavel_Dado, Long idColeta_Dado, String valor_Dado, Integer repeticao_Dado, Integer replicacao_Dado, Integer bloco_Dado, Integer fator_Dado, Integer divisao_Dado, Integer nivelFator_Dado, Integer nivelDivisao_Dado, Long idVariavel_Dado, Long idTratamento_Dado) {
+    public Dado(Long id_Dado, Integer tratamento_Dado, Integer variavel_Dado, Long idColeta_Dado, String valor_Dado, Integer repeticao_Dado, Integer replicacao_Dado, Integer bloco_Dado, Integer fator_Dado, Integer divisao_Dado, Integer idNivelFator_Dado, Integer nivelDivisao_Dado, Long idVariavel_Dado, Long idTratamento_Dado) {
         this.id_Dado = id_Dado;
         this.tratamento_Dado = tratamento_Dado;
         this.variavel_Dado = variavel_Dado;
@@ -24,7 +24,7 @@ public class Dado {
         this.bloco_Dado = bloco_Dado;
         this.fator_Dado = fator_Dado;
         this.divisao_Dado = divisao_Dado;
-        this.nivelFator_Dado = nivelFator_Dado;
+        this.idNivelFator_Dado = idNivelFator_Dado;
         this.nivelDivisao_Dado = nivelDivisao_Dado;
         this.idVariavel_Dado = idVariavel_Dado;
         this.idTratamento_Dado = idTratamento_Dado;
@@ -126,12 +126,12 @@ public class Dado {
         this.divisao_Dado = divisao_Dado;
     }
 
-    public Integer getNivelFator_Dado() {
-        return nivelFator_Dado;
+    public Integer getIdNivelFator_Dado() {
+        return idNivelFator_Dado;
     }
 
-    public void setNivelFator_Dado(Integer nivelFator_Dado) {
-        this.nivelFator_Dado = nivelFator_Dado;
+    public void setIdNivelFator_Dado(Integer idNivelFator_Dado) {
+        this.idNivelFator_Dado = idNivelFator_Dado;
     }
 
     public Integer getNivelParcela_Dado() {
@@ -157,7 +157,7 @@ public class Dado {
                 ", bloco_Dado=" + bloco_Dado +
                 ", fator_Dado=" + fator_Dado +
                 ", divisao_Dado=" + divisao_Dado +
-                ", nivelFator_Dado=" + nivelFator_Dado +
+                ", idNivelFator_Dado=" + idNivelFator_Dado +
                 ", nivelDivisao_Dado=" + nivelDivisao_Dado +
                 '}';
     }

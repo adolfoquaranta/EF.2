@@ -20,6 +20,9 @@
 
     <string name="err_msg_deveSerNumInteiroNaoNulo">Insira um número inteiro maior que 0</string>
 
+    <string name="err_msg_NumFatoresInvalido">Insira 2 ou 3</string>
+
+
     <string name="err_msg_deveSerNumInteiro">Insira um número inteiro</string>
 
 
@@ -27,6 +30,9 @@
 
     <string name="err_msg_opcaoInvalida">Opção Inválida</string>
     <string name="err_msg_nomeTratamento">Insira um nome para o Tratamento</string>
+    <string name="err_msg_nomeFator">Insira um nome para o Fator</string>
+    <string name="err_msg_nivelFator">Insira um número inteiro positivo.</string>
+    <string name="err_msg_nomeNivelFator">Insira um nome para o Nivel do Fator</string>
 
 
     <string name="inicio_btnEXE">EXP</string>
@@ -48,7 +54,13 @@
     <string name="hint_quantidadeRepeticoes_Modelo">Quantidade de Repetição</string>
     <string name="hint_quantidadeTratatmentos_Modelo">Quantidade de Tratamentos</string>
     <string name="title_activity_cadastro_tratamentos">Cadastro de Tratamentos</string>
+    <string name="title_activity_cadastro_fatores">Cadastro de Fatores</string>
+    <string name="title_activity_cadastro_nivelfatores">Cadastro de Níveis do Fator</string>
     <string name="hint_nomeTratamento">Nome do tratamento </string>
+    <string name="hint_nomeFator">Nome do fator </string>
+    <string name="hint_nomeNivelFator">Nome do nível </string>
+    <string name="hint_niveisFator">Níveis</string>
+
     <string name="string_Tratamento">Tratamento </string>
     <string name="title_activity_cadastro_variaveis">Cadastro de Variáveis</string>
     <string name="hint_nomeVariavel">Nome da variável</string>
@@ -74,6 +86,13 @@
         <item>Qual.</item>
         <item>Quant.</item>
     </string-array>
+
+    <string-array name="spinnerArray_tipoFator">
+        <item>Tipo</item>
+        <item>Qual.</item>
+        <item>Quant.</item>
+    </string-array>
+
 
     <string-array name="spinnerArray_tipoVariavel">
         <item>Tipo</item>
