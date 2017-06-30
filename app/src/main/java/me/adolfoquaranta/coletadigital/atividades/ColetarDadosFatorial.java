@@ -74,6 +74,7 @@ public class ColetarDadosFatorial extends AppCompatActivity {
         niveisFator = dbAuxilar.lerTodosNiveisFator(fatores.get(fatorAtual).getId_Fator());
         variaveis = dbAuxilar.lerTodasVariaveis(id_Formulario);
 
+        Log.d("formulario", formulario.toString());
         Log.d("coleta", coleta.toString());
         Log.d("fatores", fatores.toString());
         Log.d("niveisFator", niveisFator.toString());
@@ -142,7 +143,8 @@ public class ColetarDadosFatorial extends AppCompatActivity {
         final TextView infoColetaAtual = (TextView) findViewById(R.id.tv_infoColetaAtualFatorial);
 
 
-        String bloco = "Bloco " + (blocoAtual + 1), fator = fatores.get(fatorAtual).getNome_Fator(), nivelFator = niveisFator.get(nivelFatorAtual).getNome_NivelFator(), repeticao = "Repetição " + (repeticaoAtual + 1), replicacao = "Réplica " + (replicacaoAtual + 1), infoColeta = "";
+        final String bloco = "Bloco " + (blocoAtual + 1), fator = fatores.get(fatorAtual).getNome_Fator(), nivelFator = niveisFator.get(nivelFatorAtual).getNome_NivelFator(), repeticao = "Repetição " + (repeticaoAtual + 1), replicacao = "Réplica " + (replicacaoAtual + 1);
+        String infoColeta = "";
         infoColeta = bloco + " | " + fator + " | " + nivelFator + " | " + repeticao + " | " + replicacao;
         infoColetaAtual.setText(infoColeta);
 
@@ -243,21 +245,15 @@ public class ColetarDadosFatorial extends AppCompatActivity {
 
                 Log.d("dadosSize", String.valueOf(dados.size()));
                 Log.d("dados", dados.toString());
+                Log.d("formulario", formulario.toString());
+
+
 
                 if (replicacaoAtual + 1 == formulario.getQuantidadeReplicacoes_Formulario()) {
                     if (repeticaoAtual + 1 == formulario.getQuantidadeRepeticoes_Formulario()) {
-                        if (fatorAtual + 1 == formulario.getQuantidadeFatores_Formulario()) {
-                            if (formulario.getQuantidadeBlocos_Formulario() == -1) {
-                                inserirDados(dados);
-                                Intent listarColetas = new Intent(ColetarDadosFatorial.this, ListarColetas.class);
-                                listarColetas.putExtra("id_Formulario", id_Formulario);
-                                listarColetas.putExtra("tipo_Formulario", dbAuxilar.lerFormulario(id_Formulario).getTipo_Formulario());
-                                coleta.setStatus_Coleta("ok");
-                                dbAuxilar.updateStatusColeta(coleta);
-                                finish();
-                                startActivity(listarColetas);
-                            } else {
-                                if (blocoAtual + 1 == formulario.getQuantidadeBlocos_Formulario()) {
+                        if (nivelFatorAtual + 1 == fatores.get(fatorAtual).getQuantidadeNiveis_Fator()) {
+                            if (fatorAtual + 1 == formulario.getQuantidadeFatores_Formulario()) {
+                                if (formulario.getQuantidadeBlocos_Formulario() == -1) {
                                     inserirDados(dados);
                                     Intent listarColetas = new Intent(ColetarDadosFatorial.this, ListarColetas.class);
                                     listarColetas.putExtra("id_Formulario", id_Formulario);
@@ -266,28 +262,55 @@ public class ColetarDadosFatorial extends AppCompatActivity {
                                     dbAuxilar.updateStatusColeta(coleta);
                                     finish();
                                     startActivity(listarColetas);
-                                } else if (blocoAtual + 1 < formulario.getQuantidadeBlocos_Formulario()) {
-                                    inserirDados(dados);
-                                    blocoAtual++;
-                                    fatorAtual = 0;
-                                    repeticaoAtual = 0;
-                                    replicacaoAtual = 0;
-                                    recarregar.putExtra("blocoAtual", blocoAtual);
-                                    recarregar.putExtra("replicacaoAtual", replicacaoAtual);
-                                    recarregar.putExtra("repeticaoAtual", repeticaoAtual);
-                                    recarregar.putExtra("fatorAtual", fatorAtual);
-                                    finish();
-                                    startActivity(recarregar);
+                                } else {
+                                    if (blocoAtual + 1 == formulario.getQuantidadeBlocos_Formulario()) {
+                                        inserirDados(dados);
+                                        Intent listarColetas = new Intent(ColetarDadosFatorial.this, ListarColetas.class);
+                                        listarColetas.putExtra("id_Formulario", id_Formulario);
+                                        listarColetas.putExtra("tipo_Formulario", dbAuxilar.lerFormulario(id_Formulario).getTipo_Formulario());
+                                        coleta.setStatus_Coleta("ok");
+                                        dbAuxilar.updateStatusColeta(coleta);
+                                        finish();
+                                        startActivity(listarColetas);
+                                    } else if (blocoAtual + 1 < formulario.getQuantidadeBlocos_Formulario()) {
+                                        inserirDados(dados);
+                                        blocoAtual++;
+                                        fatorAtual = 0;
+                                        nivelFatorAtual = 0;
+                                        repeticaoAtual = 0;
+                                        replicacaoAtual = 0;
+                                        recarregar.putExtra("blocoAtual", blocoAtual);
+                                        recarregar.putExtra("replicacaoAtual", replicacaoAtual);
+                                        recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                                        recarregar.putExtra("nivelFatorAtual", nivelFatorAtual);
+                                        recarregar.putExtra("fatorAtual", fatorAtual);
+                                        finish();
+                                        startActivity(recarregar);
+                                    }
                                 }
+                            } else if (fatorAtual + 1 < formulario.getQuantidadeFatores_Formulario()) {
+                                inserirDados(dados);
+                                fatorAtual++;
+                                nivelFatorAtual = 0;
+                                repeticaoAtual = 0;
+                                replicacaoAtual = 0;
+                                recarregar.putExtra("blocoAtual", blocoAtual);
+                                recarregar.putExtra("replicacaoAtual", replicacaoAtual);
+                                recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                                recarregar.putExtra("nivelFatorAtual", nivelFatorAtual);
+                                recarregar.putExtra("fatorAtual", fatorAtual);
+                                finish();
+                                startActivity(recarregar);
                             }
-                        } else if (fatorAtual + 1 < formulario.getQuantidadeFatores_Formulario()) {
+                        } else if (nivelFatorAtual + 1 < fatores.get(fatorAtual).getQuantidadeNiveis_Fator()) {
                             inserirDados(dados);
-                            fatorAtual++;
+                            nivelFatorAtual++;
                             repeticaoAtual = 0;
                             replicacaoAtual = 0;
                             recarregar.putExtra("blocoAtual", blocoAtual);
                             recarregar.putExtra("replicacaoAtual", replicacaoAtual);
                             recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                            recarregar.putExtra("nivelFatorAtual", nivelFatorAtual);
                             recarregar.putExtra("fatorAtual", fatorAtual);
                             finish();
                             startActivity(recarregar);
@@ -299,6 +322,7 @@ public class ColetarDadosFatorial extends AppCompatActivity {
                         recarregar.putExtra("blocoAtual", blocoAtual);
                         recarregar.putExtra("replicacaoAtual", replicacaoAtual);
                         recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                        recarregar.putExtra("nivelFatorAtual", nivelFatorAtual);
                         recarregar.putExtra("fatorAtual", fatorAtual);
                         finish();
                         startActivity(recarregar);
@@ -309,11 +333,11 @@ public class ColetarDadosFatorial extends AppCompatActivity {
                     recarregar.putExtra("blocoAtual", blocoAtual);
                     recarregar.putExtra("replicacaoAtual", replicacaoAtual);
                     recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                    recarregar.putExtra("nivelFatorAtual", nivelFatorAtual);
                     recarregar.putExtra("fatorAtual", fatorAtual);
                     finish();
                     startActivity(recarregar);
                 }
-
 
             }
         });
@@ -326,51 +350,69 @@ public class ColetarDadosFatorial extends AppCompatActivity {
                 recarregar.putExtra("id_Formulario", id_Formulario);
                 recarregar.putExtra("id_Coleta", id_Coleta);
 
-
                 if (replicacaoAtual == 0) {
                     if (repeticaoAtual == 0) {
-                        if (fatorAtual == 0) {
-                            if (blocoAtual == 0) {
-                                Toast.makeText(getApplicationContext(), getString(R.string.info_Retornar), Toast.LENGTH_SHORT).show();
-                            } else if (blocoAtual > 0) {
-                                blocoAtual--;
-                                fatorAtual = formulario.getQuantidadeFatores_Formulario() - 1;
+                        if (nivelFatorAtual == 0) {
+                            if (fatorAtual == 0) {
+                                if (blocoAtual == 0) {
+                                    Toast.makeText(getApplicationContext(), getString(R.string.info_Retornar), Toast.LENGTH_SHORT).show();
+                                } else if (blocoAtual > 0) {
+                                    blocoAtual--;
+                                    nivelFatorAtual = fatores.get(fatorAtual).getQuantidadeNiveis_Fator() - 1;
+                                    fatorAtual = formulario.getQuantidadeFatores_Formulario() - 1;
+                                    repeticaoAtual = formulario.getQuantidadeRepeticoes_Formulario() - 1;
+                                    replicacaoAtual = formulario.getQuantidadeReplicacoes_Formulario() - 1;
+                                    recarregar.putExtra("blocoAtual", blocoAtual);
+                                    recarregar.putExtra("replicacaoAtual", replicacaoAtual);
+                                    recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                                    recarregar.putExtra("nivelFatorAtual", nivelFatorAtual);
+                                    recarregar.putExtra("fatorAtual", fatorAtual);
+                                    finish();
+                                    startActivity(recarregar);
+                                }
+                            } else if (fatorAtual > 0) {
+                                fatorAtual--;
+                                nivelFatorAtual = fatores.get(fatorAtual).getQuantidadeNiveis_Fator() - 1;
                                 repeticaoAtual = formulario.getQuantidadeRepeticoes_Formulario() - 1;
                                 replicacaoAtual = formulario.getQuantidadeReplicacoes_Formulario() - 1;
                                 recarregar.putExtra("blocoAtual", blocoAtual);
                                 recarregar.putExtra("replicacaoAtual", replicacaoAtual);
                                 recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                                recarregar.putExtra("nivelFatorAtual", nivelFatorAtual);
                                 recarregar.putExtra("fatorAtual", fatorAtual);
                                 finish();
                                 startActivity(recarregar);
                             }
-                        } else if (fatorAtual > 0) {
-                            fatorAtual--;
+                        } else if (nivelFatorAtual > 0) {
+                            nivelFatorAtual--;
                             repeticaoAtual = formulario.getQuantidadeRepeticoes_Formulario() - 1;
                             replicacaoAtual = formulario.getQuantidadeReplicacoes_Formulario() - 1;
+                            recarregar.putExtra("blocoAtual", blocoAtual);
                             recarregar.putExtra("replicacaoAtual", replicacaoAtual);
                             recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                            recarregar.putExtra("nivelFatorAtual", nivelFatorAtual);
                             recarregar.putExtra("fatorAtual", fatorAtual);
-                            recarregar.putExtra("blocoAtual", blocoAtual);
                             finish();
                             startActivity(recarregar);
                         }
                     } else if (repeticaoAtual > 0) {
                         repeticaoAtual--;
                         replicacaoAtual = formulario.getQuantidadeReplicacoes_Formulario() - 1;
+                        recarregar.putExtra("blocoAtual", blocoAtual);
                         recarregar.putExtra("replicacaoAtual", replicacaoAtual);
                         recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                        recarregar.putExtra("nivelFatorAtual", nivelFatorAtual);
                         recarregar.putExtra("fatorAtual", fatorAtual);
-                        recarregar.putExtra("blocoAtual", blocoAtual);
                         finish();
                         startActivity(recarregar);
                     }
                 } else if (replicacaoAtual > 0) {
                     replicacaoAtual--;
+                    recarregar.putExtra("blocoAtual", blocoAtual);
                     recarregar.putExtra("replicacaoAtual", replicacaoAtual);
                     recarregar.putExtra("repeticaoAtual", repeticaoAtual);
+                    recarregar.putExtra("nivelFatorAtual", nivelFatorAtual);
                     recarregar.putExtra("fatorAtual", fatorAtual);
-                    recarregar.putExtra("blocoAtual", blocoAtual);
                     finish();
                     startActivity(recarregar);
                 }
@@ -397,7 +439,7 @@ public class ColetarDadosFatorial extends AppCompatActivity {
                 dbAuxilar.updateDado(dados.get(i));
             }
         }
-        coleta.setStatus_Coleta(String.valueOf(fatorAtual) + ","
+        coleta.setStatus_Coleta(String.valueOf(fatorAtual) + "," + String.valueOf(nivelFatorAtual) + ","
                 + String.valueOf(replicacaoAtual) + "," + String.valueOf(repeticaoAtual) + ","
                 + String.valueOf(blocoAtual));
         dbAuxilar.updateStatusColeta(coleta);

@@ -1,11 +1,15 @@
 package me.adolfoquaranta.coletadigital.atividades;
 
+import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -18,31 +22,21 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.opencsv.CSVWriter;
-
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 
 import me.adolfoquaranta.coletadigital.R;
 import me.adolfoquaranta.coletadigital.adaptadores.ColetasAdapter;
+import me.adolfoquaranta.coletadigital.auxiliares.CSVAuxiliar;
 import me.adolfoquaranta.coletadigital.auxiliares.DBAuxilar;
 import me.adolfoquaranta.coletadigital.componentes_recycler.DividerItemDecoration;
 import me.adolfoquaranta.coletadigital.componentes_recycler.RecyclerItemClickListener;
 import me.adolfoquaranta.coletadigital.modelos.Coleta;
-import me.adolfoquaranta.coletadigital.modelos.Formulario;
-import me.adolfoquaranta.coletadigital.modelos.Tratamento;
-import me.adolfoquaranta.coletadigital.modelos.Variavel;
 
 public class ListarColetas extends AppCompatActivity {
-
+    private static final int MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE = 0x1;
+    private Boolean WRITE_EXTERNAL_STORAGE_OK = true;
     private List<Coleta> coletasList = new ArrayList<>();
     private RecyclerView recyclerView;
     private ColetasAdapter mAdapter;
@@ -52,7 +46,6 @@ public class ListarColetas extends AppCompatActivity {
 
     private Long id_Formulario;
     private String tipo_Formulario;
-
 
 
     @Override
@@ -121,6 +114,44 @@ public class ListarColetas extends AppCompatActivity {
 
     }
 
+    private void askForPermission(String permission, Integer requestCode) {
+        if (ContextCompat.checkSelfPermission(ListarColetas.this, permission) != PackageManager.PERMISSION_GRANTED) {
+            // Should we show an explanation?
+            if (ActivityCompat.shouldShowRequestPermissionRationale(ListarColetas.this, permission)) {
+                //This is called if user has denied the permission before
+                //In this case I am just asking the permission again
+                ActivityCompat.requestPermissions(ListarColetas.this, new String[]{permission}, requestCode);
+            } else {
+                ActivityCompat.requestPermissions(ListarColetas.this, new String[]{permission}, requestCode);
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    WRITE_EXTERNAL_STORAGE_OK = true;
+                    Toast.makeText(this, "Por favor, escolha a coleta que deseja e toque em exportar.", Toast.LENGTH_LONG).show();
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+
+                } else {
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    WRITE_EXTERNAL_STORAGE_OK = false;
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
     private class OnItemClickListener extends RecyclerItemClickListener.SimpleOnItemClickListener {
 
         @Override
@@ -134,135 +165,32 @@ public class ListarColetas extends AppCompatActivity {
                             // of the selected item
                             switch (which) {
                                 case 0:
-                                    Formulario formulario = dbAuxilar.lerFormulario(id_Formulario);
-                                    ArrayList<Variavel> variaveis = dbAuxilar.lerTodasVariaveis(id_Formulario);
-                                    ArrayList<Tratamento> tratamentos = dbAuxilar.lerTodosTratamentos(id_Formulario);
-
-                                    Log.d("variaveis", variaveis.toString());
-
-                                    Log.d("tratamentos", tratamentos.toString());
-
-                                    String baseDir = Environment.getExternalStorageDirectory().getAbsolutePath();
-                                    String fileDir = "COLETA DIGITAL";
-                                    String fileName = (formulario.getNome_Formulario()
-                                            + "_"
-                                            + coletasList.get(position).getNome_Coleta()
-                                            + "_"
-                                            + new SimpleDateFormat("dd-MM-yyyy_HHmmss", new Locale("pt", "BR")).format(new Date()))
-                                            + ".csv";
-                                    String filePath = baseDir + File.separator + fileDir + File.separator + fileName;
-
-                                    File folder = new File(baseDir + File.separator + fileDir);
-                                    Boolean success = true;
-                                    if (!folder.exists()) {
-                                        success = folder.mkdirs();
-                                    }
-                                    if (success) {
-                                        CSVWriter writer;
-                                        try {
-                                            writer = new CSVWriter(new FileWriter(filePath), CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER);
-                                            List<String[]> linhas = new ArrayList<>();
-                                            String[] cabecalhoPosicoes = new String[]{}, cabecalhoNomeVariaveis = new String[formulario.getQuantidadeVariaveis_Formulario()];
-
-                                            String bloco = "BLOCO" , tratamento = "TRATAMENTO", repeticao = "REPETICAO" , replicacao = "REPLICA";
-
-                                            if(formulario.getModelo_Formulario()==0) {
-                                                if (formulario.getQuantidadeReplicacoes_Formulario() <= 1) {
-                                                    cabecalhoPosicoes = new String[]{tratamento, repeticao};
-                                                } else {
-                                                    cabecalhoPosicoes = new String[]{tratamento, repeticao, replicacao};
-                                                }
-                                            }
-                                            if(formulario.getModelo_Formulario()==1){
-                                                if (formulario.getQuantidadeReplicacoes_Formulario() <= 1 && formulario.getQuantidadeRepeticoes_Formulario() <= 1) {
-                                                    cabecalhoPosicoes = new String[]{bloco, tratamento};
-                                                }
-                                                else if(formulario.getQuantidadeReplicacoes_Formulario()<=1) {
-                                                    cabecalhoPosicoes = new String[]{bloco, tratamento, repeticao};
-                                                }
-                                                else if(formulario.getQuantidadeRepeticoes_Formulario()<=1) {
-                                                    cabecalhoPosicoes = new String[]{bloco, tratamento, replicacao};
-                                                }
-                                                else {
-                                                    cabecalhoPosicoes = new String[]{bloco, tratamento, repeticao, replicacao};
-                                                }
-                                            }
-
-                                            for (int v = 0; v < formulario.getQuantidadeVariaveis_Formulario(); v++) {
-                                                cabecalhoNomeVariaveis[v] = variaveis.get(v).getNome_Variavel();
-                                            }
-                                            linhas.add(ArrayUtils.addAll(cabecalhoPosicoes, cabecalhoNomeVariaveis));
-
-                                            if(formulario.getQuantidadeBlocos_Formulario()!=-1){
-                                                for(int bloc = 0; bloc < formulario.getQuantidadeBlocos_Formulario(); bloc++) {
-                                                     for (int trat = 0; trat < formulario.getQuantidadeTratamentos_Formulario(); trat++) {
-                                                         for (int rep = 0; rep < formulario.getQuantidadeRepeticoes_Formulario(); rep++) {
-                                                             for (int repli = 0; repli < formulario.getQuantidadeReplicacoes_Formulario(); repli++) {
-                                                                 String[] posicoes;
-
-                                                                 if (formulario.getQuantidadeReplicacoes_Formulario() <= 1 && formulario.getQuantidadeRepeticoes_Formulario() <= 1) {
-                                                                     posicoes = new String[]{String.valueOf(bloc + 1), tratamentos.get(trat).getNome_Tratamento()};
-                                                                 }
-                                                                 else if(formulario.getQuantidadeReplicacoes_Formulario()<=1) {
-                                                                     posicoes = new String[]{String.valueOf(bloc + 1), tratamentos.get(trat).getNome_Tratamento(), String.valueOf(rep + 1)};
-                                                                 }
-                                                                 else if(formulario.getQuantidadeRepeticoes_Formulario()<=1) {
-                                                                     posicoes = new String[]{String.valueOf(bloc + 1), tratamentos.get(trat).getNome_Tratamento(), String.valueOf(repli + 1)};
-                                                                 }
-                                                                 else {
-                                                                     posicoes = new String[]{String.valueOf(bloc + 1), tratamentos.get(trat).getNome_Tratamento(), String.valueOf(rep + 1), String.valueOf(repli + 1)};
-                                                                 }
-
-                                                                 String[] valores = new String[formulario.getQuantidadeVariaveis_Formulario()];
-                                                                 for (int var = 0; var < formulario.getQuantidadeVariaveis_Formulario(); var++) {
-                                                                     valores[var] = dbAuxilar.lerValorDado(tratamentos.get(trat).getId_Tratamento(), bloc, rep, repli, variaveis.get(var).getId_Variavel(), coletasList.get(position).getId_Coleta()).getValor_Dado();
-                                                                 }
-
-                                                                 String[] colunas = ArrayUtils.addAll(posicoes, valores);
-                                                                 linhas.add(colunas);
-                                                             }
-                                                         }
-                                                     }
-                                                }
-                                            }
-                                            else{
-                                                for (int trat = 0; trat < formulario.getQuantidadeTratamentos_Formulario(); trat++) {
-                                                    for (int rep = 0; rep < formulario.getQuantidadeRepeticoes_Formulario(); rep++) {
-                                                        for (int repli = 0; repli < formulario.getQuantidadeReplicacoes_Formulario(); repli++) {
-                                                            String[] posicoes;
-
-                                                            if (formulario.getQuantidadeReplicacoes_Formulario() <= 1) {
-                                                                posicoes = new String[]{tratamentos.get(trat).getNome_Tratamento(), String.valueOf(rep + 1)};
-                                                            } else {
-                                                                posicoes = new String[]{tratamentos.get(trat).getNome_Tratamento(), String.valueOf(rep + 1), String.valueOf(repli + 1)};
-                                                            }
-
-                                                            String[] valores = new String[formulario.getQuantidadeVariaveis_Formulario()];
-                                                            for (int var = 0; var < formulario.getQuantidadeVariaveis_Formulario(); var++) {
-                                                                valores[var] = dbAuxilar.lerValorDado(tratamentos.get(trat).getId_Tratamento(), 0, rep, repli, variaveis.get(var).getId_Variavel(), coletasList.get(position).getId_Coleta()).getValor_Dado();
-                                                            }
-
-                                                            String[] colunas = ArrayUtils.addAll(posicoes, valores);
-                                                            linhas.add(colunas);
+                                    askForPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE, MY_PERMISSIONS_REQUEST_WRITE_EXTERNAL_STORAGE);
+                                    if (WRITE_EXTERNAL_STORAGE_OK) {
+                                        CSVAuxiliar csvAuxiliar = new CSVAuxiliar(id_Formulario, coletasList.get(position).getId_Coleta(), getApplicationContext());
+                                        final String filePath = csvAuxiliar.exportarCSV(dbAuxilar.lerFormulario(id_Formulario).getModelo_Formulario());
+                                        if (!filePath.equals("")) {
+                                            Toast.makeText(ListarColetas.this, "Arquivo Exportado", Toast.LENGTH_SHORT).show();
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(ListarColetas.this);
+                                            builder.setTitle(R.string.dialog_compartilharArquivo)
+                                                    .setMessage(R.string.dialog_compartilharMensagem)
+                                                    .setPositiveButton(R.string.dialog_sim, new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int id) {
+                                                            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+                                                            sharingIntent.setType("text/plain");
+                                                            sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
+                                                            startActivity(Intent.createChooser(sharingIntent, getString(R.string.info_CompartilharUsando)));
                                                         }
-                                                    }
-                                                }
-                                            }
-                                            writer.writeAll(linhas);
-                                            writer.close();
-                                            Log.i("Witter", "ArquivoGerado");
-
-                                            //Snackbar.make(childView, getString(R.string.info_ArquivoGerado), Snackbar.LENGTH_LONG).show();
-
-                                            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-                                            sharingIntent.setType("text/plain");
-                                            sharingIntent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(new File(filePath)));
-                                            startActivity(Intent.createChooser(sharingIntent, getString(R.string.info_CompartilharUsando)));
-
-                                        } catch (IOException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
+                                                    })
+                                                    .setNegativeButton(R.string.dialog_nao, new DialogInterface.OnClickListener() {
+                                                        public void onClick(DialogInterface dialog, int id) {
+                                                            // User cancelled the dialog
+                                                        }
+                                                    }).create().show();
+                                        } else
+                                            Toast.makeText(ListarColetas.this, "Arquivo não Exportado", Toast.LENGTH_SHORT).show();
+                                    } else
+                                        Toast.makeText(ListarColetas.this, "Para exportar o arquivo é necessário autorizar gravação de dados no armazenamento interno", Toast.LENGTH_LONG).show();
                                     break;
                                 case 1:
                                     if (dbAuxilar.lerFormulario(coletasList.get(position).getIdFormulario_Coleta()).getModelo_Formulario() == 2) {
@@ -273,9 +201,10 @@ public class ListarColetas extends AppCompatActivity {
                                                 !coletasList.get(position).getStatus_Coleta().equals("")) {
                                             String[] posicaoColeta = coletasList.get(position).getStatus_Coleta().split(",");
                                             coletarDadosFatorial.putExtra("fatorAtual", Integer.valueOf(posicaoColeta[0]));
-                                            coletarDadosFatorial.putExtra("replicacaoAtual", Integer.valueOf(posicaoColeta[1]));
-                                            coletarDadosFatorial.putExtra("repeticaoAtual", Integer.valueOf(posicaoColeta[2]));
-                                            coletarDadosFatorial.putExtra("blocoAtual", Integer.valueOf(posicaoColeta[3]));
+                                            coletarDadosFatorial.putExtra("nivelFatorAtual", Integer.valueOf(posicaoColeta[1]));
+                                            coletarDadosFatorial.putExtra("replicacaoAtual", Integer.valueOf(posicaoColeta[2]));
+                                            coletarDadosFatorial.putExtra("repeticaoAtual", Integer.valueOf(posicaoColeta[3]));
+                                            coletarDadosFatorial.putExtra("blocoAtual", Integer.valueOf(posicaoColeta[4]));
                                         }
                                         finish();
                                         startActivity(coletarDadosFatorial);
@@ -325,5 +254,4 @@ public class ListarColetas extends AppCompatActivity {
         }
 
     }
-
 }

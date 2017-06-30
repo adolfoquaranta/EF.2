@@ -29,7 +29,7 @@
     <string name="err_msg_selecioneUmRadio">Escolha uma das opções</string>
 
     <string name="err_msg_opcaoInvalida">Opção Inválida</string>
-    <string name="err_msg_nomeTratamento">Insira um nome para o Tratamento</string>
+    <string name="err_msg_nomeTratamento">Insira um nome para o Nível</string>
     <string name="err_msg_nomeFator">Insira um nome para o Fator</string>
     <string name="err_msg_nivelFator">Insira um número inteiro positivo.</string>
     <string name="err_msg_nomeNivelFator">Insira um nome para o Nivel do Fator</string>
@@ -52,11 +52,11 @@
     <string name="hint_quantidadeVariaveis_Modelo">Quantidade de Variáveis</string>
     <string name="hint_quantidadeReplicacoes_Modelo">Quantidade de Replica</string>
     <string name="hint_quantidadeRepeticoes_Modelo">Quantidade de Repetição</string>
-    <string name="hint_quantidadeTratatmentos_Modelo">Quantidade de Tratamentos</string>
-    <string name="title_activity_cadastro_tratamentos">Cadastro de Tratamentos</string>
+    <string name="hint_quantidadeTratatmentos_Modelo">Quantidade de Níveis do Tratamento</string>
+    <string name="title_activity_cadastro_tratamentos">Cadastro de Níveis do Tratamento</string>
     <string name="title_activity_cadastro_fatores">Cadastro de Fatores</string>
     <string name="title_activity_cadastro_nivelfatores">Cadastro de Níveis do Fator</string>
-    <string name="hint_nomeTratamento">Nome do tratamento </string>
+    <string name="hint_nomeTratamento">Nome do Nível </string>
     <string name="hint_nomeFator">Nome do fator </string>
     <string name="hint_nomeNivelFator">Nome do nível </string>
     <string name="hint_niveisFator">Níveis</string>
@@ -149,6 +149,10 @@
     <string name="hint_quantidadeBlocos_Modelo">Quantidade de Blocos</string>
     <string name="nav_titulo_inicio"></string>
     <string name="info_CompartilharUsando">Compatilhar usando</string>
+    <string name="dialog_compartilharArquivo">Deseja compartilhar o arquivo?</string>
+    <string name="dialog_sim">Compartilhar</string>
+    <string name="dialog_nao">Agora não</string>
+    <string name="dialog_compartilharMensagem">O arquivo já foi salvo no seu smartfone, mas você pode enviá-lo para um amigo ou para sua núvem.</string>
 
 
     <string-array name="array_opcoes_formularios">

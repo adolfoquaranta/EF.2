@@ -117,6 +117,7 @@ public class ListarFormularios extends AppCompatActivity {
                                     Intent listarColetas = new Intent(ListarFormularios.this, ListarColetas.class);
                                     listarColetas.putExtra("id_Formulario", formularioList.get(position).getId_Formulario());
                                     listarColetas.putExtra("tipo_Formulario", formularioList.get(position).getTipo_Formulario());
+                                    listarColetas.putExtra("modelo_Formulario", formularioList.get(position).getModelo_Formulario());
                                     startActivity(listarColetas);
                                     break;
                                 case 1:
