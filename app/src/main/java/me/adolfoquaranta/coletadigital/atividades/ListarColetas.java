@@ -273,9 +273,10 @@ public class ListarColetas extends AppCompatActivity {
                                                 !coletasList.get(position).getStatus_Coleta().equals("")) {
                                             String[] posicaoColeta = coletasList.get(position).getStatus_Coleta().split(",");
                                             coletarDadosFatorial.putExtra("fatorAtual", Integer.valueOf(posicaoColeta[0]));
-                                            coletarDadosFatorial.putExtra("replicacaoAtual", Integer.valueOf(posicaoColeta[1]));
-                                            coletarDadosFatorial.putExtra("repeticaoAtual", Integer.valueOf(posicaoColeta[2]));
-                                            coletarDadosFatorial.putExtra("blocoAtual", Integer.valueOf(posicaoColeta[3]));
+                                            coletarDadosFatorial.putExtra("nivelFatorAtual", Integer.valueOf(posicaoColeta[1]));
+                                            coletarDadosFatorial.putExtra("replicacaoAtual", Integer.valueOf(posicaoColeta[2]));
+                                            coletarDadosFatorial.putExtra("repeticaoAtual", Integer.valueOf(posicaoColeta[3]));
+                                            coletarDadosFatorial.putExtra("blocoAtual", Integer.valueOf(posicaoColeta[4]));
                                         }
                                         finish();
                                         startActivity(coletarDadosFatorial);
