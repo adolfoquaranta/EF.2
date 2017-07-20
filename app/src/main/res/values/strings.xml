@@ -79,6 +79,7 @@
     <string name="err_msg_nomeColeta">Insira um nome</string>
     <string name="err_msg_descricaoColeta">Insira uma descrição</string>
     <string name="err_msg_preenchaTodosCampos">Todos os campos são necessários, por favor preencha-os!</string>
+    <string name="err_msg_preenchaOuAnule">Preecha ou marque como NA!</string>
 
 
     <string-array name="spinnerArray_tipoTratamento">

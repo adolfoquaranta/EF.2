@@ -15,6 +15,8 @@ import me.adolfoquaranta.coletadigital.modelos.Dado;
 import me.adolfoquaranta.coletadigital.modelos.Fator;
 import me.adolfoquaranta.coletadigital.modelos.Formulario;
 import me.adolfoquaranta.coletadigital.modelos.NivelFator;
+import me.adolfoquaranta.coletadigital.modelos.NivelParcela;
+import me.adolfoquaranta.coletadigital.modelos.Parcela;
 import me.adolfoquaranta.coletadigital.modelos.Tratamento;
 import me.adolfoquaranta.coletadigital.modelos.Variavel;
 
@@ -67,6 +69,21 @@ public class DBAuxilar extends SQLiteOpenHelper {
     private static final String NIVELFATOR_COL_NUMERO = "numero_NivelFator";
     private static final String NIVELFATOR_COL_ID_FATOR = "idFator_NivelFator";
     private static final String NIVELFATOR_CONSTRAINT_FK_NIVELFATOR_FATOR = "FK_NivelFator_Fator";
+
+    private static final String PARCELA_TABELA = "Parcela";
+    private static final String PARCELA_COL_ID = "id_Parcela";
+    private static final String PARCELA_COL_NOME = "nome_Parcela";
+    private static final String PARCELA_COL_TIPO = "tipo_Parcela";
+    private static final String PARCELA_COL_QUANTIDADENIVEIS = "quantidadeNiveis_Parcela";
+    private static final String PARCELA_COL_ID_FORMULARIO = "idFormulario_Parcela";
+    private static final String PARCELA_CONSTRAINT_FK_PARCELA_FORMULARIO = "FK_Parcela_Formulario";
+
+    private static final String NIVELPARCELA_TABELA = "NivelParcela";
+    private static final String NIVELPARCELA_COL_ID = "id_NivelParcela";
+    private static final String NIVELPARCELA_COL_NOME = "nome_NivelParcela";
+    private static final String NIVELPARCELA_COL_NUMERO = "numero_NivelParcela";
+    private static final String NIVELPARCELA_COL_ID_PARCELA = "idParcela_NivelParcela";
+    private static final String NIVELPARCELA_CONSTRAINT_FK_NIVELPARCELA_PARCELA = "FK_NivelParcela_Parcela";
 
     private static final String VARIAVEL_TABELA = "Variavel";
     private static final String VARIAVEL_COL_ID = "id_Variavel";
@@ -153,6 +170,23 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + "CONSTRAINT '" + NIVELFATOR_CONSTRAINT_FK_NIVELFATOR_FATOR + "' FOREIGN KEY ('" + NIVELFATOR_COL_ID_FATOR + "') REFERENCES " + FATOR_TABELA + " ('" + FATOR_COL_ID + "') ON DELETE CASCADE"
             + ")";
 
+    private static final String CRIAR_TABELA_PARCELA = "CREATE TABLE "
+            + PARCELA_TABELA + "(" + PARCELA_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+            + PARCELA_COL_NOME + " TEXT, "
+            + PARCELA_COL_TIPO + " INTEGER, "
+            + PARCELA_COL_QUANTIDADENIVEIS + " INTEGER, "
+            + PARCELA_COL_ID_FORMULARIO + " INTEGER, "
+            + "CONSTRAINT '" + PARCELA_CONSTRAINT_FK_PARCELA_FORMULARIO + "' FOREIGN KEY ('" + PARCELA_COL_ID_FORMULARIO + "') REFERENCES " + FORMULARIO_TABELA + " ('" + FORMULARIO_COL_ID + "') ON DELETE CASCADE"
+            + ")";
+
+    private static final String CRIAR_TABELA_NIVELPARCELA = "CREATE TABLE "
+            + NIVELPARCELA_TABELA + "(" + NIVELPARCELA_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+            + NIVELPARCELA_COL_NOME + " TEXT, "
+            + NIVELPARCELA_COL_NUMERO + " INTEGER, "
+            + NIVELPARCELA_COL_ID_PARCELA + " INTEGER, "
+            + "CONSTRAINT '" + NIVELPARCELA_CONSTRAINT_FK_NIVELPARCELA_PARCELA + "' FOREIGN KEY ('" + NIVELPARCELA_COL_ID_PARCELA + "') REFERENCES " + PARCELA_TABELA + " ('" + PARCELA_COL_ID + "') ON DELETE CASCADE"
+            + ")";
+
     private static final String CRIAR_TABELA_VARIAVEL = "CREATE TABLE "
             + VARIAVEL_TABELA + "("+ VARIAVEL_COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
             + VARIAVEL_COL_NOME + " TEXT, "
@@ -192,9 +226,9 @@ public class DBAuxilar extends SQLiteOpenHelper {
             + "CONSTRAINT '" + DADO_CONSTRAINT_FK_DADO_TRATAMENTO + "' FOREIGN KEY ('" + DADO_COL_ID_TRATAMENTO + "') REFERENCES " + TRATAMENTO_TABELA + " ('" + TRATAMENTO_COL_ID + "') ON DELETE CASCADE, "
             + "CONSTRAINT '" + DADO_CONSTRAINT_FK_DADO_VARIAVEL + "' FOREIGN KEY ('" + DADO_COL_ID_VARIAVEL + "') REFERENCES " + VARIAVEL_TABELA + " ('" + VARIAVEL_COL_ID + "') ON DELETE CASCADE,"
             + "CONSTRAINT '" + DADO_CONSTRAINT_FK_DADO_NIVELFATOR + "' FOREIGN KEY ('" + DADO_COL_ID_NIVELFATOR + "') REFERENCES " + NIVELFATOR_TABELA + " ('" + NIVELFATOR_COL_ID + "') ON DELETE CASCADE,"
-            + "CONSTRAINT '" + DADO_CONSTRAINT_FK_DADO_FATOR + "' FOREIGN KEY ('" + DADO_COL_ID_FATOR + "') REFERENCES " + FATOR_TABELA + " ('" + FATOR_COL_ID + "') ON DELETE CASCADE"
-            //+ "CONSTRAINT '" + DADO_CONSTRAINT_FK_DADO_PARCELA + "' FOREIGN KEY ('" + DADO_COL_ID_PARCELA + "') REFERENCES " + PARCELA_TABELA + " ('" + PARCELA_COL_ID + "') ON DELETE CASCADE,"
-            //+ "CONSTRAINT '" + DADO_CONSTRAINT_FK_DADO_NIVELPARCELA + "' FOREIGN KEY ('" + DADO_COL_ID_NIVEL_PARCELA + "') REFERENCES " + NIVELPARCELA_TABELA + " ('" + NIVELPARCELA_COL_ID + "') ON DELETE CASCADE"
+            + "CONSTRAINT '" + DADO_CONSTRAINT_FK_DADO_FATOR + "' FOREIGN KEY ('" + DADO_COL_ID_FATOR + "') REFERENCES " + FATOR_TABELA + " ('" + FATOR_COL_ID + "') ON DELETE CASCADE,"
+            + "CONSTRAINT '" + DADO_CONSTRAINT_FK_DADO_PARCELA + "' FOREIGN KEY ('" + DADO_COL_ID_PARCELA + "') REFERENCES " + PARCELA_TABELA + " ('" + PARCELA_COL_ID + "') ON DELETE CASCADE,"
+            + "CONSTRAINT '" + DADO_CONSTRAINT_FK_DADO_NIVELPARCELA + "' FOREIGN KEY ('" + DADO_COL_ID_NIVEL_PARCELA + "') REFERENCES " + NIVELPARCELA_TABELA + " ('" + NIVELPARCELA_COL_ID + "') ON DELETE CASCADE"
             + ")";
 
     public DBAuxilar(Context context) {
@@ -208,6 +242,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
         db.execSQL(CRIAR_TABELA_TRATAMENTO);
         db.execSQL(CRIAR_TABELA_FATOR);
         db.execSQL(CRIAR_TABELA_NIVELFATOR);
+        db.execSQL(CRIAR_TABELA_PARCELA);
+        db.execSQL(CRIAR_TABELA_NIVELPARCELA);
         db.execSQL(CRIAR_TABELA_VARIAVEL);
         db.execSQL(CRIAR_TABELA_COLETA);
         db.execSQL(CRIAR_TABELA_DADO);
@@ -220,6 +256,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TRATAMENTO_TABELA);
         db.execSQL("DROP TABLE IF EXISTS " + FATOR_TABELA);
         db.execSQL("DROP TABLE IF EXISTS " + NIVELFATOR_TABELA);
+        db.execSQL("DROP TABLE IF EXISTS " + PARCELA_TABELA);
+        db.execSQL("DROP TABLE IF EXISTS " + NIVELPARCELA_TABELA);
         db.execSQL("DROP TABLE IF EXISTS " + VARIAVEL_TABELA);
         db.execSQL("DROP TABLE IF EXISTS " + COLETA_TABELA);
         db.execSQL("DROP TABLE IF EXISTS " + DADO_TABELA);
@@ -408,6 +446,132 @@ public class DBAuxilar extends SQLiteOpenHelper {
         values.put(TRATAMENTO_COL_ID_FORMULARIO, tratamento.getIdFormulario_Tratamento());
 
         return db.update(TRATAMENTO_TABELA, values, TRATAMENTO_COL_ID + " = " + tratamento.getId_Tratamento(), null);
+    }
+
+
+    //PARCELA
+
+    //Inserir PARCELA
+    public Long insertParcela(Parcela parcela) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(PARCELA_COL_NOME, parcela.getNome_Parcela());
+        values.put(PARCELA_COL_TIPO, parcela.getTipo_Parcela());
+        values.put(PARCELA_COL_QUANTIDADENIVEIS, parcela.getQuantidadeNiveis_Parcela());
+        values.put(PARCELA_COL_ID_FORMULARIO, parcela.getIdFormulario_Parcela());
+
+        return db.insert(PARCELA_TABELA, null, values);
+    }
+
+    //ler Parcela
+    public Parcela lerParcela(Long id_Parcela) {
+
+        String selectQuery = "SELECT * FROM " + PARCELA_TABELA + " WHERE " + PARCELA_COL_ID + " = " + id_Parcela;
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        Parcela parcela = new Parcela();
+        if (c.moveToFirst()) {
+            parcela.setId_Parcela(c.getLong(c.getColumnIndex(PARCELA_COL_ID)));
+            parcela.setNome_Parcela(c.getString(c.getColumnIndex(PARCELA_COL_NOME)));
+            parcela.setTipo_Parcela(c.getInt(c.getColumnIndex(PARCELA_COL_TIPO)));
+            parcela.setQuantidadeNiveis_Parcela(c.getInt(c.getColumnIndex(PARCELA_COL_QUANTIDADENIVEIS)));
+            parcela.setIdFormulario_Parcela(c.getLong(c.getColumnIndex(PARCELA_COL_ID_FORMULARIO)));
+        }
+        c.close();
+        return parcela;
+    }
+
+    //ler todos os Parcelaes
+    public ArrayList<Parcela> lerTodosParcelaes(Long id_Formulario) {
+        ArrayList<Parcela> parcelas = new ArrayList<>();
+
+        String selectQuery = "SELECT * FROM " + PARCELA_TABELA + " WHERE " + PARCELA_COL_ID_FORMULARIO + " = " + id_Formulario;
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()) {
+            do {
+                Parcela parcela = new Parcela();
+                parcela.setId_Parcela(c.getLong(c.getColumnIndex(PARCELA_COL_ID)));
+                parcela.setNome_Parcela(c.getString(c.getColumnIndex(PARCELA_COL_NOME)));
+                parcela.setTipo_Parcela(c.getInt(c.getColumnIndex(PARCELA_COL_TIPO)));
+                parcela.setQuantidadeNiveis_Parcela(c.getInt(c.getColumnIndex(PARCELA_COL_QUANTIDADENIVEIS)));
+                parcela.setIdFormulario_Parcela(c.getLong(c.getColumnIndex(PARCELA_COL_ID_FORMULARIO)));
+                parcelas.add(parcela);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return parcelas;
+    }
+
+    public int updateParcela(Parcela parcela) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(PARCELA_COL_NOME, parcela.getNome_Parcela());
+        values.put(PARCELA_COL_TIPO, parcela.getTipo_Parcela());
+        values.put(PARCELA_COL_QUANTIDADENIVEIS, parcela.getQuantidadeNiveis_Parcela());
+        values.put(PARCELA_COL_ID_FORMULARIO, parcela.getIdFormulario_Parcela());
+
+        return db.update(PARCELA_TABELA, values, PARCELA_COL_ID + " = " + parcela.getId_Parcela(), null);
+    }
+
+    //NivelParcela
+
+    //Inserir NivelParcela
+    public Long insertNivelParcela(NivelParcela nivelParcela) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(NIVELPARCELA_COL_NOME, nivelParcela.getNome_NivelParcela());
+        values.put(NIVELPARCELA_COL_NUMERO, nivelParcela.getNumero_NivelParcela());
+        values.put(NIVELPARCELA_COL_ID_PARCELA, nivelParcela.getIdParcela_NivelParcela());
+
+        return db.insert(NIVELPARCELA_TABELA, null, values);
+    }
+
+    //ler todas as Parcelas
+    public ArrayList<NivelParcela> lerTodosNiveisParcela(Long id_Parcela) {
+        ArrayList<NivelParcela> niveisParcela = new ArrayList<>();
+
+        String selectQuery = "SELECT * FROM " + NIVELPARCELA_TABELA + " WHERE " + NIVELPARCELA_COL_ID_PARCELA + " = " + id_Parcela;
+
+        Log.e(LOG, selectQuery);
+
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c.moveToFirst()) {
+            do {
+                NivelParcela nivelParcela = new NivelParcela();
+                nivelParcela.setId_NivelParcela(c.getLong(c.getColumnIndex(NIVELPARCELA_COL_ID)));
+                nivelParcela.setNome_NivelParcela(c.getString(c.getColumnIndex(NIVELPARCELA_COL_NOME)));
+                nivelParcela.setNumero_NivelParcela(c.getInt(c.getColumnIndex(NIVELPARCELA_COL_NUMERO)));
+                nivelParcela.setIdParcela_NivelParcela(c.getLong(c.getColumnIndex(NIVELPARCELA_COL_ID_PARCELA)));
+                niveisParcela.add(nivelParcela);
+            } while (c.moveToNext());
+        }
+        c.close();
+        return niveisParcela;
+    }
+
+    public int updateNiveisParcela(NivelParcela nivelParcela) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(NIVELPARCELA_COL_NOME, nivelParcela.getNome_NivelParcela());
+        values.put(NIVELPARCELA_COL_NUMERO, nivelParcela.getNumero_NivelParcela());
+        values.put(NIVELPARCELA_COL_ID_PARCELA, nivelParcela.getIdParcela_NivelParcela());
+
+        return db.update(NIVELPARCELA_TABELA, values, NIVELPARCELA_COL_ID + " = " + nivelParcela.getId_NivelParcela(), null);
     }
 
 
@@ -822,6 +986,34 @@ public class DBAuxilar extends SQLiteOpenHelper {
 
     }
 
+
+    public Long checarDadoFat(Dado dado) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + DADO_TABELA + " WHERE " + DADO_COL_ID_COLETA + " = " + dado.getIdColeta_Dado()
+                + " AND " + DADO_COL_ID_FATOR + " = " + dado.getIdFator_Dado()
+                + " AND " + DADO_COL_BLOCO + " = " + dado.getBloco_Dado()
+                + " AND " + DADO_COL_VARIAVEL + " = " + dado.getVariavel_Dado()
+                + " AND " + DADO_COL_REPETICAO + " = " + dado.getRepeticao_Dado()
+                + " AND " + DADO_COL_REPLICACAO + " = " + dado.getReplicacao_Dado()
+                + " AND " + DADO_COL_ID_NIVELFATOR + " = " + dado.getIdNivelFator_Dado();
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        Long id_Dado;
+        if (c.moveToFirst()) {
+            id_Dado = c.getLong(c.getColumnIndex(DADO_COL_ID));
+        } else {
+            id_Dado = 0L;
+        }
+
+        c.close();
+
+        return id_Dado;
+
+    }
 
 
 }
