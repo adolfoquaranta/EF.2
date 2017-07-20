@@ -213,6 +213,7 @@ public class CadastroFormulario extends AppCompatActivity {
 
         Intent cadastroTratamentos = new Intent(CadastroFormulario.this, CadastroTratamentos.class);
         Intent cadastroFatores = new Intent(CadastroFormulario.this, CadastroFatores.class);
+        Intent cadastroParcelas = new Intent(CadastroFormulario.this, CadastroParcelas.class);
 
         Formulario formulario = new Formulario();
         DBAuxilar dbAuxilar = new DBAuxilar(getApplicationContext());
@@ -263,10 +264,11 @@ public class CadastroFormulario extends AppCompatActivity {
 
         cadastroTratamentos.putExtra("id_Formulario", id_Formulario);
         cadastroFatores.putExtra("id_Formulario", id_Formulario);
-
+        cadastroParcelas.putExtra("id_Formulario", id_Formulario);
         finish();
 
-        if (modelo_Formulario > 1) startActivity(cadastroFatores);
+        if (modelo_Formulario == 2) startActivity(cadastroFatores);
+        else if (modelo_Formulario == 3) startActivity(cadastroParcelas);
         else startActivity(cadastroTratamentos);
 
     }

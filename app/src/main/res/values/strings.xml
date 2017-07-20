@@ -34,6 +34,9 @@
     <string name="err_msg_nivelFator">Insira um número inteiro positivo.</string>
     <string name="err_msg_nomeNivelFator">Insira um nome para o Nivel do Fator</string>
 
+    <string name="err_msg_nomeParcela">Insira um nome</string>
+    <string name="err_msg_nomeNivelParcela">Insira um nome para o Nivel da</string>
+
 
     <string name="inicio_btnEXE">EXP</string>
     <string name="inicio_btnINV">INV</string>
@@ -58,8 +61,15 @@
     <string name="title_activity_cadastro_nivelfatores">Cadastro de Níveis do Fator</string>
     <string name="hint_nomeTratamento">Nome do Nível </string>
     <string name="hint_nomeFator">Nome do fator </string>
+    <string name="hint_nomeParcela">Nome da</string>
     <string name="hint_nomeNivelFator">Nome do nível </string>
     <string name="hint_niveisFator">Níveis</string>
+    <string name="hint_nomeNivelParcela">Nome do nível </string>
+    <string name="hint_niveisParcela">Níveis</string>
+
+    <string name="title_activity_cadastro_parcelas">Cadastro de Parcelas</string>
+    <string name="title_activity_cadastro_nivelparcelas">Cadastro de Níveis da</string>
+
 
     <string name="string_Tratamento">Tratamento </string>
     <string name="title_activity_cadastro_variaveis">Cadastro de Variáveis</string>
@@ -89,6 +99,12 @@
     </string-array>
 
     <string-array name="spinnerArray_tipoFator">
+        <item>Tipo</item>
+        <item>Qual.</item>
+        <item>Quant.</item>
+    </string-array>
+
+    <string-array name="spinnerArray_tipoParcela">
         <item>Tipo</item>
         <item>Qual.</item>
         <item>Quant.</item>

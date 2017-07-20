@@ -29,8 +29,16 @@
             android:label="@string/title_activity_cadastro_fatores"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".atividades.CadastroParcelas"
+            android:label="@string/title_activity_cadastro_parcelas"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".atividades.CadastroNivelFatores"
             android:label="@string/title_activity_cadastro_nivelfatores"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".atividades.CadastroNivelParcelas"
+            android:label="@string/title_activity_cadastro_nivelparcelas"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".atividades.CadastroVariaveis"

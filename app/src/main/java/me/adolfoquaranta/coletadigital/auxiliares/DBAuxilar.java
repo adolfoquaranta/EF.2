@@ -486,8 +486,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
         return parcela;
     }
 
-    //ler todos os Parcelaes
-    public ArrayList<Parcela> lerTodosParcelaes(Long id_Formulario) {
+    //ler todas os Parcelas
+    public ArrayList<Parcela> lerTodasParcelas(Long id_Formulario) {
         ArrayList<Parcela> parcelas = new ArrayList<>();
 
         String selectQuery = "SELECT * FROM " + PARCELA_TABELA + " WHERE " + PARCELA_COL_ID_FORMULARIO + " = " + id_Formulario;
