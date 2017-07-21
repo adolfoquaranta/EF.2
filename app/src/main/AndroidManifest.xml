@@ -57,6 +57,10 @@
             android:label="@string/title_activity_coletar_dados"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".atividades.ColetarDadosParcela"
+            android:label="@string/title_activity_coletar_dados"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".atividades.ListarFormularios"
             android:label="@string/title_activity_listar_formularios"
             android:parentActivityName=".atividades.Inicio"

@@ -89,7 +89,18 @@ public class CadastroColeta extends AppCompatActivity {
         Log.d("id_Coleta", id_Coleta.toString());
 
         Formulario formulario = dbAuxilar.lerFormulario(id_Formulario);
-        if (formulario.getModelo_Formulario().equals(2)) {
+        if (formulario.getModelo_Formulario().equals(3)) {
+            Intent coletarDadosParcelas = new Intent(CadastroColeta.this, ColetarDadosParcela.class);
+            coletarDadosParcelas.putExtra("id_Formulario", id_Formulario);
+            coletarDadosParcelas.putExtra("id_Coleta", id_Coleta);
+            coletarDadosParcelas.putExtra("parcelaAtual", 0);
+            coletarDadosParcelas.putExtra("nivelFatorAtual", 0);
+            coletarDadosParcelas.putExtra("replicacaoAtual", 0);
+            coletarDadosParcelas.putExtra("repeticaoAtual", 0);
+            coletarDadosParcelas.putExtra("blocoAtual", 0);
+            finish();
+            startActivity(coletarDadosParcelas);
+        } else if (formulario.getModelo_Formulario().equals(2)) {
             Intent coletarDadosFatorial = new Intent(CadastroColeta.this, ColetarDadosFatorial.class);
             coletarDadosFatorial.putExtra("id_Formulario", id_Formulario);
             coletarDadosFatorial.putExtra("id_Coleta", id_Coleta);

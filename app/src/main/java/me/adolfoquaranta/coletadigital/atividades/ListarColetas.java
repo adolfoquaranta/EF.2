@@ -193,6 +193,22 @@ public class ListarColetas extends AppCompatActivity {
                                         Toast.makeText(ListarColetas.this, "Para exportar o arquivo é necessário autorizar gravação de dados no armazenamento interno", Toast.LENGTH_LONG).show();
                                     break;
                                 case 1:
+                                    if (dbAuxilar.lerFormulario(coletasList.get(position).getIdFormulario_Coleta()).getModelo_Formulario() == 3) {
+                                        Intent coletarDadosParcela = new Intent(ListarColetas.this, ColetarDadosParcela.class);
+                                        coletarDadosParcela.putExtra("id_Formulario", id_Formulario);
+                                        coletarDadosParcela.putExtra("id_Coleta", coletasList.get(position).getId_Coleta());
+                                        if (!coletasList.get(position).getStatus_Coleta().equals("ok") &&
+                                                !coletasList.get(position).getStatus_Coleta().equals("")) {
+                                            String[] posicaoColeta = coletasList.get(position).getStatus_Coleta().split(",");
+                                            coletarDadosParcela.putExtra("parcelaAtual", Integer.valueOf(posicaoColeta[0]));
+                                            coletarDadosParcela.putExtra("nivelFatorAtual", Integer.valueOf(posicaoColeta[1]));
+                                            coletarDadosParcela.putExtra("replicacaoAtual", Integer.valueOf(posicaoColeta[2]));
+                                            coletarDadosParcela.putExtra("repeticaoAtual", Integer.valueOf(posicaoColeta[3]));
+                                            coletarDadosParcela.putExtra("blocoAtual", Integer.valueOf(posicaoColeta[4]));
+                                        }
+                                        finish();
+                                        startActivity(coletarDadosParcela);
+                                    }
                                     if (dbAuxilar.lerFormulario(coletasList.get(position).getIdFormulario_Coleta()).getModelo_Formulario() == 2) {
                                         Intent coletarDadosFatorial = new Intent(ListarColetas.this, ColetarDadosFatorial.class);
                                         coletarDadosFatorial.putExtra("id_Formulario", id_Formulario);

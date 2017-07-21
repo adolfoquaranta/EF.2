@@ -6,14 +6,14 @@ package me.adolfoquaranta.coletadigital.modelos;
 
 public class Dado {
 
-    private Long id_Dado, idColeta_Dado, idVariavel_Dado, idTratamento_Dado, idFator_Dado, idNivelFator_Dado, idParcela_Dado, nivelParcela_Dado;
+    private Long id_Dado, idColeta_Dado, idVariavel_Dado, idTratamento_Dado, idFator_Dado, idNivelFator_Dado, idParcela_Dado, IdNivelParcela_Dado;
     private String valor_Dado;
     private Integer repeticao_Dado, replicacao_Dado, tratamento_Dado, variavel_Dado, bloco_Dado;
 
     public Dado() {
     }
 
-    public Dado(Long id_Dado, Long idColeta_Dado, Long idVariavel_Dado, Long idTratamento_Dado, Long idFator_Dado, Long idNivelFator_Dado, Long idParcela_Dado, Long nivelParcela_Dado, String valor_Dado, Integer repeticao_Dado, Integer replicacao_Dado, Integer tratamento_Dado, Integer variavel_Dado, Integer bloco_Dado) {
+    public Dado(Long id_Dado, Long idColeta_Dado, Long idVariavel_Dado, Long idTratamento_Dado, Long idFator_Dado, Long idNivelFator_Dado, Long idParcela_Dado, Long IdNivelParcela_Dado, String valor_Dado, Integer repeticao_Dado, Integer replicacao_Dado, Integer tratamento_Dado, Integer variavel_Dado, Integer bloco_Dado) {
         this.id_Dado = id_Dado;
         this.idColeta_Dado = idColeta_Dado;
         this.idVariavel_Dado = idVariavel_Dado;
@@ -21,7 +21,7 @@ public class Dado {
         this.idFator_Dado = idFator_Dado;
         this.idNivelFator_Dado = idNivelFator_Dado;
         this.idParcela_Dado = idParcela_Dado;
-        this.nivelParcela_Dado = nivelParcela_Dado;
+        this.IdNivelParcela_Dado = IdNivelParcela_Dado;
         this.valor_Dado = valor_Dado;
         this.repeticao_Dado = repeticao_Dado;
         this.replicacao_Dado = replicacao_Dado;
@@ -86,12 +86,12 @@ public class Dado {
         this.idParcela_Dado = idParcela_Dado;
     }
 
-    public Long getNivelParcela_Dado() {
-        return nivelParcela_Dado;
+    public Long getIdNivelParcela_Dado() {
+        return IdNivelParcela_Dado;
     }
 
-    public void setNivelParcela_Dado(Long nivelParcela_Dado) {
-        this.nivelParcela_Dado = nivelParcela_Dado;
+    public void setIdNivelParcela_Dado(Long IdNivelParcela_Dado) {
+        this.IdNivelParcela_Dado = IdNivelParcela_Dado;
     }
 
     public String getValor_Dado() {
@@ -152,7 +152,7 @@ public class Dado {
                 ", idFator_Dado=" + idFator_Dado +
                 ", idNivelFator_Dado=" + idNivelFator_Dado +
                 ", idParcela_Dado=" + idParcela_Dado +
-                ", nivelParcela_Dado=" + nivelParcela_Dado +
+                ", IdNivelParcela_Dado=" + IdNivelParcela_Dado +
                 ", valor_Dado='" + valor_Dado + '\'' +
                 ", repeticao_Dado=" + repeticao_Dado +
                 ", replicacao_Dado=" + replicacao_Dado +

@@ -21,6 +21,8 @@ import me.adolfoquaranta.coletadigital.modelos.Coleta;
 import me.adolfoquaranta.coletadigital.modelos.Fator;
 import me.adolfoquaranta.coletadigital.modelos.Formulario;
 import me.adolfoquaranta.coletadigital.modelos.NivelFator;
+import me.adolfoquaranta.coletadigital.modelos.NivelParcela;
+import me.adolfoquaranta.coletadigital.modelos.Parcela;
 import me.adolfoquaranta.coletadigital.modelos.Tratamento;
 import me.adolfoquaranta.coletadigital.modelos.Variavel;
 
@@ -49,7 +51,9 @@ public class CSVAuxiliar {
             criarDiretorioEnomeArquivo(formulario.getNome_Formulario(), coleta.getNome_Coleta());
             return escreverArquivoFAT(formulario, coleta, fatores, variaveis);
         } else if (modelo_Formulario == 3) {
-            return "";
+            ArrayList<Parcela> parcelas = dbAuxilar.lerTodasParcelas(id_Formulario);
+            criarDiretorioEnomeArquivo(formulario.getNome_Formulario(), coleta.getNome_Coleta());
+            return escreverArquivoParcela(formulario, coleta, parcelas, variaveis);
         } else {
             return "";
         }
@@ -278,5 +282,114 @@ public class CSVAuxiliar {
         }
 
     }
+
+    private String escreverArquivoParcela(Formulario formulario, Coleta coleta, ArrayList<Parcela> parcelas, ArrayList<Variavel> variaveis) {
+        CSVWriter writer;
+        try {
+            writer = new CSVWriter(new FileWriter(filePath), CSVWriter.DEFAULT_SEPARATOR, CSVWriter.NO_QUOTE_CHARACTER);
+            List<String[]> linhas = new ArrayList<>();
+            String[] cabecalhoPosicoes = new String[]{}, cabecalhoNomeVariaveis = new String[formulario.getQuantidadeVariaveis_Formulario()];
+
+            String bloco = "BLOCO", parcela = "PARCELA", nivel = "NIVEL", repeticao = "REPETICAO", replicacao = "REPLICA";
+
+
+            if (formulario.getQuantidadeBlocos_Formulario() <= 1 && formulario.getQuantidadeReplicacoes_Formulario() <= 1)
+                cabecalhoPosicoes = new String[]{parcela, nivel, repeticao};
+            else if (formulario.getQuantidadeBlocos_Formulario() <= 1)
+                cabecalhoPosicoes = new String[]{parcela, nivel, repeticao, replicacao};
+            else if (formulario.getQuantidadeReplicacoes_Formulario() <= 1 && formulario.getQuantidadeRepeticoes_Formulario() <= 1)
+                cabecalhoPosicoes = new String[]{bloco, parcela, nivel};
+            else if (formulario.getQuantidadeReplicacoes_Formulario() <= 1)
+                cabecalhoPosicoes = new String[]{bloco, parcela, nivel, repeticao};
+            else if (formulario.getQuantidadeRepeticoes_Formulario() <= 1)
+                cabecalhoPosicoes = new String[]{bloco, parcela, nivel, replicacao};
+            else
+                cabecalhoPosicoes = new String[]{bloco, parcela, nivel, repeticao, replicacao};
+
+            for (int v = 0; v < formulario.getQuantidadeVariaveis_Formulario(); v++) {
+                cabecalhoNomeVariaveis[v] = variaveis.get(v).getNome_Variavel();
+            }
+            linhas.add(ArrayUtils.addAll(cabecalhoPosicoes, cabecalhoNomeVariaveis));
+
+
+            if (formulario.getQuantidadeBlocos_Formulario() != -1) {
+                for (int bloc = 0; bloc < formulario.getQuantidadeBlocos_Formulario(); bloc++) {
+                    for (int fat = 0; fat < formulario.getQuantidadeParcelas_Formulario(); fat++) {
+                        ArrayList<NivelParcela> niveis = dbAuxilar.lerTodosNiveisParcela(parcelas.get(fat).getId_Parcela());
+                        for (int niv = 0; niv < niveis.size(); niv++) {
+                            for (int rep = 0; rep < formulario.getQuantidadeRepeticoes_Formulario(); rep++) {
+                                for (int repli = 0; repli < formulario.getQuantidadeReplicacoes_Formulario(); repli++) {
+                                    String[] posicoes;
+
+
+                                    if (formulario.getQuantidadeBlocos_Formulario() <= 1 && formulario.getQuantidadeReplicacoes_Formulario() <= 1)
+                                        posicoes = new String[]{parcelas.get(fat).getNome_Parcela(), niveis.get(niv).getNome_NivelParcela(), String.valueOf(rep + 1)};
+                                    else if (formulario.getQuantidadeBlocos_Formulario() <= 1)
+                                        posicoes = new String[]{parcelas.get(fat).getNome_Parcela(), niveis.get(niv).getNome_NivelParcela(), String.valueOf(rep + 1), String.valueOf(repli + 1)};
+                                    else if (formulario.getQuantidadeReplicacoes_Formulario() <= 1 && formulario.getQuantidadeRepeticoes_Formulario() <= 1)
+                                        posicoes = new String[]{String.valueOf(bloc + 1), parcelas.get(fat).getNome_Parcela(), niveis.get(niv).getNome_NivelParcela()};
+                                    else if (formulario.getQuantidadeReplicacoes_Formulario() <= 1)
+                                        posicoes = new String[]{String.valueOf(bloc + 1), parcelas.get(fat).getNome_Parcela(), niveis.get(niv).getNome_NivelParcela(), String.valueOf(rep + 1)};
+                                    else if (formulario.getQuantidadeRepeticoes_Formulario() <= 1)
+                                        posicoes = new String[]{String.valueOf(bloc + 1), parcelas.get(fat).getNome_Parcela(), niveis.get(niv).getNome_NivelParcela(), String.valueOf(repli + 1)};
+                                    else
+                                        posicoes = new String[]{String.valueOf(bloc + 1), parcelas.get(fat).getNome_Parcela(), niveis.get(niv).getNome_NivelParcela(), String.valueOf(rep + 1), String.valueOf(repli + 1)};
+
+                                    String[] valores = new String[formulario.getQuantidadeVariaveis_Formulario()];
+                                    for (int var = 0; var < formulario.getQuantidadeVariaveis_Formulario(); var++) {
+                                        valores[var] = dbAuxilar.lerValorDadoParcela(parcelas.get(fat).getId_Parcela(), niveis.get(niv).getId_NivelParcela(), bloc, rep, repli, variaveis.get(var).getId_Variavel(), coleta.getId_Coleta()).getValor_Dado();
+                                    }
+
+                                    String[] colunas = ArrayUtils.addAll(posicoes, valores);
+                                    linhas.add(colunas);
+                                }
+                            }
+                        }
+                    }
+                }
+            } else {
+                for (int fat = 0; fat < formulario.getQuantidadeParcelas_Formulario(); fat++) {
+                    ArrayList<NivelParcela> niveis = dbAuxilar.lerTodosNiveisParcela(parcelas.get(fat).getId_Parcela());
+                    for (int niv = 0; niv < niveis.size(); niv++) {
+                        for (int rep = 0; rep < formulario.getQuantidadeRepeticoes_Formulario(); rep++) {
+                            for (int repli = 0; repli < formulario.getQuantidadeReplicacoes_Formulario(); repli++) {
+                                String[] posicoes;
+
+                                if (formulario.getQuantidadeReplicacoes_Formulario() <= 1 && formulario.getQuantidadeRepeticoes_Formulario() <= 1)
+                                    posicoes = new String[]{parcelas.get(fat).getNome_Parcela(), niveis.get(niv).getNome_NivelParcela()};
+                                else if (formulario.getQuantidadeReplicacoes_Formulario() <= 1)
+                                    posicoes = new String[]{parcelas.get(fat).getNome_Parcela(), niveis.get(niv).getNome_NivelParcela(), String.valueOf(rep + 1)};
+                                else if (formulario.getQuantidadeRepeticoes_Formulario() <= 1)
+                                    posicoes = new String[]{parcelas.get(fat).getNome_Parcela(), niveis.get(niv).getNome_NivelParcela(), String.valueOf(repli + 1)};
+                                else
+                                    posicoes = new String[]{parcelas.get(fat).getNome_Parcela(), niveis.get(niv).getNome_NivelParcela(), String.valueOf(rep + 1), String.valueOf(repli + 1)};
+
+                                String[] valores = new String[formulario.getQuantidadeVariaveis_Formulario()];
+                                for (int var = 0; var < formulario.getQuantidadeVariaveis_Formulario(); var++) {
+                                    valores[var] = dbAuxilar.lerValorDadoParcela(parcelas.get(fat).getId_Parcela(), niveis.get(niv).getId_NivelParcela(), 0, rep, repli, variaveis.get(var).getId_Variavel(), coleta.getId_Coleta()).getValor_Dado();
+                                }
+
+                                String[] colunas = ArrayUtils.addAll(posicoes, valores);
+                                linhas.add(colunas);
+                            }
+                        }
+                    }
+                }
+
+            }
+
+
+            writer.writeAll(linhas);
+            writer.close();
+            Log.i("Witter", "ArquivoGerado");
+            return filePath;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "";
+        }
+
+    }
+
 
 }

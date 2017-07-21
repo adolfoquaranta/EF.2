@@ -855,6 +855,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
         values.put(DADO_COL_BLOCO,dado.getBloco_Dado());
         values.put(DADO_COL_ID_FATOR, dado.getIdFator_Dado());
         values.put(DADO_COL_ID_NIVELFATOR, dado.getIdNivelFator_Dado());
+        values.put(DADO_COL_ID_PARCELA, dado.getIdParcela_Dado());
+        values.put(DADO_COL_ID_NIVEL_PARCELA, dado.getIdNivelParcela_Dado());
         values.put(DADO_COL_ID_COLETA,dado.getIdColeta_Dado());
         values.put(DADO_COL_TRATAMENTO, dado.getTratamento_Dado());
         values.put(DADO_COL_VARIAVEL, dado.getVariavel_Dado());
@@ -884,6 +886,8 @@ public class DBAuxilar extends SQLiteOpenHelper {
                 dado.setBloco_Dado(c.getInt(c.getColumnIndex(DADO_COL_BLOCO)));
                 dado.setIdFator_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID_FATOR)));
                 dado.setIdNivelFator_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID_NIVELFATOR)));
+                dado.setIdParcela_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID_PARCELA)));
+                dado.setIdNivelParcela_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID_NIVEL_PARCELA)));
                 dado.setIdColeta_Dado(c.getLong(c.getColumnIndex(DADO_COL_ID_COLETA)));
                 dado.setTratamento_Dado(c.getInt(c.getColumnIndex(DADO_COL_TRATAMENTO)));
                 dado.setVariavel_Dado(c.getInt(c.getColumnIndex(DADO_COL_VARIAVEL)));
@@ -929,6 +933,32 @@ public class DBAuxilar extends SQLiteOpenHelper {
 
         String selectQuery = "SELECT " + DADO_COL_VALOR + " FROM " + DADO_TABELA + " WHERE " + DADO_COL_ID_FATOR + " = " + id_Fator
                 + " AND " + DADO_COL_ID_NIVELFATOR + " = " + id_NivelFator
+                + " AND " + DADO_COL_BLOCO + " = " + bloco
+                + " AND " + DADO_COL_REPETICAO + " = " + repeticao
+                + " AND " + DADO_COL_REPLICACAO + " = " + replicacao
+                + " AND " + DADO_COL_ID_VARIAVEL + " = " + id_Variavel
+                + " AND " + DADO_COL_ID_COLETA + " = " + id_Coleta;
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        if (c != null) c.moveToFirst();
+
+        Dado dado = new Dado();
+        assert c != null;
+        dado.setValor_Dado(c.getString(c.getColumnIndex(DADO_COL_VALOR)));
+        c.close();
+
+        return dado;
+
+    }
+
+    public Dado lerValorDadoParcela(Long id_Parcela, Long id_NivelParcela, Integer bloco, Integer repeticao, Integer replicacao, Long id_Variavel, Long id_Coleta) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String selectQuery = "SELECT " + DADO_COL_VALOR + " FROM " + DADO_TABELA + " WHERE " + DADO_COL_ID_PARCELA + " = " + id_Parcela
+                + " AND " + DADO_COL_ID_NIVEL_PARCELA + " = " + id_NivelParcela
                 + " AND " + DADO_COL_BLOCO + " = " + bloco
                 + " AND " + DADO_COL_REPETICAO + " = " + repeticao
                 + " AND " + DADO_COL_REPLICACAO + " = " + replicacao
@@ -997,6 +1027,34 @@ public class DBAuxilar extends SQLiteOpenHelper {
                 + " AND " + DADO_COL_REPETICAO + " = " + dado.getRepeticao_Dado()
                 + " AND " + DADO_COL_REPLICACAO + " = " + dado.getReplicacao_Dado()
                 + " AND " + DADO_COL_ID_NIVELFATOR + " = " + dado.getIdNivelFator_Dado();
+
+        Log.e(LOG, selectQuery);
+
+        Cursor c = db.rawQuery(selectQuery, null);
+
+        Long id_Dado;
+        if (c.moveToFirst()) {
+            id_Dado = c.getLong(c.getColumnIndex(DADO_COL_ID));
+        } else {
+            id_Dado = 0L;
+        }
+
+        c.close();
+
+        return id_Dado;
+
+    }
+
+    public Long checarDadoPar(Dado dado) {
+        SQLiteDatabase db = getReadableDatabase();
+
+        String selectQuery = "SELECT * FROM " + DADO_TABELA + " WHERE " + DADO_COL_ID_COLETA + " = " + dado.getIdColeta_Dado()
+                + " AND " + DADO_COL_ID_PARCELA + " = " + dado.getIdParcela_Dado()
+                + " AND " + DADO_COL_BLOCO + " = " + dado.getBloco_Dado()
+                + " AND " + DADO_COL_VARIAVEL + " = " + dado.getVariavel_Dado()
+                + " AND " + DADO_COL_REPETICAO + " = " + dado.getRepeticao_Dado()
+                + " AND " + DADO_COL_REPLICACAO + " = " + dado.getReplicacao_Dado()
+                + " AND " + DADO_COL_ID_NIVEL_PARCELA + " = " + dado.getIdNivelParcela_Dado();
 
         Log.e(LOG, selectQuery);
 
