@@ -254,8 +254,8 @@ public class ColetarDadosParcela extends AppCompatActivity {
 
                 if (replicacaoAtual + 1 == formulario.getQuantidadeReplicacoes_Formulario()) {
                     if (repeticaoAtual + 1 == formulario.getQuantidadeRepeticoes_Formulario()) {
-                        if (nivelParcelaAtual + 1 == parcelas.get(parcelaAtual).getQuantidadeNiveis_Parcela()) {
-                            if (parcelaAtual + 1 == formulario.getQuantidadeParcelas_Formulario()) {
+                        if (parcelaAtual + 1 == formulario.getQuantidadeParcelas_Formulario()) {
+                            if (nivelParcelaAtual + 1 == parcelas.get(parcelaAtual).getQuantidadeNiveis_Parcela()) {
                                 if (formulario.getQuantidadeBlocos_Formulario() == -1) {
                                     Intent listarColetas = new Intent(ColetarDadosParcela.this, ListarColetas.class);
                                     listarColetas.putExtra("id_Formulario", id_Formulario);
@@ -288,9 +288,8 @@ public class ColetarDadosParcela extends AppCompatActivity {
                                         startActivity(recarregar);
                                     }
                                 }
-                            } else if (parcelaAtual + 1 < formulario.getQuantidadeParcelas_Formulario()) {
-                                parcelaAtual++;
-                                nivelParcelaAtual = 0;
+                            } else if (nivelParcelaAtual + 1 < parcelas.get(parcelaAtual).getQuantidadeNiveis_Parcela()) {
+                                nivelParcelaAtual++;
                                 repeticaoAtual = 0;
                                 replicacaoAtual = 0;
                                 recarregar.putExtra("blocoAtual", blocoAtual);
@@ -301,8 +300,9 @@ public class ColetarDadosParcela extends AppCompatActivity {
                                 finish();
                                 startActivity(recarregar);
                             }
-                        } else if (nivelParcelaAtual + 1 < parcelas.get(parcelaAtual).getQuantidadeNiveis_Parcela()) {
-                            nivelParcelaAtual++;
+                        } else if (parcelaAtual + 1 < formulario.getQuantidadeParcelas_Formulario()) {
+                            parcelaAtual++;
+                            nivelParcelaAtual = 0;
                             repeticaoAtual = 0;
                             replicacaoAtual = 0;
                             recarregar.putExtra("blocoAtual", blocoAtual);
@@ -335,6 +335,7 @@ public class ColetarDadosParcela extends AppCompatActivity {
                     startActivity(recarregar);
                 }
 
+
             }
         });
 
@@ -352,8 +353,8 @@ public class ColetarDadosParcela extends AppCompatActivity {
 
                 if (replicacaoAtual == 0) {
                     if (repeticaoAtual == 0) {
-                        if (nivelParcelaAtual == 0) {
-                            if (parcelaAtual == 0) {
+                        if (parcelaAtual == 0) {
+                            if (nivelParcelaAtual == 0) {
                                 if (blocoAtual == 0) {
                                     Toast.makeText(getApplicationContext(), getString(R.string.info_Retornar), Toast.LENGTH_SHORT).show();
                                 } else if (blocoAtual > 0) {
@@ -370,9 +371,8 @@ public class ColetarDadosParcela extends AppCompatActivity {
                                     finish();
                                     startActivity(recarregar);
                                 }
-                            } else if (parcelaAtual > 0) {
-                                parcelaAtual--;
-                                nivelParcelaAtual = parcelas.get(parcelaAtual).getQuantidadeNiveis_Parcela() - 1;
+                            } else if (nivelParcelaAtual > 0) {
+                                nivelParcelaAtual--;
                                 repeticaoAtual = formulario.getQuantidadeRepeticoes_Formulario() - 1;
                                 replicacaoAtual = formulario.getQuantidadeReplicacoes_Formulario() - 1;
                                 recarregar.putExtra("blocoAtual", blocoAtual);
@@ -383,8 +383,9 @@ public class ColetarDadosParcela extends AppCompatActivity {
                                 finish();
                                 startActivity(recarregar);
                             }
-                        } else if (nivelParcelaAtual > 0) {
-                            nivelParcelaAtual--;
+                        } else if (parcelaAtual > 0) {
+                            parcelaAtual--;
+                            nivelParcelaAtual = parcelas.get(parcelaAtual).getQuantidadeNiveis_Parcela() - 1;
                             repeticaoAtual = formulario.getQuantidadeRepeticoes_Formulario() - 1;
                             replicacaoAtual = formulario.getQuantidadeReplicacoes_Formulario() - 1;
                             recarregar.putExtra("blocoAtual", blocoAtual);
